@@ -29,7 +29,7 @@ const Login: React.FC<LoginProps> = ({ setIsLoggedIn }) => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoggedIn(true);
-    navigate('/teams');
+    navigate('/inicio');
 
     /* if (!loginData.username || !loginData.password) {
       setError('Por favor ingresa tu nombre de usuario y contraseña');

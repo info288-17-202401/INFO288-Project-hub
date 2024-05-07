@@ -41,3 +41,10 @@
   color: #888;
 }
  */
+
+.none-style {
+  border: none;
+  background: none;
+  cursor: pointer;
+  padding: 0;
+}

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import discordSVG from '../assets/discord.svg'; // Ajusta la ruta según la ubicación real del archivo SVG
+import Discord from '../assets/Discord.tsx'; // Ajusta la ruta según la ubicación real del archivo SVG
 
 const NavigationBar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -52,12 +52,8 @@ const NavigationBar: React.FC = () => {
               <span className="me-2 text-uppercase p-2">
                 <dt>Project Hub</dt>
               </span>
-              <img
-                src={discordSVG}
-                alt="Discord Logo"
-                className="img-fluid"
-                style={{ maxWidth: '40px' }}
-              />
+
+              <Discord />
             </button>
           </Link>
         </div>
