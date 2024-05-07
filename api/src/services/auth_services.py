@@ -1,5 +1,6 @@
 from passlib.context import CryptContext
-import os, bcrypt
+import passlib.hash as hash
+import os
 from dotenv import load_dotenv
 from pydantic import BaseModel
 from datetime import datetime, timedelta, timezone
@@ -11,15 +12,13 @@ SECRET_KEY = os.environ.get("SECRET_KEY")
 ALGORITHM = 'HS256'
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
-pwd_context  = CryptContext(schemes=["bcrypt"], deprecated='auto')
+async def verify_password(plain_password, hashed_password):
+    return hash.bcrypt.verify(plain_password.encode('utf-8'), hashed_password)
 
-def verify_password(plain_password, hashed_password):
-    return pwd_context.verify(plain_password, hashed_password)
+async def get_password_hash(password):
+    return hash.bcrypt.hash(password.encode('utf-8'))
 
-def get_password_hash(password):
-    return bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
-
-def create_access_token(data: dict, expires_delta: timedelta | None = None):
+async def create_access_token(data: dict, expires_delta: timedelta | None = None):
     to_encode = data.copy()
     if expires_delta:
         expire = datetime.now(timezone.utc) + expires_delta

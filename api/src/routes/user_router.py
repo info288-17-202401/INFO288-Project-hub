@@ -6,8 +6,9 @@ user_router = APIRouter()
 
 @user_router.post("/register")
 async def register_user(user_data: user_models.UserRegisterModel):
-    return user_services.register_user(user_data)
+    return await user_services.register_user(user_data)
 
-@user_router.post("/register")
-async def register_user(user_data: user_models.UserRegisterModel):
-    return user_services.register_user(user_data)
+@user_router.post("/login")
+async def login_user(user_data: user_models.UserLoginModel):
+    return await user_services.login_user(user_data)
+
