@@ -1,35 +1,43 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React, { useState } from 'react';
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from 'react-router-dom';
+import NavigationBar from './components/NavigationBar';
+import Login from './routes/login';
+import About from './routes/about';
+import Inicio from './routes/inicio';
+import ProjectTeamPage from './routes/projectTeam';
+import ErrorSignInComponent from './routes/errorSession';
 
-function App() {
-  const [count, setCount] = useState(0)
+const App: React.FC = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   return (
-    <>
+    <Router>
       <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+        <NavigationBar />
+        <Routes>
+          <Route
+            path="/"
+            element={
+              isLoggedIn ? <ProjectTeamPage /> : <Navigate to="/login" />
+            }
+          />
+          <Route
+            path="/login"
+            element={<Login setIsLoggedIn={setIsLoggedIn} />}
+          />
+          {isLoggedIn && <Route path="/teams" element={<ProjectTeamPage />} />}
+          <Route path="/inicio" element={<Inicio />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/error-signin" element={<ErrorSignInComponent />} />
+        </Routes>
       </div>
-      <h1>Vite + </h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          coun a {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+    </Router>
+  );
+};
 
-export default App
+export default App;
