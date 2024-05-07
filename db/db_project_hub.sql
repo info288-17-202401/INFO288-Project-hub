@@ -10,20 +10,21 @@ CREATE TABLE IF NOT EXISTS app_user(
 );
 
 CREATE TABLE IF NOT EXISTS project(
-    project_id SERIAL PRIMARY KEY,
-    team_creation_date DATE,
-    team_description VARCHAR(255),
-    team_name VARCHAR(255),
+    project_id VARCHAR(20) PRIMARY KEY,
+    project_creation_date DATE,
+    project_description VARCHAR(255),
+    project_name VARCHAR(255),
+    project_password VARCHAR(255),
 
-    app_user_id INT,
-    FOREIGN KEY (app_user_id) REFERENCES app_user(app_user_id)
+    project_owner_id INT,
+    FOREIGN KEY (project_owner_id) REFERENCES app_user(app_user_id)
 );
 
 CREATE TABLE IF NOT EXISTS app_user_profile_project(
     app_user_profile_id SERIAL PRIMARY KEY,
     app_user_profile_type VARCHAR(255),
     app_user_id INT,
-    project_id INT,
+    project_id VARCHAR(20),
 
     FOREIGN KEY (project_id) REFERENCES project(project_id),
     FOREIGN KEY (app_user_id) REFERENCES app_user(app_user_id)
@@ -35,7 +36,7 @@ CREATE TABLE IF NOT EXISTS team(
     team_description VARCHAR(255),
     team_name VARCHAR(255),
 
-    project_id INT,
+    project_id VARCHAR(20),
     FOREIGN KEY (project_id) REFERENCES project(project_id)
 );
 

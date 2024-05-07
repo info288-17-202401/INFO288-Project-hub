@@ -16,7 +16,7 @@ ALGORITHM = 'HS256'
 ACCESS_TOKEN_EXPIRE_MINUTES = 60
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/user/token")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/user/login")
 
 async def register_user(user_data):
     find_user = await get_user_by_email(user_data.user_email)
@@ -39,11 +39,11 @@ async def register_user(user_data):
         )
 
 async def login_user(user_data):
-    find_user = await get_user_by_email(user_data.user_email)
+    find_user = await get_user_by_email(user_data.username)
     if not find_user:
         raise HTTPException(status_code = 401, detail="Could not validate credentials", 
                             headers={"WWW-Authenticate":"Bearer"})        
-    if not await verify_password(user_data.user_password, find_user['app_user_password']):
+    if not await verify_password(user_data.password, find_user['app_user_password']):
         raise HTTPException(status_code = 401, detail="", 
                     headers={"WWW-Authenticate":"Bearer"})  
         
