@@ -8,3 +8,6 @@ user_router = APIRouter()
 async def register_user(user_data: user_models.UserRegisterModel):
     return user_services.register_user(user_data)
 
+@user_router.post("/register")
+async def register_user(user_data: user_models.UserRegisterModel):
+    return user_services.register_user(user_data)

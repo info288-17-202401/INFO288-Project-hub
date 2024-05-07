@@ -9,7 +9,9 @@ docker run --name project_hub_db --env-file ./.env.db --network red_project_hub 
 ## api
 docker build -t project_hub_api . -f ./Dockerfile.api
 docker run --name project_hub_api -v /app:/code/app --env-file ./.env.api --network red_project_hub -p 2520:5000 -d project_hub_api
-    uvicorn main:app --reload
+uvicorn <module>:<app_instance> --reload
+
+❯ uvicorn main:app --host=localhost --port=8000 --reload
 
 
 ## Frontend

@@ -1,2 +1,4 @@
 psycopg2
-flask==3.0.3
+fastapi
+python-jose[cryptography]
+passlib[bcrypt]
