@@ -31,7 +31,7 @@ const NavigationBar: React.FC = () => {
             className={`collapse navbar-collapse ${isOpen ? 'show' : ''}`}
             id="navbarSupportedContent"
           >
-            <Link to="/inicio" className="nav-link" onClick={toggleMenu}>
+            <Link to="/home" className="nav-link" onClick={toggleMenu}>
               <button
                 className="d-flex align-items-center btn-unstyled"
                 style={{ border: 'none', background: 'none' }}
@@ -45,7 +45,7 @@ const NavigationBar: React.FC = () => {
             </Link>
             <ul className="navbar-nav me-auto mb-2 mb-lg-0 m-auto">
               <li className="nav-item">
-                <Link to="/inicio" className="nav-link" onClick={toggleMenu}>
+                <Link to="/home" className="nav-link" onClick={toggleMenu}>
                   <dt className="text-white">Inicio</dt>
                 </Link>
               </li>

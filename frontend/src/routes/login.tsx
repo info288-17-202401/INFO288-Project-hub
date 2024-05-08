@@ -33,6 +33,16 @@ const Login: React.FC<LoginProps> = ({ setIsLoggedIn }) => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (!loginData.email || !loginData.password) {
+      setError('Por favor, completa todos los campos.');
+      return;
+    }
+
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailPattern.test(loginData.email)) {
+      setError('Por favor, introduce un correo electrónico válido.');
+      return;
+    }
     try {
       const formData = new URLSearchParams();
       formData.append('username', loginData.email);
@@ -51,7 +61,7 @@ const Login: React.FC<LoginProps> = ({ setIsLoggedIn }) => {
         setToken(responseData.access_token); // Almacena el token en el store
         setTokenType(responseData.token_type); // Almacena el tipo de token en el store
         setIsLoggedIn(true);
-        navigate('/inicio');
+        navigate('/search-project');
       } else {
         console.error('Error al iniciar sesión:', response.statusText);
         setError('Credenciales inválidas. Por favor, intenta de nuevo.');

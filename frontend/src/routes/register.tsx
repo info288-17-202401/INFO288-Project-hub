@@ -21,7 +21,6 @@ const Register: React.FC = ({}) => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // Verificar si algún campo está vacío
     if (
       !registerData.username ||
       !registerData.email ||
