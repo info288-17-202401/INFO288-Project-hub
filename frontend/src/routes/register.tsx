@@ -30,7 +30,6 @@ const Register: React.FC = ({}) => {
       return;
     }
 
-    // Verificar si el correo electrónico es válido
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailPattern.test(registerData.email)) {
       setError('Por favor, introduce un correo electrónico válido.');
@@ -38,16 +37,13 @@ const Register: React.FC = ({}) => {
     }
 
     try {
-      const response = await fetch('http://localhost:8000/user/register', {
+      const url = `http://localhost:8000/user/register?user_name=${registerData.username}&user_email=${registerData.email}&user_password=${registerData.password}`;
+
+      const response = await fetch(url, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          user_name: registerData.username,
-          user_email: registerData.email,
-          user_password: registerData.password,
-        }),
       });
 
       if (response.ok) {

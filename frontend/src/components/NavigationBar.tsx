@@ -13,10 +13,7 @@ const NavigationBar: React.FC = () => {
   return (
     <div style={{ background: '#404fed' }}>
       <div className="container">
-        <nav
-          className="navbar navbar-expand-lg navbar-dark"
-          style={{ margin: '0 auto' }}
-        >
+        <nav className="navbar navbar-expand-lg navbar-dark justify-content-center">
           <button
             className="navbar-toggler"
             type="button"
@@ -27,10 +24,7 @@ const NavigationBar: React.FC = () => {
           >
             <span className="navbar-toggler-icon"></span>
           </button>
-          <div
-            className={`collapse navbar-collapse ${isOpen ? 'show' : ''}`}
-            id="navbarSupportedContent"
-          >
+          <div className="d-flex align-items-center">
             <Link to="/home" className="nav-link" onClick={toggleMenu}>
               <button
                 className="d-flex align-items-center btn-unstyled"
@@ -39,36 +33,42 @@ const NavigationBar: React.FC = () => {
                 <span className="me-2 text-uppercase p-2 text-white">
                   <dt>Project Hub</dt>
                 </span>
-
                 <Discord />
               </button>
             </Link>
-            <ul className="navbar-nav me-auto mb-2 mb-lg-0 m-auto">
+          </div>
+          <div
+            className={`collapse navbar-collapse ${isOpen ? 'show' : ''}`}
+            id="navbarSupportedContent"
+          >
+            <ul className="navbar-nav mx-auto">
               <li className="nav-item">
                 <Link to="/home" className="nav-link" onClick={toggleMenu}>
                   <dt className="text-white">Inicio</dt>
                 </Link>
               </li>
-
+              <li>
+                <Link to="/projects" className="nav-link" onClick={toggleMenu}>
+                  <dt className="text-white">Proyectos</dt>
+                </Link>
+              </li>
               <li className="nav-item">
                 <Link to="/about" className="nav-link" onClick={toggleMenu}>
                   <dt className="text-white">Acerca de</dt>
                 </Link>
               </li>
             </ul>
-            <div className="">
-              <Link to="/login" className="nav-link" onClick={toggleMenu}>
-                <button
-                  className="btn-sm d-flex rounded-5 text-dark"
-                  style={{ border: 'none', fontSize: '0.9rem' }}
-                >
-                  <span className="p-2">
-                    <dt>Login</dt>
-                  </span>
-                </button>
-              </Link>
-            </div>
           </div>
+          <Link to="/login" className="nav-link" onClick={toggleMenu}>
+            <button
+              className="btn-sm d-flex rounded-5 text-dark"
+              style={{ border: 'none', fontSize: '0.9rem' }}
+            >
+              <span className="p-2">
+                <dt>Login</dt>
+              </span>
+            </button>
+          </Link>
         </nav>
       </div>
     </div>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState, DragEvent } from 'react';
 import Close from '../assets/Close';
 
 interface ToDoCardProps {
@@ -7,7 +7,18 @@ interface ToDoCardProps {
 }
 
 const ToDoCard: React.FC<ToDoCardProps> = ({ id, onDelete }) => {
+  const [isDragging, setIsDragging] = useState(false);
+  const dragItem = useRef<HTMLDivElement>(null);
   const [checked, setChecked] = useState(false);
+
+  const handleDragStart = (event: DragEvent<HTMLDivElement>) => {
+    setIsDragging(true);
+    event.dataTransfer?.setData('text/plain', 'DraggableItem');
+  };
+
+  const handleDragEnd = () => {
+    setIsDragging(false);
+  };
 
   const handleCheckboxChange = () => {
     setChecked((prevChecked) => !prevChecked);
@@ -20,8 +31,15 @@ const ToDoCard: React.FC<ToDoCardProps> = ({ id, onDelete }) => {
   const handleClickToDo = () => {
     alert('To do item clicked!');
   };
+
   return (
-    <div className="container">
+    <div
+      className={`container card m-2 ${isDragging ? 'dragging' : ''}`}
+      draggable
+      ref={dragItem}
+      onDragStart={handleDragStart}
+      onDragEnd={handleDragEnd}
+    >
       <div className="row align-items-center">
         <div className="col-md-1 m-2 p-0">
           <input
@@ -43,7 +61,10 @@ const ToDoCard: React.FC<ToDoCardProps> = ({ id, onDelete }) => {
           </span>
         </div>
         <div className="col-md-1 p-0">
-          <button className="border-0 p-0" onClick={handleDeleteTodo}>
+          <button
+            className="border-0 p-0 bg-transparent "
+            onClick={handleDeleteTodo}
+          >
             <Close size="36" />
           </button>
         </div>

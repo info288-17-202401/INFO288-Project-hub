@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { DragEvent, useState } from 'react';
 import Add from '../assets/Add';
 import ToDoCard from './ToDoCard';
 
@@ -11,7 +11,26 @@ const ToDo: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [text, setText] = useState('Agrega tareas!');
   const [isEditing, setIsEditing] = useState(false);
+  const [isOver, setIsOver] = useState(false);
 
+  const handleDragOver = (event: DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    setIsOver(true);
+  };
+
+  const handleDragLeave = () => {
+    setIsOver(false);
+  };
+
+  const handleDrop = (event: DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    setIsOver(false);
+    const data = event.dataTransfer?.getData('text/plain');
+    if (data === 'DraggableItem') {
+      // Realizar acciones necesarias al soltar el elemento
+      console.log('Elemento soltado en el área.');
+    }
+  };
   const handleAddTodo = () => {
     const newTodoItem: Todo = {
       id: Date.now(),
@@ -41,7 +60,19 @@ const ToDo: React.FC = () => {
 
   return (
     <>
-      <div className="container">
+      <div
+        className=""
+        onDragOver={handleDragOver}
+        onDragLeave={handleDragLeave}
+        onDrop={handleDrop}
+        style={{
+          height: '40vh',
+          border: '2px dashed #000',
+          backgroundColor: isOver ? 'rgba(0, 0, 0, 0.1)' : 'transparent',
+          overflowY: 'auto',
+          overflowX: 'hidden',
+        }}
+      >
         <div className="row justify-content-center text-center ">
           <div className="col-md m-2 p-2">
             <div onClick={handleTextClick} className="mb-2 p-2 ">
@@ -58,7 +89,7 @@ const ToDo: React.FC = () => {
                 <div>{text}</div>
               )}
             </div>
-            <ul style={{ listStyleType: 'none' }} className="p-0">
+            <ul style={{ listStyleType: 'none', padding: 0 }} className="p-0">
               {todos.map((todo) => (
                 <li className="container " key={todo.id}>
                   <ToDoCard id={todo.id} onDelete={handleDeleteTodo} />
