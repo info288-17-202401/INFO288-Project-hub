@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // Importa useNavigate
+import { Link, useNavigate } from 'react-router-dom';
+import Register from './register'; // Importa el componente Register
+import { useAuthStore } from './authStore'; // Importa el store global
 
 type LoginType = {
-  username: string;
+  email: string;
   password: string;
 };
 
@@ -12,14 +14,17 @@ type LoginProps = {
 
 const Login: React.FC<LoginProps> = ({ setIsLoggedIn }) => {
   const [loginData, setLoginData] = useState<LoginType>({
-    username: '',
+    email: '',
     password: '',
   });
   const [isSignUp, setIsSignUp] = useState(false);
   const [error, setError] = useState('');
+  const setToken = useAuthStore((state) => state.setToken); // Obtén el método setToken del store
+  const setTokenType = useAuthStore((state) => state.setTokenType); // Obtén el método setUserType del store
+
   const navigate = useNavigate();
 
-  const dataLogin = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleLoginChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setLoginData({
       ...loginData,
       [e.target.name]: e.target.value,
@@ -28,43 +33,35 @@ const Login: React.FC<LoginProps> = ({ setIsLoggedIn }) => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setIsLoggedIn(true);
-    navigate('/inicio');
-
-    /* if (!loginData.username || !loginData.password) {
-      setError('Por favor ingresa tu nombre de usuario y contraseña');
-      return;
-    }
-
     try {
-      const response = await fetch('./users.json');
-      const users = await response.json();
+      const formData = new URLSearchParams();
+      formData.append('username', loginData.email);
+      formData.append('password', loginData.password);
 
-      const user = users.find(
-        (user: { username: string; password: string }) =>
-          user.username === loginData.username &&
-          user.password === loginData.password
-      );
+      const response = await fetch('http://localhost:8000/user/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: formData.toString(),
+      });
 
-      if (user) {
-        if (isSignUp) {
-          // Manejo de registro
-          console.log('Usuario nuevo:', loginData.username);
-          console.log('Contraseña nueva:', loginData.password);
-          // Lógica de registro...
-        } else {
-          // Manejo de inicio de sesión
-          console.log('Iniciando sesión...');
-          // Lógica de inicio de sesión...
-          navigate('/inicio');
-        }
+      if (response.ok) {
+        const responseData = await response.json(); // Parsea la respuesta a JSON
+        setToken(responseData.access_token); // Almacena el token en el store
+        setTokenType(responseData.token_type); // Almacena el tipo de token en el store
+        setIsLoggedIn(true);
+        navigate('/inicio');
       } else {
-        setError('Usuario o contraseña incorrectos');
+        console.error('Error al iniciar sesión:', response.statusText);
+        setError('Credenciales inválidas. Por favor, intenta de nuevo.');
       }
-    } catch (error) {
-      setError('Error al intentar iniciar sesión');
-      console.error('Error:', error);
-    } */
+    } catch (error: any) {
+      console.error('Error de red:', error.message);
+      setError(
+        'Error de red. Por favor, revisa tu conexión e intenta de nuevo.'
+      );
+    }
   };
 
   return (
@@ -76,53 +73,51 @@ const Login: React.FC<LoginProps> = ({ setIsLoggedIn }) => {
         className="card p-4  text-light"
         style={{ backgroundColor: '#303339', width: '50%' }}
       >
-        <div className="">
+        <div>
           <h2 className="mb-4 text-center">
-            {isSignUp
-              ? 'Crear cuenta'
-              : '¡Te damos la bienvenida a Project Hub!'}
+            ¡Te damos la bienvenida a Project Hub!
           </h2>
-          {!isSignUp && <h3 className="text-center">Inicia sesión</h3>}
+          <h3 className="text-center">Inicia sesión</h3>
         </div>
-        <form onSubmit={handleSubmit}>
-          <div className="mb-3">
-            <label className="form-label">Nombre de usuario</label>
-            <input
-              type="text"
-              name="username"
-              className="form-control"
-              onChange={dataLogin}
-            />
-          </div>
-          <div className="mb-3">
-            <label className="form-label">Contraseña</label>
-            <input
-              type="password"
-              name="password"
-              className="form-control"
-              onChange={dataLogin}
-            />
-          </div>
-          <div style={{ width: '100%' }}>
-            <button
-              type="submit"
-              className="btn text-white w-100"
-              style={{ backgroundColor: '#5864f2' }}
-            >
-              {isSignUp ? 'Crear cuenta' : 'Iniciar sesión'}
-            </button>
-          </div>
-          {error && <p className="mt-3 text-center text-danger">{error}</p>}
-        </form>
+        {isSignUp ? (
+          <Register />
+        ) : (
+          <form onSubmit={handleSubmit}>
+            <div className="mb-3">
+              <label className="form-label">Correo electrónico</label>
+              <input
+                type="email"
+                name="email"
+                className="form-control"
+                onChange={handleLoginChange}
+              />
+            </div>
+            <div className="mb-3">
+              <label className="form-label">Contraseña</label>
+              <input
+                type="password"
+                name="password"
+                className="form-control"
+                onChange={handleLoginChange}
+              />
+            </div>
+            <div style={{ width: '100%' }}>
+              <button
+                type="submit"
+                className="btn text-white w-100"
+                style={{ backgroundColor: '#5864f2' }}
+              >
+                Iniciar sesión
+              </button>
+            </div>
+            {error && <p className="mt-3 text-center text-danger">{error}</p>}
+          </form>
+        )}
         <p className="mt-3 text-center">
-          {isSignUp ? '¿Ya tienes una cuenta?' : '¿No tienes una cuenta?'}
-          <button
-            type="button"
-            className="btn btn-link text-light border-0"
-            onClick={() => setIsSignUp(!isSignUp)}
-          >
-            {isSignUp ? 'Iniciar sesión' : 'Crear cuenta'}
-          </button>
+          ¿No tienes una cuenta?{' '}
+          <Link to="/register" className="text-light">
+            Crear cuenta
+          </Link>
         </p>
       </div>
     </div>
