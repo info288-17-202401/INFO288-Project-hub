@@ -107,6 +107,3 @@ const JoinProject: React.FC<{ onReturn: () => void }> = ({ onReturn }) => {
 };
 
 export default JoinProject;
-function joinAuthStore(arg0: (state: any) => any) {
-  throw new Error('Function not implemented.');
-}

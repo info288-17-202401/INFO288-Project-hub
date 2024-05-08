@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import Register from './register'; // Importa el componente Register
 import { userAuthStore } from './authStore'; // Importa el store global
 
 type LoginType = {
@@ -17,7 +16,6 @@ const Login: React.FC<LoginProps> = ({ setIsLoggedIn }) => {
     email: '',
     password: '',
   });
-  const [isSignUp, setIsSignUp] = useState(false);
   const [error, setError] = useState('');
   const setToken = userAuthStore((state) => state.setToken); // Obtén el método setToken del store
   const setTokenType = userAuthStore((state) => state.setTokenType); // Obtén el método setUserType del store
@@ -89,40 +87,37 @@ const Login: React.FC<LoginProps> = ({ setIsLoggedIn }) => {
           </h2>
           <h3 className="text-center">Inicia sesión</h3>
         </div>
-        {isSignUp ? (
-          <Register />
-        ) : (
-          <form onSubmit={handleSubmit}>
-            <div className="mb-3">
-              <label className="form-label">Correo electrónico</label>
-              <input
-                type="email"
-                name="email"
-                className="form-control"
-                onChange={handleLoginChange}
-              />
-            </div>
-            <div className="mb-3">
-              <label className="form-label">Contraseña</label>
-              <input
-                type="password"
-                name="password"
-                className="form-control"
-                onChange={handleLoginChange}
-              />
-            </div>
-            <div style={{ width: '100%' }}>
-              <button
-                type="submit"
-                className="btn text-white w-100"
-                style={{ backgroundColor: '#5864f2' }}
-              >
-                Iniciar sesión
-              </button>
-            </div>
-            {error && <p className="mt-3 text-center text-danger">{error}</p>}
-          </form>
-        )}
+        <form onSubmit={handleSubmit}>
+          <div className="mb-3">
+            <label className="form-label">Correo electrónico</label>
+            <input
+              type="email"
+              name="email"
+              className="form-control"
+              onChange={handleLoginChange}
+            />
+          </div>
+          <div className="mb-3">
+            <label className="form-label">Contraseña</label>
+            <input
+              type="password"
+              name="password"
+              className="form-control"
+              onChange={handleLoginChange}
+            />
+          </div>
+          <div style={{ width: '100%' }}>
+            <button
+              type="submit"
+              className="btn text-white w-100"
+              style={{ backgroundColor: '#5864f2' }}
+            >
+              Iniciar sesión
+            </button>
+          </div>
+          {error && <p className="mt-3 text-center text-danger">{error}</p>}
+        </form>
+
         <p className="mt-3 text-center">
           ¿No tienes una cuenta?{' '}
           <Link to="/register" className="text-light">
