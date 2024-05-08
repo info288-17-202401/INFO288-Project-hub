@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Register from './register'; // Importa el componente Register
-import { useAuthStore } from './authStore'; // Importa el store global
+import { userAuthStore } from './authStore'; // Importa el store global
 
 type LoginType = {
   email: string;
@@ -19,8 +19,8 @@ const Login: React.FC<LoginProps> = ({ setIsLoggedIn }) => {
   });
   const [isSignUp, setIsSignUp] = useState(false);
   const [error, setError] = useState('');
-  const setToken = useAuthStore((state) => state.setToken); // Obtén el método setToken del store
-  const setTokenType = useAuthStore((state) => state.setTokenType); // Obtén el método setUserType del store
+  const setToken = userAuthStore((state) => state.setToken); // Obtén el método setToken del store
+  const setTokenType = userAuthStore((state) => state.setTokenType); // Obtén el método setUserType del store
 
   const navigate = useNavigate();
 

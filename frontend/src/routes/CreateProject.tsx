@@ -1,4 +1,4 @@
-import { useAuthStore } from './authStore';
+import { userAuthStore } from './authStore';
 import Back from '../assets/Back';
 import { useState } from 'react';
 
@@ -22,7 +22,7 @@ const CreateProject: React.FC<{ onReturn: () => void }> = ({ onReturn }) => {
   };
 
   const clickButton = () => {
-    const token = useAuthStore.getState().token;
+    const token = userAuthStore.getState().token;
 
     if (
       !createProjectData.name ||

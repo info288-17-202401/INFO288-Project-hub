@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import CreateProject from './CreateProject';
 import JoinProject from './JoinProject';
 
@@ -26,7 +25,6 @@ const ProjectType: React.FC<ProjectTypeProps> = ({ type, onClick }) => {
 const SearchProject: React.FC = () => {
   const [showCreateProject, setShowCreateProject] = useState(false);
   const [showJoinProject, setShowJoinProject] = useState(false);
-  const navigate = useNavigate();
 
   const handleCreateProjectClick = () => {
     setShowCreateProject(true);

@@ -3,7 +3,7 @@ import UserCard from '../components/UserCard';
 import ToDoContainer from '../components/TodoContainer';
 import usercards from './userscards.json';
 
-const ProjectTeamPage: React.FC = () => {
+const TeamsPage: React.FC = () => {
   return (
     <div className="" style={{ display: 'flex', height: '90vh' }}>
       <div style={{ flex: '1', borderRight: '1px solid #ccc' }}>
@@ -50,29 +50,4 @@ const ProjectTeamPage: React.FC = () => {
   );
 };
 
-export default ProjectTeamPage;
-
-/* import React from 'react';
-import DraggableItem from '../components/DragItem';
-import DroppableArea from '../components/DragPlace';
-
-const ProjectTeamPage: React.FC = () => {
-  return (
-    <div className="container">
-      <h1>Arrastrar y soltar con React y TypeScript</h1>
-      <div className="row">
-        <div className="col">
-          <DraggableItem />
-          <DraggableItem />
-          <DraggableItem />
-        </div>
-        <div className="col">
-          <DroppableArea />
-        </div>
-      </div>
-    </div>
-  );
-};
-
-export default ProjectTeamPage;
- */
+export default TeamsPage;

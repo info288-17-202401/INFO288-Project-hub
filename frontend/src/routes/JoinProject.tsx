@@ -1,13 +1,18 @@
 import { useState } from 'react';
 import Back from '../assets/Back';
-import { useAuthStore } from './authStore';
+import { projectAuthStore, userAuthStore } from './authStore';
+import { useNavigate } from 'react-router-dom';
 
 const JoinProject: React.FC<{ onReturn: () => void }> = ({ onReturn }) => {
   const [error, setError] = useState('');
+  const setToken = projectAuthStore((state) => state.setToken); // Obtén el método setToken del store
+  const setTokenType = projectAuthStore((state) => state.setTokenType); // Obtén el método setUserType del store
+
+  const navigate = useNavigate();
 
   const [joinProjectData, setJoinProjectData] = useState({
-    token: '',
-    password: '',
+    project_id: '',
+    project_password: '',
   });
 
   const handleJoinProjectChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -16,31 +21,36 @@ const JoinProject: React.FC<{ onReturn: () => void }> = ({ onReturn }) => {
       [e.target.name]: e.target.value,
     });
   };
-  const clickButton = () => {
-    const token = useAuthStore.getState().token;
 
-    if (!joinProjectData.token || !joinProjectData.password) {
+  const clickButton = () => {
+    const token = userAuthStore.getState().token;
+
+    if (!joinProjectData.project_id || !joinProjectData.project_password) {
       setError('Por favor, completa todos los campos.');
       return;
     }
 
     setError('');
-    fetch('http://localhost:8000/project/auth', {
+    const url = `http://localhost:8000/project/auth?project_id=${joinProjectData.project_id}&project_password=${joinProjectData.project_password}`;
+
+    fetch(url, {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(joinProjectData),
     })
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
-        alert('Proyecto creado correctamente.');
+        setToken(data.access_token); // Almacena el token en el store
+        setTokenType(data.token_type); // Almacena el tipo de token en el store
+        console.log('Te has unido al proyecto correctamente.');
+        navigate('/teams');
       })
       .catch((error) => {
         console.error('Error:', error);
-        alert('Ocurrió un error al crear el proyecto.');
+        console.log('Ocurrió un error al crear el proyecto.');
       });
   };
   return (
@@ -62,11 +72,11 @@ const JoinProject: React.FC<{ onReturn: () => void }> = ({ onReturn }) => {
         </div>
         <form>
           <div className="mb-3">
-            <label className="form-label">Token de acceso</label>
+            <label className="form-label">Id del proyecto</label>
             <input
               onChange={handleJoinProjectChange}
               type="text"
-              name="token"
+              name="project_id"
               className="form-control"
             />
           </div>
@@ -75,7 +85,7 @@ const JoinProject: React.FC<{ onReturn: () => void }> = ({ onReturn }) => {
             <input
               onChange={handleJoinProjectChange}
               type="password"
-              name="password"
+              name="project_password"
               className="form-control"
             />
           </div>
@@ -97,3 +107,6 @@ const JoinProject: React.FC<{ onReturn: () => void }> = ({ onReturn }) => {
 };
 
 export default JoinProject;
+function joinAuthStore(arg0: (state: any) => any) {
+  throw new Error('Function not implemented.');
+}

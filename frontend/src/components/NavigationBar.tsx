@@ -48,8 +48,12 @@ const NavigationBar: React.FC = () => {
                 </Link>
               </li>
               <li>
-                <Link to="/projects" className="nav-link" onClick={toggleMenu}>
-                  <dt className="text-white">Proyectos</dt>
+                <Link
+                  to="/search-project"
+                  className="nav-link"
+                  onClick={toggleMenu}
+                >
+                  <dt className="text-white">Buscar proyecto</dt>
                 </Link>
               </li>
               <li className="nav-item">

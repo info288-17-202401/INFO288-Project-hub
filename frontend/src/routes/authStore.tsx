@@ -1,4 +1,4 @@
-import create from 'zustand';
+import { create } from 'zustand';
 
 type AuthState = {
   token: string | null;
@@ -7,7 +7,14 @@ type AuthState = {
   setTokenType: (tokenType: string) => void;
 };
 
-export const useAuthStore = create<AuthState>((set) => ({
+export const userAuthStore = create<AuthState>((set) => ({
+  token: null,
+  tokenType: null,
+  setToken: (token) => set({ token }),
+  setTokenType: (tokenType) => set({ tokenType }),
+}));
+
+export const projectAuthStore = create<AuthState>((set) => ({
   token: null,
   tokenType: null,
   setToken: (token) => set({ token }),
