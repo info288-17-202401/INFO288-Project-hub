@@ -16,7 +16,7 @@ ALGORITHM = 'HS256'
 ACCESS_TOKEN_EXPIRE_MINUTES = 60
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/user/login")
+oauth2_scheme_user = OAuth2PasswordBearer(tokenUrl="/user/login")
 
 async def register_user(user_data):
     find_user = await get_user_by_email(user_data.user_email)
@@ -71,9 +71,9 @@ async def create_access_token(user_id):
     }
     return jwt.encode(payload, SECRET_KEY, ALGORITHM)
     
-async def get_user_current(token: str = Depends(oauth2_scheme)):
+async def get_user_current(user_token: str = Depends(oauth2_scheme_user)):
     try:
-        token_decode = jwt.decode(token, SECRET_KEY, ALGORITHM)
+        token_decode = jwt.decode(user_token, SECRET_KEY, ALGORITHM)
         user_email = token_decode.get("sub")
         if user_email == None:
             raise HTTPException(status_code = 401, detail="User email not decoded", 

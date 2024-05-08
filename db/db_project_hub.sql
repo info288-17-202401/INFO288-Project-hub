@@ -32,7 +32,7 @@ CREATE TABLE IF NOT EXISTS app_user_profile_project(
 
 CREATE TABLE IF NOT EXISTS team(
     team_id SERIAL PRIMARY KEY,
-    team_creation_date INT,
+    team_creation_date DATE,
     team_description VARCHAR(255),
     team_name VARCHAR(255),
 
