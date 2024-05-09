@@ -12,9 +12,11 @@ async def register_user(user_data: user_models.UserRegisterModel = Depends()):
 
 @auth_router.post("/login", tags=["auth"])
 async def access_token(form_data: OAuth2PasswordRequestForm = Depends()):
-    await auth_services.login_user(form_data)
+    user = await auth_services.login_user(form_data)
     token = await auth_services.create_access_token(form_data.username)
     return {
+        "user_name": user['app_user_name'],
+        "user_email": user['app_user_email'],
         "access_token": token,
         "token_type": "bearer"
     }
