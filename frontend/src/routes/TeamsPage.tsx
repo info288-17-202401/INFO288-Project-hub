@@ -2,7 +2,7 @@ import React from 'react';
 import UserCard from '../components/UserCard';
 import ToDoContainer from '../components/TodoContainer';
 import usercards from './userscards.json';
-import Chat from './Chat';
+import Chat from '../components/Chat';
 
 const TeamsPage: React.FC = () => {
   return (
