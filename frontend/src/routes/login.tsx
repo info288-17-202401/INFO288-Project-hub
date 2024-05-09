@@ -19,6 +19,7 @@ const Login: React.FC<LoginProps> = ({ setIsLoggedIn }) => {
   const [error, setError] = useState('');
   const setToken = userAuthStore((state) => state.setToken); // Obtén el método setToken del store
   const setTokenType = userAuthStore((state) => state.setTokenType); // Obtén el método setUserType del store
+  const setEmail = userAuthStore((state) => state.setEmail); // Obtén el método setUsername del store
 
   const navigate = useNavigate();
 
@@ -58,8 +59,12 @@ const Login: React.FC<LoginProps> = ({ setIsLoggedIn }) => {
         const responseData = await response.json(); // Parsea la respuesta a JSON
         setToken(responseData.access_token); // Almacena el token en el store
         setTokenType(responseData.token_type); // Almacena el tipo de token en el store
+        setEmail(loginData.email);
+
+        userAuthStore.setState({ state: true });
+
         setIsLoggedIn(true);
-        navigate('/search-project');
+        navigate('/home');
       } else {
         console.error('Error al iniciar sesión:', response.statusText);
         setError('Credenciales inválidas. Por favor, intenta de nuevo.');

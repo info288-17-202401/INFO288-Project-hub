@@ -9,9 +9,12 @@ import HomePage from './routes/HomePage';
 import PageNotFound from './routes/PageNotFound'; // Importa tu componente de página no encontrada
 import ProjectsPage from './routes/ProjectsPage';
 import TeamsPage from './routes/TeamsPage';
+import Profile from './routes/Profile';
+import { userAuthStore } from './routes/authStore';
 
 const App: React.FC = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const login = userAuthStore.getState().state;
 
   return (
     <div>
@@ -25,7 +28,6 @@ const App: React.FC = () => {
           path="/login"
           element={<Login setIsLoggedIn={setIsLoggedIn} />}
         />
-        {isLoggedIn && <Route path="/projects" element={<ProjectsPage />} />}
         <Route path="/register" element={<Register />} />
         <Route
           path="/search-project"
@@ -38,6 +40,10 @@ const App: React.FC = () => {
         <Route
           path="/teams"
           element={isLoggedIn ? <TeamsPage /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/profile"
+          element={isLoggedIn ? <Profile /> : <Navigate to="/login" />}
         />
         <Route path="/home" element={<HomePage />} />
         <Route path="/about" element={<About />} />

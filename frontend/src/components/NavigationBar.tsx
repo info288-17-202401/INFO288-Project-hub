@@ -2,9 +2,12 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Discord from '../assets/Discord.tsx'; // Ajusta la ruta según la ubicación real del archivo SVG
+import { userAuthStore } from '../routes/authStore.tsx';
 
 const NavigationBar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
+
+  const login = userAuthStore((state) => state.state); // Obtener el estado de autenticación del store
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -48,13 +51,15 @@ const NavigationBar: React.FC = () => {
                 </Link>
               </li>
               <li>
-                <Link
-                  to="/search-project"
-                  className="nav-link"
-                  onClick={toggleMenu}
-                >
-                  <dt className="text-white">Buscar proyecto</dt>
-                </Link>
+                {login ? (
+                  <Link
+                    to="/search-project"
+                    className="nav-link"
+                    onClick={toggleMenu}
+                  >
+                    <dt className="text-white">Buscar proyecto</dt>
+                  </Link>
+                ) : null}
               </li>
               <li className="nav-item">
                 <Link to="/about" className="nav-link" onClick={toggleMenu}>
@@ -63,16 +68,30 @@ const NavigationBar: React.FC = () => {
               </li>
             </ul>
           </div>
-          <Link to="/login" className="nav-link" onClick={toggleMenu}>
-            <button
-              className="btn-sm d-flex rounded-5 text-dark"
-              style={{ border: 'none', fontSize: '0.9rem' }}
-            >
-              <span className="p-2">
-                <dt>Login</dt>
-              </span>
-            </button>
-          </Link>
+
+          {!login ? (
+            <Link to="/login" className="nav-link" onClick={toggleMenu}>
+              <button
+                className="btn-sm d-flex rounded-5 text-dark"
+                style={{ border: 'none', fontSize: '0.9rem' }}
+              >
+                <span className="p-2">
+                  <dt>Login</dt>
+                </span>
+              </button>
+            </Link>
+          ) : (
+            <Link to="/profile" className="nav-link" onClick={toggleMenu}>
+              <button
+                className="btn-sm d-flex rounded-5 text-dark"
+                style={{ border: 'none', fontSize: '0.9rem' }}
+              >
+                <span className="p-2">
+                  <dt>Perfil usuario</dt>
+                </span>
+              </button>
+            </Link>
+          )}
         </nav>
       </div>
     </div>

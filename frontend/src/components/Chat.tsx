@@ -11,10 +11,7 @@ const Chat: React.FC = () => {
     return () => clearInterval(intervalId);
   }, []);
 
-  const fetchMessages = () => {
-    // Aquí podrías realizar la lógica para actualizar los mensajes, si lo necesitas
-    // Por ejemplo, podrías hacer una solicitud HTTP como lo hacías antes
-  };
+  const fetchMessages = () => {};
 
   const clickButton = () => {
     alert('Mensaje enviado');
