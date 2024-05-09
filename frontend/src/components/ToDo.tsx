@@ -61,16 +61,17 @@ const ToDo: React.FC = () => {
   return (
     <>
       <div
-        className=""
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
         style={{
           height: '40vh',
-          border: '2px dashed #000',
-          backgroundColor: isOver ? 'rgba(0, 0, 0, 0.1)' : 'transparent',
+          border: '2px #000',
+          borderRadius: '7px',
+          backgroundColor: isOver ? 'rgba(0, 0, 0, 0.1)' : '#ffffff',
           overflowY: 'auto',
           overflowX: 'hidden',
+          color: isOver ? '#ffffff' : '#000000',
         }}
       >
         <div className="row justify-content-center text-center ">
@@ -97,7 +98,7 @@ const ToDo: React.FC = () => {
               ))}
             </ul>
             <button className="btn p-2 m-2 " onClick={handleAddTodo}>
-              <Add size="36" />
+              <Add size="36" color={isOver ? '#ffffff' : '#323232'} />
             </button>
           </div>
         </div>

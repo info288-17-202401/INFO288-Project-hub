@@ -60,7 +60,7 @@ const ToDoCard: React.FC<ToDoCardProps> = ({ id, onDelete }) => {
             To do name
           </span>
         </div>
-        <div className="col-md-1 p-0">
+        <div className="col-md-2 p-0">
           <button
             className="border-0 p-0 bg-transparent "
             onClick={handleDeleteTodo}
