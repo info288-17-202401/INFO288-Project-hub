@@ -5,8 +5,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from src.routes.auth_router import auth_router
 from src.routes.project_router import project_router
 from src.routes.team_router import team_router
-
-
+from src.routes.messages_router import messages_router
+from src.routes.tasks_router import tasks_router
 
 origins = ["*"]
 
@@ -24,6 +24,10 @@ app.add_middleware(
 app.include_router(auth_router, prefix="/user")
 app.include_router(project_router, prefix="/project")
 app.include_router(team_router, prefix="/team")
+app.include_router(messages_router, prefix="/message")
+app.include_router(tasks_router, prefix="/tasks")
+
+
 
 
 
