@@ -1,20 +1,20 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { userAuthStore } from './authStore';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import NavigationBar from './components/NavigationBar';
-import Login from './routes/login';
-import About from './routes/about';
-import SearchProject from './routes/SearchProject';
-import Register from './routes/register';
 import HomePage from './routes/HomePage';
-import PageNotFound from './routes/PageNotFound'; // Importa tu componente de página no encontrada
-import ProjectsPage from './routes/ProjectsPage';
+import LoginPage from './routes/LoginPage';
+import RegisterPage from './routes/RegisterPage';
+import ProjectOptionsPage from './routes/ProjectOptionsPage';
 import TeamsPage from './routes/TeamsPage';
-import Profile from './routes/Profile';
-import { userAuthStore } from './routes/authStore';
+import NotFoundPage from './routes/NotFoundPage'; // Importa tu componente de página no encontrada
+import ProjectsPage from './routes/ProjectsPage';
+import ProfilePage from './routes/ProfilePage';
+import AboutPage from './routes/AboutPage';
+import MyProjectsPage from './routes/MyProjectsPage';
 
 const App: React.FC = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const login = userAuthStore.getState().state;
+  const login = userAuthStore((state) => state.state); // Obtener el estado de autenticación del store
 
   return (
     <div>
@@ -22,32 +22,34 @@ const App: React.FC = () => {
       <Routes>
         <Route
           path="/"
-          element={isLoggedIn ? <SearchProject /> : <Navigate to="/login" />}
+          element={login ? <ProjectsPage /> : <Navigate to="/login" />}
         />
+        <Route path="/home" element={<HomePage />} />
+
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
         <Route
-          path="/login"
-          element={<Login setIsLoggedIn={setIsLoggedIn} />}
-        />
-        <Route path="/register" element={<Register />} />
-        <Route
-          path="/search-project"
-          element={isLoggedIn ? <SearchProject /> : <Navigate to="/login" />}
+          path="/project-options"
+          element={login ? <ProjectOptionsPage /> : <Navigate to="/login" />}
         />
         <Route
           path="/projects"
-          element={isLoggedIn ? <ProjectsPage /> : <Navigate to="/login" />}
+          element={login ? <ProjectsPage /> : <Navigate to="/login" />}
         />
         <Route
           path="/teams"
-          element={isLoggedIn ? <TeamsPage /> : <Navigate to="/login" />}
+          element={login ? <TeamsPage /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="my-projects"
+          element={login ? <MyProjectsPage /> : <Navigate to="/login" />}
         />
         <Route
           path="/profile"
-          element={isLoggedIn ? <Profile /> : <Navigate to="/login" />}
+          element={login ? <ProfilePage /> : <Navigate to="/login" />}
         />
-        <Route path="/home" element={<HomePage />} />
-        <Route path="/about" element={<About />} />
-        <Route path="*" element={<PageNotFound />} />
+        <Route path="/about" element={<AboutPage />} />
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </div>
   );

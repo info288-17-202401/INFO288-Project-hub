@@ -1,6 +1,6 @@
 import React from 'react';
 
-const AcercaDe: React.FC = () => {
+const AboutPage: React.FC = () => {
   return (
     <div className="container mt-5">
       <div className="row">
@@ -62,4 +62,4 @@ const AcercaDe: React.FC = () => {
   );
 };
 
-export default AcercaDe;
+export default AboutPage;

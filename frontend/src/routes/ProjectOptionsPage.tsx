@@ -1,13 +1,16 @@
 import React, { useState } from 'react';
-import CreateProject from './CreateProject';
-import JoinProject from './JoinProject';
+import CreateProject from '../components/CreateProject';
+import JoinProject from '../components/JoinProject';
 
-type ProjectTypeProps = {
+type ProjectOptionsPageButtonProps = {
   type: string;
   onClick: () => void;
 };
 
-const ProjectType: React.FC<ProjectTypeProps> = ({ type, onClick }) => {
+const ProjectOptionsPageButton: React.FC<ProjectOptionsPageButtonProps> = ({
+  type,
+  onClick,
+}) => {
   return (
     <>
       <button
@@ -22,7 +25,7 @@ const ProjectType: React.FC<ProjectTypeProps> = ({ type, onClick }) => {
   );
 };
 
-const SearchProject: React.FC = () => {
+const ProjectOptionsPage: React.FC = () => {
   const [showCreateProject, setShowCreateProject] = useState(false);
   const [showJoinProject, setShowJoinProject] = useState(false);
 
@@ -54,11 +57,11 @@ const SearchProject: React.FC = () => {
           style={{ backgroundColor: '#303339', width: '50%' }}
         >
           <h1 className="text-center text-uppercase">Selecciona</h1>
-          <ProjectType
+          <ProjectOptionsPageButton
             type="Crear un proyecto"
             onClick={handleCreateProjectClick}
           />
-          <ProjectType
+          <ProjectOptionsPageButton
             type="Unirse a un proyecto"
             onClick={handleJoinProjectClick}
           />
@@ -68,4 +71,4 @@ const SearchProject: React.FC = () => {
   );
 };
 
-export default SearchProject;
+export default ProjectOptionsPage;

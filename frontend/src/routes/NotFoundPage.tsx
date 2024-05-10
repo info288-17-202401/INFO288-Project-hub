@@ -1,7 +1,7 @@
 import React from 'react';
 import errorPageImage from '../assets/errorPage.jpg';
 
-const PageNotFound: React.FC = () => {
+const NotFoundPage: React.FC = () => {
   return (
     <div className="container mt-5">
       <div className="row justify-content-center">
@@ -27,4 +27,4 @@ const PageNotFound: React.FC = () => {
   );
 };
 
-export default PageNotFound;
+export default NotFoundPage;

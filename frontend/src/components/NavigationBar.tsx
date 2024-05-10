@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Discord from '../assets/Discord.tsx'; // Ajusta la ruta según la ubicación real del archivo SVG
-import { userAuthStore } from '../routes/authStore.tsx';
+import { userAuthStore } from '../authStore.tsx';
 
 const NavigationBar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -11,6 +11,15 @@ const NavigationBar: React.FC = () => {
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
+  };
+
+  const clickButton = () => {
+    userAuthStore.getState().setToken('');
+    userAuthStore.getState().setUsername('');
+    userAuthStore.getState().setEmail('');
+    userAuthStore.getState().setTokenType('');
+    userAuthStore.getState().setState(false);
+    //hacer fetch a la api para cerrar la session
   };
 
   return (
@@ -41,10 +50,12 @@ const NavigationBar: React.FC = () => {
             </Link>
           </div>
           <div
-            className={`collapse navbar-collapse ${isOpen ? 'show' : ''}`}
+            className={`collapse navbar-collapse d-flex m-auto bg-primary ${
+              isOpen ? 'show' : ''
+            }`}
             id="navbarSupportedContent"
           >
-            <ul className="navbar-nav mx-auto">
+            <ul className="navbar-nav mx-auto ">
               <li className="nav-item">
                 <Link to="/home" className="nav-link" onClick={toggleMenu}>
                   <dt className="text-white">Inicio</dt>
@@ -52,13 +63,22 @@ const NavigationBar: React.FC = () => {
               </li>
               <li>
                 {login ? (
-                  <Link
-                    to="/search-project"
-                    className="nav-link"
-                    onClick={toggleMenu}
-                  >
-                    <dt className="text-white">Buscar proyecto</dt>
-                  </Link>
+                  <div className="d-flex">
+                    <Link
+                      to="/project-options"
+                      className="nav-link"
+                      onClick={toggleMenu}
+                    >
+                      <dt className="text-white">Opciones de proyecto</dt>
+                    </Link>
+                    <Link
+                      to="/my-projects"
+                      className="nav-link"
+                      onClick={toggleMenu}
+                    >
+                      <dt className="text-white">Mis proyectos</dt>
+                    </Link>
+                  </div>
                 ) : null}
               </li>
               <li className="nav-item">
@@ -72,7 +92,7 @@ const NavigationBar: React.FC = () => {
           {!login ? (
             <Link to="/login" className="nav-link" onClick={toggleMenu}>
               <button
-                className="btn-sm d-flex rounded-5 text-dark"
+                className="btn-sm d-flex rounded-5 text-dark ms-2"
                 style={{ border: 'none', fontSize: '0.9rem' }}
               >
                 <span className="p-2">
@@ -81,16 +101,30 @@ const NavigationBar: React.FC = () => {
               </button>
             </Link>
           ) : (
-            <Link to="/profile" className="nav-link" onClick={toggleMenu}>
+            <div className="d-flex">
+              <Link to="/profile" className="nav-link" onClick={toggleMenu}>
+                <button
+                  className="btn-sm d-flex rounded-5 text-dark ms-2"
+                  style={{ border: 'none', fontSize: '0.9rem' }}
+                >
+                  <span className="p-2">
+                    <dt>Perfil</dt>
+                  </span>
+                </button>
+              </Link>
               <button
-                className="btn-sm d-flex rounded-5 text-dark"
-                style={{ border: 'none', fontSize: '0.9rem' }}
+                className="btn-sm d-flex rounded-5 text-dark ms-2"
+                style={{
+                  border: 'none',
+                  fontSize: '0.9rem',
+                }}
+                onClick={clickButton}
               >
                 <span className="p-2">
-                  <dt>Perfil usuario</dt>
+                  <dt>Cerrar session</dt>
                 </span>
               </button>
-            </Link>
+            </div>
           )}
         </nav>
       </div>

@@ -1,51 +1,49 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { userAuthStore } from './authStore'; // Importa el store global
+import { userAuthStore } from '../authStore'; // Importa el store global
 
-type LoginType = {
+type LoginPageType = {
   email: string;
   password: string;
 };
 
-type LoginProps = {
-  setIsLoggedIn: (isLoggedIn: boolean) => void;
-};
-
-const Login: React.FC<LoginProps> = ({ setIsLoggedIn }) => {
-  const [loginData, setLoginData] = useState<LoginType>({
+const LoginPage: React.FC = () => {
+  const [LoginPageData, setLoginPageData] = useState<LoginPageType>({
     email: '',
     password: '',
   });
+
   const [error, setError] = useState('');
   const setToken = userAuthStore((state) => state.setToken); // Obtén el método setToken del store
   const setTokenType = userAuthStore((state) => state.setTokenType); // Obtén el método setUserType del store
   const setEmail = userAuthStore((state) => state.setEmail); // Obtén el método setUsername del store
+  const setUsername = userAuthStore((state) => state.setUsername); // Obtén el método setUsername del store
 
   const navigate = useNavigate();
 
-  const handleLoginChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setLoginData({
-      ...loginData,
+  const handleLoginPageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setLoginPageData({
+      ...LoginPageData,
       [e.target.name]: e.target.value,
     });
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!loginData.email || !loginData.password) {
+    if (!LoginPageData.email || !LoginPageData.password) {
       setError('Por favor, completa todos los campos.');
       return;
     }
 
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailPattern.test(loginData.email)) {
+    if (!emailPattern.test(LoginPageData.email)) {
       setError('Por favor, introduce un correo electrónico válido.');
       return;
     }
     try {
       const formData = new URLSearchParams();
-      formData.append('username', loginData.email);
-      formData.append('password', loginData.password);
+      formData.append('username', LoginPageData.email);
+      formData.append('password', LoginPageData.password);
 
       const response = await fetch('http://localhost:8000/user/login', {
         method: 'POST',
@@ -59,11 +57,9 @@ const Login: React.FC<LoginProps> = ({ setIsLoggedIn }) => {
         const responseData = await response.json(); // Parsea la respuesta a JSON
         setToken(responseData.access_token); // Almacena el token en el store
         setTokenType(responseData.token_type); // Almacena el tipo de token en el store
-        setEmail(loginData.email);
-
+        setUsername(responseData.user_name); // Almacena el nombre de usuario en el store
+        setEmail(LoginPageData.email);
         userAuthStore.setState({ state: true });
-
-        setIsLoggedIn(true);
         navigate('/home');
       } else {
         console.error('Error al iniciar sesión:', response.statusText);
@@ -99,7 +95,7 @@ const Login: React.FC<LoginProps> = ({ setIsLoggedIn }) => {
               type="email"
               name="email"
               className="form-control"
-              onChange={handleLoginChange}
+              onChange={handleLoginPageChange}
             />
           </div>
           <div className="mb-3">
@@ -108,7 +104,7 @@ const Login: React.FC<LoginProps> = ({ setIsLoggedIn }) => {
               type="password"
               name="password"
               className="form-control"
-              onChange={handleLoginChange}
+              onChange={handleLoginPageChange}
             />
           </div>
           <div style={{ width: '100%' }}>
@@ -134,4 +130,4 @@ const Login: React.FC<LoginProps> = ({ setIsLoggedIn }) => {
   );
 };
 
-export default Login;
+export default LoginPage;

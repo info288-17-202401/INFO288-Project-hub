@@ -1,37 +1,39 @@
-import { useState } from 'react';
+import { userAuthStore } from '../authStore';
 import Back from '../assets/Back';
-import { projectAuthStore, userAuthStore } from './authStore';
-import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 
-const JoinProject: React.FC<{ onReturn: () => void }> = ({ onReturn }) => {
+const CreateProject: React.FC<{ onReturn: () => void }> = ({ onReturn }) => {
   const [error, setError] = useState('');
-  const setToken = projectAuthStore((state) => state.setToken); // Obtén el método setToken del store
-  const setTokenType = projectAuthStore((state) => state.setTokenType); // Obtén el método setUserType del store
 
-  const navigate = useNavigate();
-
-  const [joinProjectData, setJoinProjectData] = useState({
-    project_id: '',
+  const [createProjectData, setCreateProjectData] = useState({
+    project_name: '',
     project_password: '',
+    project_description: '',
   });
 
-  const handleJoinProjectChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setJoinProjectData({
-      ...joinProjectData,
-      [e.target.name]: e.target.value,
-    });
+  const handleCreateDataChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setCreateProjectData((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
   };
 
   const clickButton = () => {
     const token = userAuthStore.getState().token;
 
-    if (!joinProjectData.project_id || !joinProjectData.project_password) {
+    if (
+      !createProjectData.project_name ||
+      !createProjectData.project_password ||
+      !createProjectData.project_description
+    ) {
       setError('Por favor, completa todos los campos.');
       return;
     }
-
     setError('');
-    const url = `http://localhost:8000/project/auth?project_id=${joinProjectData.project_id}&project_password=${joinProjectData.project_password}`;
+    const url = `http://localhost:8000/project/create?project_name=${createProjectData.project_name}&project_password=${createProjectData.project_password}&project_description=${createProjectData.project_description}`;
 
     fetch(url, {
       method: 'POST',
@@ -43,53 +45,58 @@ const JoinProject: React.FC<{ onReturn: () => void }> = ({ onReturn }) => {
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
-        setToken(data.access_token); // Almacena el token en el store
-        setTokenType(data.token_type); // Almacena el tipo de token en el store
-        console.log('Te has unido al proyecto correctamente.');
-        navigate('/projects');
+        alert('Proyecto creado correctamente.');
       })
       .catch((error) => {
         console.error('Error:', error);
-        console.log('Ocurrió un error al crear el proyecto.');
+        alert('Ocurrió un error al crear el proyecto.');
       });
   };
+
   return (
     <div
       className="text-light p-4 container d-flex justify-content-center align-items-center"
       style={{ minHeight: '80vh' }}
     >
       <div
-        className="card p-4  text-light"
+        className="card p-4 text-light"
         style={{ backgroundColor: '#303339', width: '50%' }}
       >
         <div className="d-flex justify-content-between align-items-center m-auto mb-4">
-          <button className="btn p-0 m-2 border-0" onClick={onReturn}>
+          <button className="btn p-0 border-0 m-2 " onClick={onReturn}>
             <Back />
           </button>
-          <h1 className="text-center text-uppercase m-0">
-            Unirse a un proyecto
-          </h1>
+          <h1 className="text-center text-uppercase m-0">Crear un proyecto</h1>
         </div>
         <form>
           <div className="mb-3">
-            <label className="form-label">Id del proyecto</label>
+            <label className="form-label">Nombre del proyecto</label>
             <input
-              onChange={handleJoinProjectChange}
+              onChange={handleCreateDataChange}
               type="text"
-              name="project_id"
+              name="project_name"
               className="form-control"
             />
           </div>
           <div className="mb-3">
             <label className="form-label">Contraseña</label>
             <input
-              onChange={handleJoinProjectChange}
+              onChange={handleCreateDataChange}
               type="password"
               name="project_password"
               className="form-control"
             />
           </div>
+          <div className="mb-3">
+            <label className="form-label">Descripcion</label>
+            <textarea
+              onChange={handleCreateDataChange}
+              className="form-control"
+              name="project_description"
+            />
+          </div>
         </form>
+
         <div style={{ width: '100%' }}>
           <button
             type="submit"
@@ -97,7 +104,7 @@ const JoinProject: React.FC<{ onReturn: () => void }> = ({ onReturn }) => {
             style={{ backgroundColor: '#5864f2' }}
             onClick={clickButton}
           >
-            Unirse
+            Crear
           </button>
           {error && <p className="mt-3 text-center text-danger">{error}</p>}
         </div>
@@ -106,4 +113,4 @@ const JoinProject: React.FC<{ onReturn: () => void }> = ({ onReturn }) => {
   );
 };
 
-export default JoinProject;
+export default CreateProject;

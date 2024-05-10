@@ -1,8 +1,8 @@
 import React from 'react';
 import profileimg from '../assets/errorPage.jpg';
-import { userAuthStore } from './authStore';
+import { userAuthStore } from '../authStore';
 
-const Profile: React.FC = () => {
+const ProfilePage: React.FC = () => {
   return (
     <div className="container mt-5">
       <div className="row justify-content-center">
@@ -28,7 +28,7 @@ const Profile: React.FC = () => {
                   id="username"
                   className="form-control"
                   readOnly
-                  value="NombreUsuario"
+                  value={userAuthStore.getState().username}
                 />
               </div>
               <div className="mb-3">
@@ -55,4 +55,4 @@ const Profile: React.FC = () => {
   );
 };
 
-export default Profile;
+export default ProfilePage;

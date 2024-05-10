@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
-const Register: React.FC = ({}) => {
-  const [registerData, setRegisterData] = useState({
+const RegisterPage: React.FC = ({}) => {
+  const [RegisterPageData, setRegisterPageData] = useState({
     username: '',
     email: '',
     password: '',
@@ -11,9 +11,9 @@ const Register: React.FC = ({}) => {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  const handleRegisterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setRegisterData({
-      ...registerData,
+  const handleRegisterPageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setRegisterPageData({
+      ...RegisterPageData,
       [e.target.name]: e.target.value,
     });
   };
@@ -22,22 +22,22 @@ const Register: React.FC = ({}) => {
     e.preventDefault();
 
     if (
-      !registerData.username ||
-      !registerData.email ||
-      !registerData.password
+      !RegisterPageData.username ||
+      !RegisterPageData.email ||
+      !RegisterPageData.password
     ) {
       setError('Por favor, completa todos los campos.');
       return;
     }
 
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailPattern.test(registerData.email)) {
+    if (!emailPattern.test(RegisterPageData.email)) {
       setError('Por favor, introduce un correo electrónico válido.');
       return;
     }
 
     try {
-      const url = `http://localhost:8000/user/register?user_name=${registerData.username}&user_email=${registerData.email}&user_password=${registerData.password}`;
+      const url = `http://localhost:8000/user/register?user_name=${RegisterPageData.username}&user_email=${RegisterPageData.email}&user_password=${RegisterPageData.password}`;
 
       const response = await fetch(url, {
         method: 'POST',
@@ -48,10 +48,10 @@ const Register: React.FC = ({}) => {
 
       if (response.ok) {
         console.log('Usuario registrado exitosamente.');
-        navigate('/login'); // Redirige al componente de login
+        navigate('/login');
       } else {
         console.error('Error al registrar usuario:', response.statusText);
-        setError(`El correo ${registerData.email} ya tiene cuenta`);
+        setError(`El correo ${RegisterPageData.email} ya tiene cuenta`);
       }
     } catch (error: any) {
       console.error('Error de red:', error.message);
@@ -78,7 +78,7 @@ const Register: React.FC = ({}) => {
               type="text"
               name="username"
               className="form-control"
-              onChange={handleRegisterChange}
+              onChange={handleRegisterPageChange}
             />
           </div>
           <div className="mb-3">
@@ -87,7 +87,7 @@ const Register: React.FC = ({}) => {
               type="email"
               name="email"
               className="form-control"
-              onChange={handleRegisterChange}
+              onChange={handleRegisterPageChange}
             />
           </div>
           <div className="mb-3">
@@ -96,7 +96,7 @@ const Register: React.FC = ({}) => {
               type="password"
               name="password"
               className="form-control"
-              onChange={handleRegisterChange}
+              onChange={handleRegisterPageChange}
             />
           </div>
           <div style={{ width: '100%', textAlign: 'center' }}>
@@ -125,4 +125,4 @@ const Register: React.FC = ({}) => {
   );
 };
 
-export default Register;
+export default RegisterPage;
