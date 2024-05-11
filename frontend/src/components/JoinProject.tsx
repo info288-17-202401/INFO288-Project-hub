@@ -42,10 +42,8 @@ const JoinProject: React.FC<{ onReturn: () => void }> = ({ onReturn }) => {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
         setToken(data.access_token); // Almacena el token en el store
         setTokenType(data.token_type); // Almacena el tipo de token en el store
-        console.log('Te has unido al proyecto correctamente.');
         navigate('/projects');
       })
       .catch((error) => {

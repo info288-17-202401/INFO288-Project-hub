@@ -1,0 +1,72 @@
+[
+  {
+    "nombre_team": "Equipo A",
+    "tamaño_team": 10,
+    "tareas_finalizadas_team": 5,
+    "tareas_pendientes": 3,
+    "tareas_activas_team": 2
+  },
+  {
+    "nombre_team": "Equipo B",
+    "tamaño_team": 8,
+    "tareas_finalizadas_team": 6,
+    "tareas_pendientes": 1,
+    "tareas_activas_team": 1
+  },
+  {
+    "nombre_team": "Equipo C",
+    "tamaño_team": 12,
+    "tareas_finalizadas_team": 8,
+    "tareas_pendientes": 2,
+    "tareas_activas_team": 2
+  },
+  {
+    "nombre_team": "Equipo D",
+    "tamaño_team": 6,
+    "tareas_finalizadas_team": 4,
+    "tareas_pendientes": 1,
+    "tareas_activas_team": 1
+  },
+  {
+    "nombre_team": "Equipo E",
+    "tamaño_team": 15,
+    "tareas_finalizadas_team": 12,
+    "tareas_pendientes": 3,
+    "tareas_activas_team": 0
+  },
+  {
+    "nombre_team": "Equipo F",
+    "tamaño_team": 9,
+    "tareas_finalizadas_team": 7,
+    "tareas_pendientes": 2,
+    "tareas_activas_team": 0
+  },
+  {
+    "nombre_team": "Equipo G",
+    "tamaño_team": 11,
+    "tareas_finalizadas_team": 9,
+    "tareas_pendientes": 1,
+    "tareas_activas_team": 1
+  },
+  {
+    "nombre_team": "Equipo H",
+    "tamaño_team": 7,
+    "tareas_finalizadas_team": 3,
+    "tareas_pendientes": 4,
+    "tareas_activas_team": 0
+  },
+  {
+    "nombre_team": "Equipo I",
+    "tamaño_team": 14,
+    "tareas_finalizadas_team": 10,
+    "tareas_pendientes": 3,
+    "tareas_activas_team": 1
+  },
+  {
+    "nombre_team": "Equipo J",
+    "tamaño_team": 13,
+    "tareas_finalizadas_team": 11,
+    "tareas_pendientes": 1,
+    "tareas_activas_team": 1
+  }
+]

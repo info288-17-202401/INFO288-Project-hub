@@ -43,14 +43,20 @@ const Chat: React.FC = () => {
           ))}
         </ul>
       </div>
-      <div className="d-flex">
+      <div className="d-flex ps-3 pe-2">
         <input
           className="form-control me-2"
           type="text"
           placeholder="Ingresa tu mensaje!"
         />
-        <button onClick={clickButton} className="btn btn-primary">
-          Enviar
+
+        <button
+          type="submit"
+          className="btn text-white "
+          style={{ backgroundColor: '#5864f2' }}
+          onClick={clickButton}
+        >
+          enviar
         </button>
       </div>
     </div>

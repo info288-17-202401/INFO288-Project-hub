@@ -1,32 +1,29 @@
-import React, { useEffect, useRef } from 'react';
-import { Chart } from 'chart.js/auto'; // Importa la versión de módulo de Chart.js
+import React from 'react';
+import ScatterPlot from './ScatterPlot';
+import testjson from './testjson.json';
+import BarChart from './BarChart';
 
-interface ChartProps {
-  data: Chart.ChartData;
-  options: Chart.ChartOptions;
-}
-
-const ChartsContainer: React.FC<ChartProps> = ({ data, options }) => {
-  const chartRef = useRef<HTMLCanvasElement>(null);
-  let chartInstance: Chart | null = null;
-
-  useEffect(() => {
-    if (chartRef && chartRef.current) {
-      chartInstance = new Chart(chartRef.current, {
-        type: 'bar',
-        data,
-        options,
-      });
-    }
-
-    return () => {
-      if (chartInstance) {
-        chartInstance.destroy();
-      }
-    };
-  }, [data, options]);
-
-  return <canvas ref={chartRef} />;
+const ChartsContainer: React.FC = () => {
+  return (
+    <div className="container-fluid">
+      <div className="row">
+        <div
+          className="col-md p-2 m-2 align-content-center text-center rounded-2"
+          style={{ backgroundColor: '#21252b' }}
+        >
+          <h3>Tamaño del Equipo v/s Tareas Finalizadas</h3>
+          <ScatterPlot data={testjson} />
+        </div>
+        <div
+          className="col-md p-2 m-2 align-content-center text-center rounded-2"
+          style={{ backgroundColor: '#21252b' }}
+        >
+          <h3>Tareas Finalizadas por Equipo</h3>
+          <BarChart data={testjson} />
+        </div>
+      </div>
+    </div>
+  );
 };
 
 export default ChartsContainer;

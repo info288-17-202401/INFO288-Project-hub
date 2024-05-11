@@ -50,7 +50,7 @@ const NavigationBar: React.FC = () => {
             </Link>
           </div>
           <div
-            className={`collapse navbar-collapse d-flex m-auto bg-primary ${
+            className={`collapse navbar-collapse d-flex m-auto ${
               isOpen ? 'show' : ''
             }`}
             id="navbarSupportedContent"

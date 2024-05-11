@@ -17,6 +17,7 @@ const TeamsPage: React.FC = () => {
         style={{
           flex: '0.7',
           backgroundColor: '#21252b',
+          overflowY: 'auto',
         }}
       >
         <div className="d-flex align-items-center">
@@ -32,7 +33,6 @@ const TeamsPage: React.FC = () => {
           </div>
         </div>
         <hr className=" border-top b-0 p-0 m-0 ms-2 me-2 bg-white" />
-
         <ul className="p-2 m-1" style={{ listStyle: 'none', padding: 0 }}>
           {usercards.map((user, index) => (
             <li className="mb-3" key={index}>
@@ -49,15 +49,17 @@ const TeamsPage: React.FC = () => {
         style={{
           flex: '3',
           backgroundColor: '#282c34',
+          overflowY: 'auto',
+          display: 'flex',
+          flexDirection: 'column',
         }}
       >
-        <div className="p-2 d-flex flex-column justify-content-between m-0 p-0 h-100 ">
-          <div className="m-1 p-0">
-            <ToDoContainer />
-          </div>
-          <div className="p-2 m-1">
-            <Chat />
-          </div>
+        <div className="p-2 text-white " style={{ flex: '1' }}>
+          <ToDoContainer />
+        </div>
+
+        <div className="p-2 " style={{ flex: '1' }}>
+          <Chat />
         </div>
       </div>
     </div>
