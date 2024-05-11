@@ -15,19 +15,25 @@ ALGORITHM = 'HS256'
 async def create_project(project_data, user_data):
     cursor = db.conn.cursor()
     random_id = await random_key(10)
+    time_now = datetime.now()
     project_add_query = f"""
         INSERT INTO project (project_id, project_creation_date, project_description, project_name, project_password, project_owner_id)
         VALUES (%s, %s, %s, %s, %s, %s);
     """
     project_add_query_parameters = (random_id, 
-                             datetime.now(),
+                             time_now,
                              project_data.project_description,
                              project_data.project_name,
                              await auth_services.get_password_hash(project_data.project_password),
                              user_data['app_user_id'])
     cursor.execute(project_add_query,project_add_query_parameters)
     db.conn.commit()
-    return random_id
+    return {
+        "project_id": random_id,
+        "project_description": project_data.project_description,
+        "project_name": project_data.project_name,
+        "creation_date": time_now 
+    }
     
 async def project_auth( project_data ):
     find_project = await get_project_by_id(project_data.project_id)
