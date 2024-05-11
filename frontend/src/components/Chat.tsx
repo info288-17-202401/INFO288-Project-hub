@@ -18,32 +18,30 @@ const Chat: React.FC = () => {
   };
 
   return (
-    <div className=" ">
+    <div className="">
       <div
-        className="d-flex m-4"
+        className=" "
         style={{
-          height: '30vh',
+          height: '36vh',
           overflowY: 'auto', // Agregamos desbordamiento vertical para asegurar que todos los mensajes sean visibles
           overflowX: 'hidden',
-          marginTop: '10px', // Ajustamos el margen superior para separar el primer mensaje del borde superior del contenedor
         }}
       >
-        <ul
-          className="align-content-center w-100 p-2"
-          style={{ listStyle: 'none', padding: 0 }}
-        >
-          {messages.map((message, index) => (
-            <Message
-              key={index}
-              user_name={message.user_name}
-              user_email={message.user_email}
-              message_text={message.message_text}
-              date={message.date}
-            />
-          ))}
-        </ul>
+        <div className="d-flex m-4">
+          <div className="align-content-center ">
+            {messages.map((message, index) => (
+              <Message
+                key={index}
+                user_name={message.user_name}
+                user_email={message.user_email}
+                message_text={message.message_text}
+                date={message.date}
+              />
+            ))}
+          </div>
+        </div>
       </div>
-      <div className="d-flex ps-3 pe-2">
+      <div className="d-flex ps-3 pe-2 pt-4">
         <input
           className="form-control me-2"
           type="text"

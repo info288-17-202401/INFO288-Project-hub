@@ -15,7 +15,7 @@ const UserCard: React.FC<UserCardProps> = ({ photo, name }) => {
               src={photo}
               alt={name}
               className="user-card__photo rounded-circle"
-              style={{ width: '40px', height: '40px' }} // Tamaño personalizado para la imagen
+              style={{ width: '40px', height: '40px' }}
             />
           </div>
           <div>

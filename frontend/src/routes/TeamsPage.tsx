@@ -36,11 +36,7 @@ const TeamsPage: React.FC = () => {
         <ul className="p-2 m-1" style={{ listStyle: 'none', padding: 0 }}>
           {usercards.map((user, index) => (
             <li className="mb-3" key={index}>
-              <UserCard
-                name={user.name}
-                status={user.status as 'active' | 'absent' | 'disconnected'} // Cast the status prop to the correct type
-                photo={user.photo}
-              />
+              <UserCard name={user.name} photo={user.photo} />
             </li>
           ))}
         </ul>

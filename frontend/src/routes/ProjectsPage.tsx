@@ -75,8 +75,16 @@ const ProjectPage: React.FC = () => {
             </span>
           </div>
         </div>
-        <hr className=" border-top b-0 p-0 m-0 ms-2 me-2 bg-white" />
-        <ul className="p-2 m-1" style={{ listStyle: 'none', padding: 0 }}>
+        <hr className=" border-top b-0 p-0 m-0 ms-2 me-2" />
+        <ul
+          className="p-2 m-2 mt-2"
+          style={{
+            listStyle: 'none',
+            padding: 0,
+            overflowY: 'auto',
+            maxHeight: 'calc(100vh - 140px)',
+          }}
+        >
           {dataTeams.map((team: TeamsCardProps, index: number) => (
             <li className="mb-3" key={index}>
               <TeamCard team={team} />
@@ -96,9 +104,8 @@ const ProjectPage: React.FC = () => {
         <div className="p-2 text-white " style={{ flex: '1' }}>
           <ChartsContainer />
         </div>
-
-        <div className="p-2 " style={{ flex: '1' }}>
-          {/* <Chat /> */}
+        <div className="p-2 text-white " style={{ flex: '1' }}>
+          <Chat />
         </div>
       </div>
     </div>
