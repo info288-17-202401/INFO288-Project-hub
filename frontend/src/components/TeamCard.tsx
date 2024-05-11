@@ -22,7 +22,7 @@ const TeamsCard: React.FC<TeamsCardProps> = ({ team }) => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!data.id_team || !data.password) {
-      setError('Por favor, completa todos los campos.');
+      // setError('Por favor, completa todos los campos.');
       return;
     }
   };
