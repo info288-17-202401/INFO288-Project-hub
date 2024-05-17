@@ -1,12 +1,11 @@
 from passlib.context import CryptContext
-import passlib.hash as hash
-import os, db
+import os
 from dotenv import load_dotenv
-from pydantic import BaseModel
-from datetime import datetime, timedelta, timezone
-from fastapi import HTTPException, Security, status, Depends
-from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer, OAuth2PasswordBearer
+from datetime import datetime
+from fastapi import HTTPException, status, Depends
+from fastapi.security import HTTPBearer, OAuth2PasswordBearer
 from jose import jwt, JWTError
+import src.controllers.db_controller as db
 
 load_dotenv('.env.api')
 
@@ -46,6 +45,7 @@ async def login_user(user_data):
     if not await verify_password(user_data.password, find_user['app_user_password']):
         raise HTTPException(status_code = 401, detail="", 
                     headers={"WWW-Authenticate":"Bearer"})  
+    return find_user
         
 async def get_user_by_email(user_email):
     cursor = db.conn.cursor()
