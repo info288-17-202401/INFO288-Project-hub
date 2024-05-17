@@ -23,6 +23,9 @@ docker build -t project_hub_api . -f ./Dockerfile.api
 
 ```bash
 docker run --name project_hub_api -v /app:/code/app --env-file ./.env.api --network red_project_hub -p 2520:5000 -d project_hub_api
+uvicorn <module>:<app_instance> --reload
+
+❯ uvicorn main:app --host=localhost --port=8000 --reload
 
 ```
 
