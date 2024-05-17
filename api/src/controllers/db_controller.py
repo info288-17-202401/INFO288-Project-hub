@@ -2,7 +2,6 @@ import os, psycopg2
 from dotenv import load_dotenv
 
 load_dotenv('.env.api')
-print("Using port:", os.getenv("POSTGRES_PORT"))
 
 conn = psycopg2.connect(
                 host = os.getenv("POSTGRES_HOST"),
