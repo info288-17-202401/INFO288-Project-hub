@@ -17,7 +17,6 @@ async def auth_project(project_data: project_models.ProjectSearchModel = Depends
     data = {"access_token": token, "token_type": "bearer"}
     return data
 
-
 @project_router.post("/create", tags=["project"])
 async def create_project(
     project_data: project_models.ProjectRegisterModel = Depends(),
@@ -41,7 +40,7 @@ async def get_teams_from_project(project_auth_key: str):
 
 
 @project_router.get(
-    "/{user_id}/projects",
+    "/projects",
     tags=["project"],
 )
 async def get_projects_from_user(user_data=Depends(auth_services.get_user_current)):

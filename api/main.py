@@ -3,6 +3,7 @@ from fastapi.responses import JSONResponse
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from src.routes.auth_router import auth_router
+from src.routes.user_router import user_router
 from src.routes.project_router import project_router
 from src.routes.team_router import team_router
 from src.routes.messages_router import messages_router
@@ -21,7 +22,8 @@ app.add_middleware(
 
 
 # routes
-app.include_router(auth_router, prefix="/user")
+app.include_router(auth_router, prefix="/auth")
+app.include_router(user_router, prefix="/user")
 app.include_router(project_router, prefix="/project")
 app.include_router(team_router, prefix="/team")
 app.include_router(messages_router, prefix="/message")

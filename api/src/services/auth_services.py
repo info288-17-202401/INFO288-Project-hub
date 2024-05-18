@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 from datetime import datetime
 from fastapi import HTTPException, status, Depends
 from fastapi.security import HTTPBearer, OAuth2PasswordBearer
-from jose import jwt, JWTError
+from jose import jwt as jose_jwt, JWTError
 import src.controllers.db_controller as db
 
 load_dotenv('.env.api')
@@ -15,7 +15,7 @@ ALGORITHM = 'HS256'
 ACCESS_TOKEN_EXPIRE_MINUTES = 60
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-oauth2_scheme_user = OAuth2PasswordBearer(tokenUrl="/user/login")
+oauth2_scheme_user = OAuth2PasswordBearer(tokenUrl="/auth/login")
 
 async def register_user(user_data):
     find_user = await get_user_by_email(user_data.user_email)
@@ -69,11 +69,11 @@ async def create_access_token(user_id):
     payload = {
         'sub': user_id
     }
-    return jwt.encode(payload, SECRET_KEY, ALGORITHM)
+    return jose_jwt.encode(payload, SECRET_KEY, ALGORITHM)
     
 async def get_user_current(user_token: str = Depends(oauth2_scheme_user)):
     try:
-        token_decode = jwt.decode(user_token, SECRET_KEY, ALGORITHM)
+        token_decode = jose_jwt.decode(user_token, SECRET_KEY, ALGORITHM)
         user_email = token_decode.get("sub")
         if user_email == None:
             raise HTTPException(status_code = 401, detail="User email not decoded", 

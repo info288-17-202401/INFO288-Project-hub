@@ -8,7 +8,8 @@ auth_router = APIRouter()
 
 @auth_router.post("/register", tags=["auth"])
 async def register_user(user_data: user_models.UserRegisterModel = Depends()):
-    return await auth_services.register_user(user_data)
+    await auth_services.register_user(user_data)
+    return {"status": 201, "response": "Cuenta creada exitosamente"}
 
 @auth_router.post("/login", tags=["auth"])
 async def access_token(form_data: OAuth2PasswordRequestForm = Depends()):
