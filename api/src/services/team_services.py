@@ -65,19 +65,23 @@ async def verify_team_in_project(team_id, project_id):
         SELECT COUNT(*) FROM team WHERE team_id = %s AND project_id = %s;
     """
     cursor.execute(check_user_query, (team_id, project_id))
-    team_in_project = cursor.fetchone()[0] > 0
+    team = cursor.fetchone()
+    team_in_project = team[0] > 0
     if not team_in_project:
         raise HTTPException(status_code = 401, detail="Team not in project", 
                 headers={"WWW-Authenticate":"Bearer"})  
+    return team
         
 async def join_team(user_id, team_id):
+    
+    
     cursor = db.conn.cursor()
     check_user_query = """
         SELECT COUNT(*) FROM app_user_team WHERE app_user_id = %s;
     """
     cursor.execute(check_user_query, (user_id,))
     user_exists = cursor.fetchone()[0] > 0
-    
+
     if user_exists:
         update_user_query = """
             UPDATE app_user_team
@@ -93,6 +97,7 @@ async def join_team(user_id, team_id):
         """
         insert_user_query_parameters = (team_id, user_id, "active")
         cursor.execute(insert_user_query, insert_user_query_parameters)
+    
     
     db.conn.commit()
 

@@ -16,7 +16,8 @@ team_router = APIRouter()
 async def join_to_team(  user = Depends(auth_services.get_user_current), 
                         team_data: team_models.TeamJoinModel = Depends()):
     project = await project_services.get_project_current(team_data.project_auth_key)
-    await team_services.verify_team_in_project(team_data.team_id, project['project_id'])
+    team = await team_services.verify_team_in_project(team_data.team_id, project['project_id'])
+    await auth_services.verify_password(team_data.team_password, team['team_password'])
     await team_services.join_team(user['app_user_id'], team_data.team_id)
     await team_services.send_user_status(user['app_user_id'], team_data.team_id, project['project_id'], "connected")
     

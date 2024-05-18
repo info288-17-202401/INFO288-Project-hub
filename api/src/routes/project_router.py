@@ -13,8 +13,9 @@ project_router = APIRouter()
     "/auth", tags=["project"], dependencies=[Depends(auth_services.get_user_current)]
 )
 async def auth_project(project_data: project_models.ProjectSearchModel = Depends()):
+    await project_services.project_auth(project_data.project_id, project_data.project_password)
     token = await auth_services.create_access_token(project_data.project_id)
-    data = {"access_token": token, "token_type": "bearer"}
+    data = {"status_code": 201, "access_token": token, "token_type": "bearer"}
     return data
 
 @project_router.post("/create", tags=["project"])
@@ -26,7 +27,6 @@ async def create_project(
     return await project_services.set_profile_in_project(
         project_id["project_id"], user_data["app_user_id"], "admin"
     )
-
 
 @project_router.get(
     "/{project_auth_key}/teams",

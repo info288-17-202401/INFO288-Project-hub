@@ -40,16 +40,17 @@ async def create_project(project_data, user_data):
     }
 
 
-async def project_auth(project_data):
-    find_project = await get_project_by_id(project_data.project_id)
+    
+async def project_auth(project_id, project_password):
+    find_project = await get_project_by_id(project_id)
     if not find_project:
         raise HTTPException(
             status_code=401,
             detail="Project not found",
             headers={"WWW-Authenticate": "Bearer"},
         )
-    if not auth_services.verify_password(
-        project_data.project_password, find_project["project_password"]
+    if not await auth_services.verify_password(
+        project_password, find_project["project_password"]
     ):
         raise HTTPException(
             status_code=401,

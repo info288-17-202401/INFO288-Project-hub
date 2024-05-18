@@ -10,5 +10,4 @@ user_router = APIRouter()
 
 @user_router.get("/projects", tags=["user"])
 async def get_projects_from_user(user_data=Depends(auth_services.get_user_current)):
-    print(user_data)
     return await project_services.get_all_projects_from_user(user_data["app_user_id"])
