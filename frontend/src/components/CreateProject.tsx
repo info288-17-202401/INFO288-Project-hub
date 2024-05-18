@@ -1,6 +1,7 @@
 import { userAuthStore } from '../authStore';
 import Back from '../assets/Back';
 import { useState } from 'react';
+import { apiGetData, apiSendData } from '../services/apiService';
 
 const CreateProject: React.FC<{ onReturn: () => void }> = ({ onReturn }) => {
   const [error, setError] = useState('');
@@ -21,7 +22,7 @@ const CreateProject: React.FC<{ onReturn: () => void }> = ({ onReturn }) => {
     }));
   };
 
-  const clickButton = () => {
+  const clickButton = async () => {
     const token = userAuthStore.getState().token;
 
     if (
@@ -33,15 +34,10 @@ const CreateProject: React.FC<{ onReturn: () => void }> = ({ onReturn }) => {
       return;
     }
     setError('');
-    const url = `http://localhost:8000/project/create?project_name=${createProjectData.project_name}&project_password=${createProjectData.project_password}&project_description=${createProjectData.project_description}`;
 
-    fetch(url, {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
-    })
+    const route = `/project/create?project_name=${createProjectData.project_name}&project_password=${createProjectData.project_password}&project_description=${createProjectData.project_description}`;
+    const header = { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json'}
+    await apiSendData(route, header)
       .then((response) => response.json())
       .then((data) => {
         console.log(data);

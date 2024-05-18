@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Discord from '../assets/Discord.tsx'; // Ajusta la ruta según la ubicación real del archivo SVG
 import { userAuthStore } from '../authStore.tsx';
 
 const NavigationBar: React.FC = () => {
@@ -23,44 +22,22 @@ const NavigationBar: React.FC = () => {
   };
 
   return (
-    <div style={{ background: '#404fed' }}>
-      <div className="container">
-        <nav className="navbar navbar-expand-lg navbar-dark justify-content-center">
+    <nav className='navbar navbar-expand-lg'
+    style={{ position: 'fixed', top: 0, left: 0, width: '100%', zIndex: 1000 }}>
+      <div className='container-fluid'>
+        <Link to="/home" className="nav-link" onClick={toggleMenu}>
           <button
-            className="navbar-toggler"
-            type="button"
-            onClick={toggleMenu}
-            aria-controls="navbarSupportedContent"
-            aria-expanded={isOpen ? 'true' : 'false'}
-            aria-label="Toggle navigation"
+            className="d-flex align-items-center btn-unstyled"
+            style={{ border: 'none', background: 'none' }}
           >
-            <span className="navbar-toggler-icon"></span>
+            <span className="me-2 text-uppercase p-2 text-black">
+              <dt>Project Hub</dt>
+            </span>
           </button>
-          <div className="d-flex align-items-center">
-            <Link to="/home" className="nav-link" onClick={toggleMenu}>
-              <button
-                className="d-flex align-items-center btn-unstyled"
-                style={{ border: 'none', background: 'none' }}
-              >
-                <span className="me-2 text-uppercase p-2 text-white">
-                  <dt>Project Hub</dt>
-                </span>
-                <Discord />
-              </button>
-            </Link>
-          </div>
-          <div
-            className={`collapse navbar-collapse d-flex m-auto ${
-              isOpen ? 'show' : ''
-            }`}
-            id="navbarSupportedContent"
-          >
-            <ul className="navbar-nav mx-auto ">
-              <li className="nav-item">
-                <Link to="/home" className="nav-link" onClick={toggleMenu}>
-                  <dt className="text-white">Inicio</dt>
-                </Link>
-              </li>
+          </Link>
+          <div className='collapse navbar-collapse'>
+            <ul className="navbar-nav">
+
               <li>
                 {login ? (
                   <div className="d-flex">
@@ -69,66 +46,27 @@ const NavigationBar: React.FC = () => {
                       className="nav-link"
                       onClick={toggleMenu}
                     >
-                      <dt className="text-white">Opciones de proyecto</dt>
+                      <dt className="text-black">Opciones de proyecto</dt>
                     </Link>
                     <Link
                       to="/my-projects"
                       className="nav-link"
                       onClick={toggleMenu}
                     >
-                      <dt className="text-white">Mis proyectos</dt>
+                      <dt className="text-black">Mis proyectos</dt>
                     </Link>
                   </div>
                 ) : null}
               </li>
               <li className="nav-item">
                 <Link to="/about" className="nav-link" onClick={toggleMenu}>
-                  <dt className="text-white">Acerca de</dt>
+                  <dt className="text-black">About</dt>
                 </Link>
               </li>
             </ul>
           </div>
-
-          {!login ? (
-            <Link to="/login" className="nav-link" onClick={toggleMenu}>
-              <button
-                className="btn-sm d-flex rounded-5 text-dark ms-2"
-                style={{ border: 'none', fontSize: '0.9rem' }}
-              >
-                <span className="p-2">
-                  <dt>Login</dt>
-                </span>
-              </button>
-            </Link>
-          ) : (
-            <div className="d-flex">
-              <Link to="/profile" className="nav-link" onClick={toggleMenu}>
-                <button
-                  className="btn-sm d-flex rounded-5 text-dark ms-2"
-                  style={{ border: 'none', fontSize: '0.9rem' }}
-                >
-                  <span className="p-2">
-                    <dt>Perfil</dt>
-                  </span>
-                </button>
-              </Link>
-              <button
-                className="btn-sm d-flex rounded-5 text-dark ms-2"
-                style={{
-                  border: 'none',
-                  fontSize: '0.9rem',
-                }}
-                onClick={clickButton}
-              >
-                <span className="p-2">
-                  <dt>Cerrar session</dt>
-                </span>
-              </button>
-            </div>
-          )}
-        </nav>
       </div>
-    </div>
+    </nav>
   );
 };
 

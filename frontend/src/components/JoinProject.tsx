@@ -2,6 +2,7 @@ import { useState } from 'react';
 import Back from '../assets/Back';
 import { projectAuthStore, userAuthStore } from '../authStore';
 import { useNavigate } from 'react-router-dom';
+import { apiSendData } from '../services/apiService';
 
 const JoinProject: React.FC<{ onReturn: () => void }> = ({ onReturn }) => {
   const [error, setError] = useState('');
@@ -22,7 +23,7 @@ const JoinProject: React.FC<{ onReturn: () => void }> = ({ onReturn }) => {
     });
   };
 
-  const clickButton = () => {
+  const clickButton = async () => {
     const token = userAuthStore.getState().token;
 
     if (!joinProjectData.project_id || !joinProjectData.project_password) {
@@ -31,16 +32,15 @@ const JoinProject: React.FC<{ onReturn: () => void }> = ({ onReturn }) => {
     }
 
     setError('');
-    const url = `http://localhost:8000/project/auth?project_id=${joinProjectData.project_id}&project_password=${joinProjectData.project_password}`;
-
-    fetch(url, {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
-    })
-      .then((response) => response.json())
+    const route = `/project/auth?project_id=${joinProjectData.project_id}&project_password=${joinProjectData.project_password}`;
+    const header = { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json'}
+    await apiSendData(route, header)
+      .then((response) => {
+        const data = response.json()
+        if(response.ok){
+          return data
+        }
+      })
       .then((data) => {
         setToken(data.access_token); // Almacena el token en el store
         setTokenType(data.token_type); // Almacena el tipo de token en el store
@@ -48,8 +48,11 @@ const JoinProject: React.FC<{ onReturn: () => void }> = ({ onReturn }) => {
       })
       .catch((error) => {
         console.error('Error:', error);
-        console.log('Ocurrió un error al crear el proyecto.');
+        console.log('Ocurrió un error al unirse el proyecto.');
       });
+
+
+
   };
   return (
     <div

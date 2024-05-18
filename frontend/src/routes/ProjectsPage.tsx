@@ -5,6 +5,7 @@ import ChartsContainer from '../components/ChartsContainer';
 import Back from '../assets/Back';
 import { useNavigate } from 'react-router-dom';
 import { projectAuthStore, userAuthStore } from '../authStore';
+import { apiGetData } from '../services/apiService';
 
 type TeamsCardProps = {
   team_description: string;
@@ -27,16 +28,11 @@ const ProjectPage: React.FC = () => {
         const token_project = projectAuthStore.getState().token;
         const token_user = userAuthStore.getState().token;
 
-        const response = await fetch(
-          `http://localhost:8000/project/${token_project}/teams`,
-          {
-            method: 'GET',
-            headers: {
-              Authorization: `Bearer ${token_user}`,
-              'Content-Type': 'application/json',
-            },
-          }
-        );
+
+        const route = `/project/${token_project}/teams`
+        const header =  { Authorization: `Bearer ${token_user}`, 'Content-Type': 'application/json'}
+        const response = await apiGetData(route, header )
+        
 
         if (!response.ok) {
           throw new Error('Error en la solicitud fetch');

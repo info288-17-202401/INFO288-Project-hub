@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import projectimg from '../assets/proyecto.png';
 import { projectAuthStore } from '../authStore';
+import { apiSendData } from '../services/apiService';
 
 type TeamsCardProps = {
   team: {
@@ -38,13 +39,10 @@ const TeamsCard: React.FC<TeamsCardProps> = ({ team }) => {
       formData.append('username', data.team_id);
       formData.append('password', data.password);
       console.log(projectAuthStore.getState().token);
-      const response = await fetch('http://localhost:8000/team/join', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: formData.toString(),
-      });
+
+      const route = `/team/join`;
+      const header = {'Content-Type': 'application/x-www-form-urlencoded'}
+      const response = await apiSendData(route, header, formData.toString())
 
       if (response.ok) {
         const responseData = await response.json(); // Parsea la respuesta a JSON

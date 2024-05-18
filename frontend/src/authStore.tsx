@@ -13,6 +13,8 @@ type AuthState = {
   setState: (state: boolean) => void;
 };
 
+
+
 export const userAuthStore = create<AuthState>((set) => ({
   username: '',
   email: '',

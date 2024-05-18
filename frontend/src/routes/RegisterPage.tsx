@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { apiSendData } from '../services/apiService';
 
 const RegisterPage: React.FC = ({}) => {
   const [RegisterPageData, setRegisterPageData] = useState({
@@ -37,15 +38,9 @@ const RegisterPage: React.FC = ({}) => {
     }
 
     try {
-      const url = `http://localhost:8000/user/register?user_name=${RegisterPageData.username}&user_email=${RegisterPageData.email}&user_password=${RegisterPageData.password}`;
-
-      const response = await fetch(url, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-
+      const route = `/auth/register?user_name=${RegisterPageData.username}&user_email=${RegisterPageData.email}&user_password=${RegisterPageData.password}`;
+      const header = { 'Content-Type': 'application/json'}
+      const response = await apiSendData(route, header)
       if (response.ok) {
         console.log('Usuario registrado exitosamente.');
         navigate('/login');

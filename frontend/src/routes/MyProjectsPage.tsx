@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { userAuthStore } from '../authStore';
+import { apiGetData } from '../services/apiService';
+
 
 const MyProjectsPage: React.FC = () => {
   const [dataProjects, setDataProjects] = useState([]);
@@ -8,17 +10,10 @@ const MyProjectsPage: React.FC = () => {
       try {
         const token_user = userAuthStore.getState().token;
 
-        const response = await fetch(
-          `http://localhost:8000/project/${token_user}/projects`,
-          {
-            method: 'GET',
-            headers: {
-              Authorization: `Bearer ${token_user}`,
-              'Content-Type': 'application/json',
-            },
-          }
-        );
-
+        const route = `/user/projects`
+        const header =  { 'Authorization': `bearer ${token_user}`, 'Content-Type': 'application/json',}
+        const response = await apiGetData(route, header )
+        
         if (!response.ok) {
           throw new Error('Error en la solicitud fetch');
         }

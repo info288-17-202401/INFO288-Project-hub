@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { userAuthStore } from '../authStore'; // Importa el store global
+import { apiSendData } from '../services/apiService';
+import pattern_gif from '../images/pattern_login.gif'
+
 
 type LoginPageType = {
   email: string;
@@ -45,14 +48,10 @@ const LoginPage: React.FC = () => {
       formData.append('username', LoginPageData.email);
       formData.append('password', LoginPageData.password);
 
-      const response = await fetch('http://localhost:8000/user/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: formData.toString(),
-      });
-
+      const route = "/auth/login"
+      const header = { 'Content-Type': 'application/x-www-form-urlencoded'}
+      const response = await apiSendData(route, header, formData.toString())
+    
       if (response.ok) {
         const responseData = await response.json(); // Parsea la respuesta a JSON
         setToken(responseData.access_token); // Almacena el token en el store
@@ -74,59 +73,54 @@ const LoginPage: React.FC = () => {
   };
 
   return (
-    <div
-      className="text-light p-4 container d-flex justify-content-center align-items-center"
-      style={{ minHeight: '80vh' }}
-    >
-      <div
-        className="card p-4  text-light"
-        style={{ backgroundColor: '#303339', width: '50%' }}
-      >
-        <div>
-          <h2 className="mb-4 text-center">
-            ¡Te damos la bienvenida a Project Hub!
-          </h2>
-          <h3 className="text-center">Inicia sesión</h3>
-        </div>
-        <form onSubmit={handleSubmit}>
-          <div className="mb-3">
-            <label className="form-label">Correo electrónico</label>
-            <input
-              type="email"
-              name="email"
-              className="form-control"
-              onChange={handleLoginPageChange}
-            />
-          </div>
-          <div className="mb-3">
-            <label className="form-label">Contraseña</label>
-            <input
-              type="password"
-              name="password"
-              className="form-control"
-              onChange={handleLoginPageChange}
-            />
-          </div>
-          <div style={{ width: '100%' }}>
-            <button
-              type="submit"
-              className="btn text-white w-100"
-              style={{ backgroundColor: '#5864f2' }}
-            >
-              Iniciar sesión
-            </button>
-          </div>
-          {error && <p className="mt-3 text-center text-danger">{error}</p>}
-        </form>
-
-        <p className="mt-3 text-center">
-          ¿No tienes una cuenta?{' '}
-          <Link to="/register" className="text-light">
-            Crear cuenta
-          </Link>
-        </p>
-      </div>
+<div className='vw-100' style={{backgroundColor: '#f9f9f9'}}>
+  <div className='w-100 d-flex flex-container justify-content-center align-items-center vw-100 vh-100'>
+  <section className="d-flex justify-content-center align-items-center w-100 vh-100">
+  <div className="p-5 text-black bg-white rounded-lg" style={{ width: '30vw', maxWidth:'30rem', borderRadius: '10px 2%' }}>
+    <div>
+      <h3 className="text-left font-inter">Bienvenido!</h3>
+      <h6 className="text-left nunito-sans-regular text-secondary mb-4">Ingresa tus datos para iniciar sesión</h6>
     </div>
+    <form onSubmit={handleSubmit}>
+      <div className="mb-3">
+        <input
+          type="email"
+          name="email"
+          placeholder="Ingresa tu correo"
+          className="form-control"
+          onChange={handleLoginPageChange}
+          style={{ backgroundColor: '#f8f8f8', borderColor: 'white' }}
+        />
+      </div>
+      <div className="mb-3">
+        <input
+          type="password"
+          name="password"
+          placeholder="Contraseña"
+          className="form-control"
+          style={{ backgroundColor: '#f8f8f8', borderColor: 'white' }}
+          onChange={handleLoginPageChange}
+        />
+      </div>
+    </form>
+    <div style={{ width: '100%' }}>
+      <button type="submit" className="btn text-white w-100 mt-2" style={{ backgroundColor: '#202020' }}>
+        Iniciar sesión
+      </button>
+      <button style={{ background: 'white', border: 0 }}>
+        <Link to="/register" className="text-black">
+          <p>Crear cuenta</p>
+        </Link>
+      </button>
+    </div>
+    {error && <p className="mt-3 text-center text-danger">{error}</p>}
+  </div>
+</section>
+    <section className='w-50 vh-100'>
+      <img src={pattern_gif} className='vh-100' style={{ overflow: "hidden", borderRadius: '10px 2%' }}></img>
+    </section>
+  </div>
+</div>
   );
 };
 
