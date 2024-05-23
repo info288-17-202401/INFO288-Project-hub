@@ -1,6 +1,27 @@
 version: '3.8'
 
 services:
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile.api.dev
+    container_name: project_hub_api
+    hostname: project_hub_api
+    depends_on:
+      - database
+      - broker
+    env_file:
+      - ./api/.env.api
+    networks:
+      - project_hub_overlay
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./api:/app
+    deploy:
+      mode: replicated
+      replicas: 1
+      
   database:
     hostname: project_hub_db
     build:
@@ -13,24 +34,6 @@ services:
       - project_hub_overlay
     ports:
       - "2500:5432"
-    deploy:
-      mode: replicated
-      replicas: 1
-
-  api:
-    build:
-      context: ./api
-      dockerfile: Dockerfile.api.dev
-    container_name: project_hub_api
-    hostname: project_hub_api
-    env_file:
-      - ./api/.env.api
-    networks:
-      - project_hub_overlay
-    ports:
-      - "8000:8000"
-    volumes:
-      - ./api:/app
     deploy:
       mode: replicated
       replicas: 1

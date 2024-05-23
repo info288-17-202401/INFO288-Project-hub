@@ -37,11 +37,3 @@ async def get_teams_from_project(project_auth_key: str):
     project = await project_services.get_project_current(project_auth_key)
     teams = await project_services.get_teams_from_project(project["project_id"])
     return teams
-
-
-@project_router.get(
-    "/projects",
-    tags=["project"],
-)
-async def get_projects_from_user(user_data=Depends(auth_services.get_user_current)):
-    return await project_services.get_all_projects_from_user(user_data["app_user_id"])

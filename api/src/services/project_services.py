@@ -49,9 +49,7 @@ async def project_auth(project_id, project_password):
             detail="Project not found",
             headers={"WWW-Authenticate": "Bearer"},
         )
-    if not await auth_services.verify_password(
-        project_password, find_project["project_password"]
-    ):
+    if not await auth_services.verify_password(project_password, find_project["project_password"]):
         raise HTTPException(
             status_code=401,
             detail="Password error",
@@ -139,7 +137,7 @@ async def set_profile_in_project(project_id, user_id, profile_type):
 async def get_all_projects_from_user(user_id):
     cursor = db.conn.cursor()
     projects_search_query = f"""
-                    SELECT project_id, project_creation_date, project_description, project_name
+                    SELECT project_id, project_creation_date, project_description, project_name, project_password
                     FROM project
                     WHERE project_owner_id = %s
                     """
@@ -151,5 +149,4 @@ async def get_all_projects_from_user(user_id):
     for projects in find_projects:
         project_dict = dict(zip(column_names, projects))
         project_as_dict.append(project_dict)
-
     return project_as_dict
