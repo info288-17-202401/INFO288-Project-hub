@@ -1,41 +1,32 @@
-## network
+docker swarm init 
+docker network create --driver overlay --attachable project_hub_overlay
 
-docker network create red_project_hub
 
-## database
-
-```bash
+database
 docker build -t project_hub_db . -f ./Dockerfile.db
+docker run --name project_hub_db --env-file ./.env.db --network project_hub_overlay -p 2500:5432 -d project_hub_db
 
-```
 
-```bash
-docker run --name project_hub_db --env-file ./.env.db --network red_project_hub -p 2500:5432 -d project_hub_db
+api
+bash 
+>> dev 
 
-```
+docker build -t project_hub_api . -f ./Dockerfile.api.dev
+docker run --name project_hub_api --hostname project_hub_api --mount type=bind,source=.,target=/app  --env-file ./.env.api --network project_hub_overlay -p 8000:8000 -d project_hub_api
 
-## api
 
-```bash
-docker build -t project_hub_api . -f ./Dockerfile.api
-
-```
-
-```bash
-docker run --name project_hub_api -v /app:/code/app --env-file ./.env.api --network red_project_hub -p 2520:5000 -d project_hub_api
-uvicorn <module>:<app_instance> --reload
-
-❯ uvicorn main:app --host=localhost --port=8000 --reload
-
-```
-
-## Frontend
-
-```bash
+Frontend
 docker build -t project_hub_frontend . -f ./Dockerfile.frontend.dev
-```
+docker run --name project_hub_frontend --mount type=bind,source={path},target=/app/src --env-file ./.env --network project_hub_overlay -p 2530:5173 -d project_hub_frontend
 
-```bash
-docker run --name project_hub_frontend --mount type=bind,source="$PWD"/src,target=/app/src --env-file ./.env.frontend --network red_project_hub -p 2530:5173 -d project_hub_frontend
 
-```
+Broker
+docker build -t project_hub_broker . -f ./Dockerfile.rabbitmq
+docker run --name project_hub_broker --env-file ./.env.rabbitmq --network project_hub_overlay -p 2550:5672 -p 2560:15672 -d project_hub_broker
+
+
+
+DOCKER COMPOSE DEV
+
+para desarrollo ejecutar solo
+docker-compose up -d

@@ -1,0 +1,74 @@
+version: '3.8'
+
+services:
+  database:
+    hostname: project_hub_db
+    build:
+      context: ./db
+      dockerfile: Dockerfile.db
+    container_name: project_hub_db
+    env_file:
+      - ./db/.env.db
+    networks:
+      - project_hub_overlay
+    ports:
+      - "2500:5432"
+    deploy:
+      mode: replicated
+      replicas: 1
+
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile.api.dev
+    container_name: project_hub_api
+    hostname: project_hub_api
+    env_file:
+      - ./api/.env.api
+    networks:
+      - project_hub_overlay
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./api:/app
+    deploy:
+      mode: replicated
+      replicas: 1
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.frontend.dev
+    container_name: project_hub_frontend
+    env_file:
+      - ./frontend/.env
+    networks:
+      - project_hub_overlay
+    ports:
+      - "2530:5173"
+    volumes:
+      - ./frontend/src:/app/src
+    deploy:
+      mode: replicated
+      replicas: 1
+
+  broker:
+    build:
+      context: ./broker
+      dockerfile: Dockerfile.rabbitmq
+    container_name: project_hub_broker
+    env_file:
+      - ./broker/.env.rabbitmq
+    networks:
+      - project_hub_overlay
+    ports:
+      - "2550:5672"
+      - "2560:15672"
+    deploy:
+      mode: replicated
+      replicas: 1
+
+networks:
+  project_hub_overlay:
+    driver: overlay
+    attachable: true
