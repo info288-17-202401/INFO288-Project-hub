@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import projectimg from '../assets/proyecto.png';
-import { projectAuthStore } from '../authStore';
-import { apiSendData } from '../services/apiService';
+import { projectAuthStore, teamAuthStore } from '../authStore';
+import { toast, Toaster } from 'sonner';
 
 type TeamsCardProps = {
   team: {
@@ -15,11 +15,11 @@ type TeamsCardProps = {
 
 const TeamsCard: React.FC<TeamsCardProps> = ({ team }) => {
   const [showTeam, setShowTeam] = useState(false);
-  const [error, setError] = useState('');
   const [data, setData] = useState({
     team_id: team.team_id.toString(),
     password: '',
   });
+  const setId = teamAuthStore((state) => state.setTeamId); // Obtén el método setToken del store
   const navigate = useNavigate();
   const handleLoginTeamChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setData({
@@ -30,43 +30,46 @@ const TeamsCard: React.FC<TeamsCardProps> = ({ team }) => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!data.team_id || !data.password) {
-      setError('Por favor, completa todos los campos.');
-      return;
+    if (team.team_private) {
+      if (!data.team_id || !data.password) {
+        toast.warning('Por favor, completa todos los campos.');
+        return;
+      }
     }
     try {
       const formData = new URLSearchParams();
       formData.append('username', data.team_id);
       formData.append('password', data.password);
       console.log(projectAuthStore.getState().token);
-
-      const route = `/team/join`;
-      const header = {'Content-Type': 'application/x-www-form-urlencoded'}
-      const response = await apiSendData(route, header, formData.toString())
+      const response = await fetch('http://localhost:8000/team/join', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: formData.toString(),
+      });
 
       if (response.ok) {
-        const responseData = await response.json(); // Parsea la respuesta a JSON
-        console.log(responseData);
+        setId(team.team_id);
+        console.log(team.team_id);
+        setShowTeam(false);
+        toast.success('Credenciales exitosas!.');
+        // Espera un segundo antes de navegar a '/projects'
+        handleSubmit;
+        setTimeout(() => {
+          navigate('/teams');
+        }, 500);
       } else {
-        console.error('Error al iniciar sesión:', response.statusText);
-        setError('Credenciales inválidas. Por favor, intenta de nuevo.');
+        setId(team.team_id);
+        console.log(team.team_id);
+
+        toast.error('Credenciales inválidas. Por favor, intenta de nuevo.');
+        navigate('/teams');
       }
-    } catch (error: any) {
-      console.error('Error de red:', error.message);
-      setError(
+    } catch (error) {
+      toast.warning(
         'Error de red. Por favor, revisa tu conexión e intenta de nuevo.'
       );
-    }
-  };
-
-  const handleConfirm = () => {
-    if (team.team_private) {
-      console.log(data);
-      //validar id, contraseña y hace el fetch
-      // setShowTeam(false);
-    } else {
-      navigate('/teams');
-      setShowTeam(false);
     }
   };
 
@@ -138,11 +141,6 @@ const TeamsCard: React.FC<TeamsCardProps> = ({ team }) => {
                             onChange={handleLoginTeamChange}
                           />
                         </div>
-                        {error && (
-                          <p className="mt-3 text-center text-danger">
-                            {error}
-                          </p>
-                        )}
                       </>
                     ) : (
                       <>
@@ -157,12 +155,11 @@ const TeamsCard: React.FC<TeamsCardProps> = ({ team }) => {
                         type="submit"
                         className="btn text-white m-auto w-50 me-2"
                         style={{ backgroundColor: '#5864f2' }}
-                        onClick={handleConfirm}
                       >
                         Confirmar
                       </button>
                       <button
-                        type="submit"
+                        type="button"
                         className="btn text-white m-auto w-50 ms-2"
                         style={{ backgroundColor: '#5864f2' }}
                         onClick={() => setShowTeam(false)}
@@ -177,6 +174,7 @@ const TeamsCard: React.FC<TeamsCardProps> = ({ team }) => {
           </div>
         )}
       </div>
+      <Toaster richColors />
     </>
   );
 };

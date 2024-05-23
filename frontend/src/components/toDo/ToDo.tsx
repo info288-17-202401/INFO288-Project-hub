@@ -1,62 +1,62 @@
-import React, { DragEvent, useState } from 'react';
-import Add from '../assets/Add';
-import ToDoCard from './ToDoCard';
+import React, { DragEvent, useState } from 'react'
+import Add from '../../assets/Add'
+import ToDoCard from './ToDoCard'
 
 interface Todo {
-  id: number;
-  completed: boolean;
+  id: number
+  completed: boolean
 }
 
 const ToDo: React.FC = () => {
-  const [todos, setTodos] = useState<Todo[]>([]);
-  const [text, setText] = useState('Agrega tareas!');
-  const [isEditing, setIsEditing] = useState(false);
-  const [isOver, setIsOver] = useState(false);
+  const [todos, setTodos] = useState<Todo[]>([])
+  const [text, setText] = useState('Agrega tareas!')
+  const [isEditing, setIsEditing] = useState(false)
+  const [isOver, setIsOver] = useState(false)
 
   const handleDragOver = (event: DragEvent<HTMLDivElement>) => {
-    event.preventDefault();
-    setIsOver(true);
-  };
+    event.preventDefault()
+    setIsOver(true)
+  }
 
   const handleDragLeave = () => {
-    setIsOver(false);
-  };
+    setIsOver(false)
+  }
 
   const handleDrop = (event: DragEvent<HTMLDivElement>) => {
-    event.preventDefault();
-    setIsOver(false);
-    const data = event.dataTransfer?.getData('text/plain');
+    event.preventDefault()
+    setIsOver(false)
+    const data = event.dataTransfer?.getData('text/plain')
     if (data === 'DraggableItem') {
       // Realizar acciones necesarias al soltar el elemento
-      console.log('Elemento soltado en el área.');
+      console.log('Elemento soltado en el área.')
     }
-  };
+  }
   const handleAddTodo = () => {
     const newTodoItem: Todo = {
       id: Date.now(),
       completed: false,
-    };
+    }
 
-    setTodos([...todos, newTodoItem]);
-  };
+    setTodos([...todos, newTodoItem])
+  }
 
   const handleDeleteTodo = (id: number) => {
-    setTodos((prevTodos) => prevTodos.filter((todo) => todo.id !== id));
-  };
+    setTodos((prevTodos) => prevTodos.filter((todo) => todo.id !== id))
+  }
 
   const handleTextClick = () => {
-    setIsEditing(true);
-  };
+    setIsEditing(true)
+  }
 
   const handleTextChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setText(event.target.value);
-  };
+    setText(event.target.value)
+  }
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
-      setIsEditing(false);
+      setIsEditing(false)
     }
-  };
+  }
 
   return (
     <>
@@ -72,8 +72,7 @@ const ToDo: React.FC = () => {
           overflowY: 'auto',
           overflowX: 'hidden',
           color: isOver ? '#ffffff' : '#000000',
-        }}
-      >
+        }}>
         <div className="row justify-content-center text-center ">
           <div className="col-md m-2 p-2">
             <div onClick={handleTextClick} className="mb-2 p-2 ">
@@ -104,7 +103,7 @@ const ToDo: React.FC = () => {
         </div>
       </div>
     </>
-  );
-};
+  )
+}
 
-export default ToDo;
+export default ToDo

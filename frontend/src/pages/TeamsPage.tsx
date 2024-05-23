@@ -1,29 +1,33 @@
-import React from 'react';
-import UserCard from '../components/UserCard';
-import ToDoContainer from '../components/TodoContainer';
-import usercards from './userscards.json';
-import Chat from '../components/Chat';
-import Back from '../assets/Back';
-import { useNavigate } from 'react-router-dom';
+import React from 'react'
+import UserCard from '../components/UserCard'
+import ToDoContainer from '../components/toDo/TodoContainer'
+import usercards from './userscards.json'
+import Chat from '../components/chat/Chat'
+import Back from '../assets/Back'
+import { useNavigate } from 'react-router-dom'
 
 const TeamsPage: React.FC = () => {
-  const navigate = useNavigate();
+  const navigate = useNavigate()
   const clickButton = () => {
-    navigate('/projects');
-  };
+    navigate('/projects')
+  }
   return (
-    <div style={{ display: 'flex', height: 'calc(100vh - 58px)' }}>
+    <div
+      style={{
+        display: 'flex',
+        height: 'calc(100vh - 58px)',
+        marginTop: '58px',
+      }}>
       <div
         style={{
           flex: '0.7',
           backgroundColor: '#21252b',
           overflowY: 'auto',
-        }}
-      >
+        }}>
         <div className="d-flex align-items-center">
           <div className="m-2">
             <button className="btn p-0" onClick={clickButton}>
-              <Back />
+              <Back size="36" color="#ffffff" />
             </button>
           </div>
           <div className="w-100 mt-2 mb-2 me-2 text-center">
@@ -48,8 +52,7 @@ const TeamsPage: React.FC = () => {
           overflowY: 'auto',
           display: 'flex',
           flexDirection: 'column',
-        }}
-      >
+        }}>
         <div className="p-2 text-white " style={{ flex: '1' }}>
           <ToDoContainer />
         </div>
@@ -59,7 +62,7 @@ const TeamsPage: React.FC = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default TeamsPage;
+export default TeamsPage

@@ -2,16 +2,16 @@ import React from 'react';
 import { userAuthStore } from './authStore';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import NavigationBar from './components/NavigationBar';
-import HomePage from './routes/HomePage';
-import LoginPage from './routes/LoginPage';
-import RegisterPage from './routes/RegisterPage';
-import ProjectOptionsPage from './routes/ProjectOptionsPage';
-import TeamsPage from './routes/TeamsPage';
-import NotFoundPage from './routes/NotFoundPage'; // Importa tu componente de página no encontrada
-import ProjectsPage from './routes/ProjectsPage';
-import ProfilePage from './routes/ProfilePage';
-import AboutPage from './routes/AboutPage';
-import MyProjectsPage from './routes/MyProjectsPage';
+import HomePage from './pages/HomePage';
+import LoginPage from './pages/LoginPage';
+import RegisterPage from './pages/RegisterPage';
+import ProjectOptionsPage from './pages/ProjectOptionsPage';
+import TeamsPage from './pages/TeamsPage';
+import NotFoundPage from './pages/NotFoundPage'; // Importa tu componente de página no encontrada
+import ProjectsPage from './pages/ProjectsPage';
+import ProfilePage from './pages/ProfilePage';
+import AboutPage from './pages/AboutPage';
+import MyProjectsPage from './pages/MyProjectsPage';
 
 const App: React.FC = () => {
   const login = userAuthStore((state) => state.state); // Obtener el estado de autenticación del store
@@ -19,6 +19,7 @@ const App: React.FC = () => {
   return (
     <div>
       <NavigationBar />
+
       <Routes>
         <Route
           path="/"

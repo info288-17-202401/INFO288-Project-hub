@@ -13,8 +13,6 @@ type AuthState = {
   setState: (state: boolean) => void;
 };
 
-
-
 export const userAuthStore = create<AuthState>((set) => ({
   username: '',
   email: '',
@@ -36,6 +34,28 @@ export const projectAuthStore = create<AuthState>((set) => ({
   state: false,
   setUsername: (username) => set({ username }),
   setEmail: (email) => set({ email }),
+  setToken: (token) => set({ token }),
+  setTokenType: (tokenType) => set({ tokenType }),
+  setState: (state) => set({ state }),
+}));
+
+type teamState = {
+  team_id: number | null;
+  token: string | null;
+  tokenType: string | null;
+  state: boolean;
+  setTeamId: (team_id: number) => void;
+  setToken: (token: string) => void;
+  setTokenType: (tokenType: string) => void;
+  setState: (state: boolean) => void;
+};
+
+export const teamAuthStore = create<teamState>((set) => ({
+  team_id: null,
+  token: null,
+  tokenType: null,
+  state: false,
+  setTeamId: (team_id) => set({ team_id }),
   setToken: (token) => set({ token }),
   setTokenType: (tokenType) => set({ tokenType }),
   setState: (state) => set({ state }),
