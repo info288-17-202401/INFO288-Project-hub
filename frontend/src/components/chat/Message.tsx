@@ -1,11 +1,11 @@
-import React from 'react';
+import React from 'react'
 
 type MessageProps = {
-  message_text: string;
-  user_name: string;
-  user_email: string;
-  date: string;
-};
+  message_text: string
+  user_name: string
+  user_email: string
+  date: string
+}
 
 const Message: React.FC<MessageProps> = ({
   message_text,
@@ -16,15 +16,14 @@ const Message: React.FC<MessageProps> = ({
   return (
     <div
       className="container mt-2 p-2 pb-0 align-content-center"
-      style={{ borderTop: '0.3px solid rgba(255,255,255,0.5)' }}
-    >
+      style={{ borderTop: '0.3px solid rgba(255,255,255,0.5)' }}>
       <div className="pb-2">
         <span className="me-2">
           <strong style={{ color: '#404fed' }}>{user_name}</strong>
         </span>
-        <span className="text-white">{date}</span>
+        <span className="">{date}</span>
       </div>
-      <div className="text-white">
+      <div className="">
         <p>{message_text}</p>
         <p>
           Lorem ipsum, dolor sit amet consectetur adipisicing elit. Fugit rerum,
@@ -41,7 +40,7 @@ const Message: React.FC<MessageProps> = ({
         </p>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Message;
+export default Message
