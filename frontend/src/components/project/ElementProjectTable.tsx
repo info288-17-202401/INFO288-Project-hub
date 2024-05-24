@@ -10,7 +10,7 @@ type ElementProjectTableProps = {
   name: string
   description: string
   project_id: string
-
+  project_creation_date: string
   project_password: string
 }
 
@@ -18,7 +18,7 @@ const ElementProjectTable: React.FC<ElementProjectTableProps> = ({
   name,
   description,
   project_id,
-
+  project_creation_date,
   project_password,
 }) => {
   const setToken = projectAuthStore((state) => state.setToken)
@@ -56,6 +56,51 @@ const ElementProjectTable: React.FC<ElementProjectTableProps> = ({
       toast.info('ID copiada!')
     }
     navigator.clipboard.writeText(e.currentTarget.textContent || '')
+  }
+
+  // src/utils/dateUtils.ts
+  const days = [
+    'domingo',
+    'lunes',
+    'martes',
+    'miércoles',
+    'jueves',
+    'viernes',
+    'sábado',
+  ]
+  const months = [
+    'enero',
+    'febrero',
+    'marzo',
+    'abril',
+    'mayo',
+    'junio',
+    'julio',
+    'agosto',
+    'septiembre',
+    'octubre',
+    'noviembre',
+    'diciembre',
+  ]
+
+  const parseDate = (dateString: string): Date => {
+    // Crear una fecha desde la cadena original
+    const date = new Date(dateString)
+
+    // Crear una nueva fecha ajustando la diferencia horaria local
+    const userTimezoneOffset = date.getTimezoneOffset() * 60000
+    return new Date(date.getTime() + userTimezoneOffset)
+  }
+
+  const formatDate = (dateString: string): string => {
+    const date = parseDate(dateString)
+    console.log(date)
+    const dayName = days[date.getDay()]
+    const day = date.getDate()
+    const monthName = months[date.getMonth()]
+    const year = date.getFullYear()
+
+    return `${dayName} ${day} de ${monthName} ${year}`
   }
 
   type TdCopyOptionProps = {
@@ -126,7 +171,9 @@ const ElementProjectTable: React.FC<ElementProjectTableProps> = ({
       <TdCopyOption type="id" content={project_id} />
       <TdCopyOption type="password" content={project_password} />
 
-      <td className="align-content-center d-none d-md-table-cell">Fecha</td>
+      <td className="align-content-center d-none d-md-table-cell">
+        {formatDate(project_creation_date)}
+      </td>
     </tr>
   )
 }

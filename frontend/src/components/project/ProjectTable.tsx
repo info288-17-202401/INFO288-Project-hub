@@ -14,7 +14,7 @@ const ProjectTable: React.FC = () => {
   useEffect(() => {
     const fetchProjects = async () => {
       try {
-        const route = `/project/projects`
+        const route = `/user/projects`
         const header = {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${userAuthStore.getState().token}`,
@@ -87,6 +87,7 @@ const ProjectTable: React.FC = () => {
                   description={project.project_description}
                   project_id={project.project_id}
                   project_password="12345"
+                  project_creation_date={project.project_creation_date}
                 />
               ))}
               <Toaster richColors />
