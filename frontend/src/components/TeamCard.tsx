@@ -37,7 +37,6 @@ const TeamsCard: React.FC<TeamsCardProps> = ({ team }) => {
         return
       }
     }
-
     try {
       const route = `/team/join?team_id=${dataTeam.team_id}&team_password=${
         dataTeam.password
@@ -51,8 +50,13 @@ const TeamsCard: React.FC<TeamsCardProps> = ({ team }) => {
       if (response.ok) {
         console.log(data)
         setId(team.team_id)
+        console.log(team.team_id)
+        setShowTeam(false)
         toast.success('Credenciales exitosas!.')
-        // navigate('/projects')
+        handleSubmit
+        setTimeout(() => {
+          navigate('/teams')
+        }, 500)
       } else {
         toast.error('Credenciales inválidas. Por favor, intenta de nuevo.')
       }
@@ -61,38 +65,6 @@ const TeamsCard: React.FC<TeamsCardProps> = ({ team }) => {
         'Error de red. Por favor, revisa tu conexión e intenta de nuevo.'
       )
     }
-
-    /*  try {
-      const formData = new URLSearchParams()
-      formData.append('username', data.team_id)
-      formData.append('password', data.password)
-      console.log(projectAuthStore.getState().token)
-      const response = await fetch('http://localhost:8000/team/join', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: formData.toString(),
-      })
-
-      if (response.ok) {
-        setId(team.team_id)
-        console.log(team.team_id)
-        setShowTeam(false)
-        toast.success('Credenciales exitosas!.')
-        // Espera un segundo antes de navegar a '/projects'
-        handleSubmit
-        setTimeout(() => {
-          navigate('/teams')
-        }, 500)
-      } else {
-        toast.error('Credenciales inválidas. Por favor, intenta de nuevo.')
-      }
-    } catch (error) {
-      toast.warning(
-        'Error de red. Por favor, revisa tu conexión e intenta de nuevo.'
-      )
-    } */
   }
 
   return (
