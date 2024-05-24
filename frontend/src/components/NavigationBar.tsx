@@ -23,7 +23,7 @@ const NavigationBar: React.FC = () => {
     authState.setEmail('')
     authState.setTokenType('')
     authState.setState(false)
-    // Llama a la API y cierra sesión
+    localStorage.removeItem('userDataLogin')
   }
 
   const handleNavItemClick = (link: string) => {

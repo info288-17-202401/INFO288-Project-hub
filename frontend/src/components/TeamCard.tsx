@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import img1 from '../assets/images/management_image.jpg'
 import { projectAuthStore, teamAuthStore, userAuthStore } from '../authStore'
-import { toast, Toaster } from 'sonner'
+import { toast } from 'sonner'
 import { apiSendData } from '../services/apiService'
 
 type TeamsCardProps = {
@@ -30,15 +30,14 @@ const TeamsCard: React.FC<TeamsCardProps> = ({ team, colorRow }) => {
     })
   }
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    console.log(dataTeam)
-
     e.preventDefault()
     if (team.team_private) {
-      if (!dataTeam.team_id || !dataTeam.password) {
+      if (!dataTeam.password) {
         toast.warning('Por favor, completa todos los campos.')
         return
       }
     }
+
     try {
       const route = `/team/join?team_id=${dataTeam.team_id}&team_password=${
         dataTeam.password
@@ -51,8 +50,8 @@ const TeamsCard: React.FC<TeamsCardProps> = ({ team, colorRow }) => {
       const data = await response.json()
       console.log(data)
       if (response.ok) {
+        console.log('Credenciales exitosas!.')
         setId(team.team_id)
-
         setShowTeam(false)
         toast.success('Credenciales exitosas!.')
         handleSubmit
@@ -124,12 +123,12 @@ const TeamsCard: React.FC<TeamsCardProps> = ({ team, colorRow }) => {
                   flexDirection: 'column',
                   justifyContent: 'space-between',
                 }}>
-                <div className="text-left">
+                <div className="text-center">
                   <h2 className="font-inter" style={{ fontSize: '2rem' }}>
                     ¡Ingresa al equipo!
                   </h2>
                   <p
-                    className=" text-uppercase text-center pt-1"
+                    className="fw-bold text-uppercase text-center pt-1"
                     style={{ fontSize: '1.1rem' }}>
                     {team.team_name}
                   </p>

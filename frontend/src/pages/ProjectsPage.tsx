@@ -23,8 +23,6 @@ const ProjectPage: React.FC = () => {
   const navigate = useNavigate()
 
   const fetchTeams = async () => {
-    console.log(token_project)
-    console.log(token_user)
     try {
       const route = `/project/${token_project}/teams`
       const header = {
@@ -34,6 +32,7 @@ const ProjectPage: React.FC = () => {
       const response = await apiGetData(route, header)
 
       if (response.ok) {
+        console.log(token_project)
         setTimeout(async () => {
           toast.success('Equipos obtenidos exitosamente.')
         }, 700)
@@ -112,7 +111,7 @@ const ProjectPage: React.FC = () => {
             listStyle: 'none',
             padding: 0,
             overflowY: 'auto',
-            maxHeight: 'calc(100vh - 140px)',
+            maxHeight: 'calc(100vh - 190px)',
           }}>
           {dataTeams.map((team: TeamsCardProps, index: number) => (
             <li className="" key={index}>

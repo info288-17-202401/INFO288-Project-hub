@@ -55,6 +55,10 @@ const Chat: React.FC = () => {
     }
   }
 
+  useEffect(() => {
+    fetchMessages()
+  }, [])
+
   return (
     <div className="">
       <div

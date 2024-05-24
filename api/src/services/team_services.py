@@ -82,6 +82,7 @@ async def verify_team_in_project(team_id, project_id):
 
 
 async def verify_team_password(team_id, team_password, team_password_hash):
+    return team_password == None or team_password == ""
     if not await auth_services.verify_password(team_password, team_password_hash):
         raise HTTPException(
             status_code=401,

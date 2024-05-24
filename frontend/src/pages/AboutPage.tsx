@@ -1,12 +1,21 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import services from '../assets/ServicesData'
 import { ElementPageProps } from '../types/types'
+import { userAuthStore } from '../authStore'
 
 const ElementPage: React.FC<ElementPageProps> = ({
   image,
   title,
   description,
 }) => {
+  useEffect(() => {
+    const userDataLogin = window.localStorage.getItem('userDataLogin')
+    if (userDataLogin) {
+      const userData = JSON.parse(userDataLogin)
+      userAuthStore.setState({ state: true })
+      userAuthStore.setState({ token: userData.token_user })
+    }
+  }, [])
   return (
     <div className="col-lg-12 col-md-12 mb-4">
       <div className="card" style={{ border: 'none', textAlign: 'center' }}>

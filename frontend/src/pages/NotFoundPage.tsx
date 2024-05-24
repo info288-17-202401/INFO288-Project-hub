@@ -1,8 +1,17 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import error_page from '../assets/images/error_page.gif'
 import { Link } from 'react-router-dom'
+import { userAuthStore } from '../authStore'
 
 const NotFoundPage: React.FC = () => {
+  useEffect(() => {
+    const userDataLogin = window.localStorage.getItem('userDataLogin')
+    if (userDataLogin) {
+      const userData = JSON.parse(userDataLogin)
+      userAuthStore.setState({ state: true })
+      userAuthStore.setState({ token: userData.token_user })
+    }
+  }, [])
   return (
     <div
       className="container-fluid"
