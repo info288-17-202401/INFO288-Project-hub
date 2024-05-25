@@ -6,6 +6,7 @@ export type ProjectCardProps = {
   project_password: string
 }
 
+
 export type IconProps = {
   size: string
   color: string
@@ -37,4 +38,18 @@ export type TeamsCardProps = {
   team_id: number
   team_name: string
   team_private: boolean
+}
+
+export type MessageProps = {
+  app_user_name: string
+  app_user_email: string
+  message_content: string
+  message_date: string
+}
+
+export type UserProps = {
+  app_user_email: string,
+  app_user_id: string,
+  app_user_name: string,
+  user_status: string
 }

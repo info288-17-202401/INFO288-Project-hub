@@ -69,9 +69,7 @@ const ProjectTable: React.FC = () => {
                 <th className="text-secondary" style={{ width: '20%' }}>
                   ID
                 </th>
-                <th className="text-secondary" style={{ width: '20%' }}>
-                  Contraseña
-                </th>
+
                 <th
                   className="text-secondary d-none d-md-table-cell"
                   style={{ width: '20%' }}>
@@ -86,7 +84,7 @@ const ProjectTable: React.FC = () => {
                   name={project.project_name}
                   description={project.project_description}
                   project_id={project.project_id}
-                  project_password="12345"
+                  project_password={project.project_password}
                   project_creation_date={project.project_creation_date}
                 />
               ))}
@@ -128,7 +126,7 @@ const PaginationControl: React.FC<{
           <li
             key={i}
             className={`page-item ${currentPage === i + 1 ? 'active' : ''}`}>
-            <button className="page-link" onClick={() => onPageChange(i + 1)}>
+            <button className="page-link bg-black border-1 border-black" onClick={() => onPageChange(i + 1)}>
               {i + 1}
             </button>
           </li>

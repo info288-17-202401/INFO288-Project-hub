@@ -64,6 +64,7 @@ const ToDo: React.FC = () => {
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
+        className='border'
         style={{
           height: '40vh',
           border: '2px #000',

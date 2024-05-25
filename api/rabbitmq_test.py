@@ -1,17 +1,22 @@
-import pika
+import stomp, pika, time
 
-
-credentials = pika.PlainCredentials('admin','admin123')
-parameters = pika.ConnectionParameters('localhost', 5672, '/', credentials)
-connection = pika.BlockingConnection(parameters)
-channel = connection.channel()  
-
-queue_name = 'messages/5QdEPG2uyV'
-channel.queue_declare(queue=queue_name)
-
-def callback(ch, method, properties, body):
-    print("Mensaje recibido:", body)
+class MyListener(stomp.ConnectionListener):
+    def on_error(self, message):
+        print(f'Error: {message}')
     
-channel.basic_consume(queue=queue_name, on_message_callback=callback, auto_ack=True)
+    def on_message(self, message):
+        print(f'Mensaje recibido: {message}')
+
+conn = stomp.Connection([('localhost', 61613)])
+conn.set_listener('', MyListener())
+conn.connect('admin', 'admin123', wait=True)
+
+queue_name = '/queue/messages_team_1'
+conn.subscribe(destination=queue_name, id=1, ack='auto')
+
 print('Esperando mensajes. Presiona CTRL+C para salir.')
-channel.start_consuming()
+try:
+    while True:
+        pass
+except KeyboardInterrupt:
+    conn.disconnect()

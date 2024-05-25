@@ -48,7 +48,7 @@ const ProjectPage: React.FC = () => {
 
   useEffect(() => {
     fetchTeams()
-  }, [token_project, token_user])
+  }, [])
 
   const createNewTeam = async () => {
     try {
@@ -136,9 +136,10 @@ const ProjectPage: React.FC = () => {
             zIndex: 9999,
           }}>
           <div
-            className="p-2 text-white d-flex  "
+            className="p-2 text-white d-flex flex-column p-5 rounded"
             style={{ backgroundColor: '#F9F9F9' }}>
             <input
+              className='mt-3 rounded p-2 '
               type="text"
               value={newTeamData.team_name}
               onChange={(e) =>
@@ -148,6 +149,7 @@ const ProjectPage: React.FC = () => {
             />
             <input
               type="text"
+              className='mt-3 rounded p-2'
               value={newTeamData.team_description}
               onChange={(e) =>
                 setNewTeamData({
@@ -158,6 +160,7 @@ const ProjectPage: React.FC = () => {
               placeholder="Descripción del equipo"
             />
             <input
+              className='mt-3 rounded p-2'
               type="password"
               value={newTeamData.team_password}
               onChange={(e) =>
@@ -168,7 +171,12 @@ const ProjectPage: React.FC = () => {
               }
               placeholder="Contraseña del equipo"
             />
-            <button onClick={createNewTeam}>Crear equipo</button>
+            <div className='d-flex justify-content-end mt-4'>
+              <button className='bg-black text-white rounded' 
+                      onClick={createNewTeam}>
+                        Crear 
+              </button>
+            </div>
           </div>
         </div>
       )}
@@ -181,10 +189,10 @@ const ProjectPage: React.FC = () => {
           flexDirection: 'column',
         }}>
         <div className="p-2  " style={{ flex: '1' }}>
-          <ChartsContainer />
+          {/* <ChartsContainer /> */}
         </div>
         <div className="p-2  " style={{ flex: '1' }}>
-          <Chat />
+          {/* <Chat /> */}
         </div>
       </div>
     </div>

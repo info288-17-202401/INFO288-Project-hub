@@ -1,16 +1,82 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import UserCard from '../components/UserCard'
 import ToDoContainer from '../components/toDo/TodoContainer'
-import usercards from './userscards.json'
 import Chat from '../components/chat/Chat'
 import Back from '../assets/Back'
 import { useNavigate } from 'react-router-dom'
+import { projectAuthStore, teamAuthStore, userAuthStore } from '../authStore'
+import { apiGetData } from '../services/apiService'
+import { toast } from 'sonner'
+import {rabbitUnsubscribeChannel, client, rabbitSubscribeChannel} from '../services/rabbitMQService'
+import TeamUserList from '../components/team/TeamUserList'
+import { UserProps } from '../types/types'
+
+
 
 const TeamsPage: React.FC = () => {
   const navigate = useNavigate()
+  const teamId = teamAuthStore.getState().team_id
+  const token_user = userAuthStore.getState().token
+  const token_project = projectAuthStore.getState().token
+  const [sessionUsers, setSessionUsers] = useState<UserProps[]>([])
+
+
   const clickButton = () => {
     navigate('/projects')
   }
+
+  const fetchTeamUsers = async () => {
+    try {
+      const route = `/team/${teamId}/users?project_auth_key=${token_project}`
+      const header = {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token_user}`,
+      }
+      const response = await apiGetData(route, header)
+
+      if (response.ok) {
+        setTimeout(async () => {
+          toast.success('Usuarios obtenidos exitosamente.')
+        }, 700)
+        const data = await response.json()
+        setSessionUsers(data)
+        return data
+      } else {
+        toast.error('Error al obtener los usuarios.')
+      }
+    } catch (e) {
+      console.error('Error:', e)
+    }
+  }
+
+  
+  const onMessageReceived = async(body: any) => {
+    const messageObject = JSON.parse(body);
+    const newUser : UserProps = {
+      'app_user_name': messageObject.app_user_name,
+      'app_user_email': messageObject.app_user_email,
+      'app_user_id': messageObject.app_user_id,
+      'user_status': messageObject.user_status
+    }
+    if(newUser.user_status == 'connected'){
+      setSessionUsers(prevUsers => [...prevUsers, newUser]);
+    }else if (newUser.user_status == 'disconnected') {
+      setSessionUsers(prevUsers => prevUsers.filter(user => user.app_user_id !== newUser.app_user_id));
+    }
+}
+
+  useEffect(() => {
+    fetchTeamUsers();
+    rabbitSubscribeChannel('users_team_' + teamId, onMessageReceived)
+
+    return () => {
+      if (client && client.connected) {
+        rabbitUnsubscribeChannel('users_team_' + teamId)
+      }
+    }
+  }, []);
+
+
   return (
     <div
       style={{
@@ -35,18 +101,11 @@ const TeamsPage: React.FC = () => {
           </div>
         </div>
         <hr className="m-0 mx-2" style={{ borderTop: '1.5px solid #000' }} />
-        <ul className="p-2 m-1" style={{ listStyle: 'none', padding: 0 }}>
-          {usercards.map((user, index) => (
-            <li className="mb-3" key={index}>
-              <UserCard name={user.name} photo={user.photo} />
-            </li>
-          ))}
-        </ul>
+          <TeamUserList sessionUsers={sessionUsers}></TeamUserList>
       </div>
       <div
         style={{
           flex: '3',
-          backgroundColor: '#282c34',
           overflowY: 'auto',
           display: 'flex',
           flexDirection: 'column',
@@ -54,7 +113,6 @@ const TeamsPage: React.FC = () => {
         <div className="p-2 text-white " style={{ flex: '1' }}>
           <ToDoContainer />
         </div>
-
         <div className="p-2 " style={{ flex: '1' }}>
           <Chat />
         </div>
