@@ -8,9 +8,10 @@ async def send_message_to_queue(message, user, project):
         "message_text": message.message_content,
         "user_name": user['app_user_name'],
         "user_email": user['app_user_email'],
+        "message_date": datetime.now().strftime('%Y-%m-%d %H:%M:%S') 
     }
     body = json.dumps(content_message_broker)
-    rabbit_controller.send_message(body.encode(), f"messages/{project['project_id']}/{message.team_id}")
+    rabbit_controller.send_message(body.encode(), f"messages_team_{message.team_id}")
     return content_message_broker
 
 async def save_in_db_team_message(message, user):
@@ -45,10 +46,11 @@ async def save_in_db_team_message(message, user):
 async def get_team_messages(team_id):
     cursor = db.conn.cursor()
     get_team_messages_query = f"""
-        SELECT aut.app_user_team_id, cm.message_id, cm.message_date, message_content
+        SELECT aut.app_user_team_id, aut.app_user_id, cm.message_id, cm.message_date, message_content, au.app_user_id, au.app_user_name, au.app_user_email 
         FROM chat_message cm
         JOIN app_user_team aut ON cm.app_user_team_id = aut.app_user_team_id
-		WHERE aut.team_id = %s
+        JOIN app_user au ON au.app_user_id = aut.app_user_id  
+        WHERE aut.team_id = 1;
     """
     
     cursor.execute(get_team_messages_query, (team_id, ))

@@ -16,7 +16,7 @@ const client = new Client({
 let subscription: StompSubscription | null = null;
 const user_email = userAuthStore.getState().email
 
-const rabbitSubscribeChannel = async (brokerChannel: string) => {
+const rabbitSubscribeChannel = async (brokerChannel: string, onMessageReceived: (message: string) => void) => {
   const uniqueId = `sub-${brokerChannel}-${user_email}`;
   client.onConnect = () => {
     if (subscription) {
@@ -26,7 +26,7 @@ const rabbitSubscribeChannel = async (brokerChannel: string) => {
 
     subscription = client.subscribe('/queue/' + brokerChannel, (message: IMessage) => {
       if (message.body) {
-        console.log('Received message:', message.body);
+        onMessageReceived(message.body)
       } else {
         console.log('Received empty message');
       }

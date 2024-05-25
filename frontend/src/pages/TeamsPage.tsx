@@ -43,7 +43,6 @@ const TeamsPage: React.FC = () => {
 
   useEffect(() => {
     // fetchTeamUsers();
-    rabbitSubscribeChannel('messages_team_' + teamId)
 
     return () => {
       if (client && client.connected) {
@@ -88,7 +87,6 @@ const TeamsPage: React.FC = () => {
       <div
         style={{
           flex: '3',
-          backgroundColor: '#282c34',
           overflowY: 'auto',
           display: 'flex',
           flexDirection: 'column',
@@ -96,9 +94,8 @@ const TeamsPage: React.FC = () => {
         <div className="p-2 text-white " style={{ flex: '1' }}>
           <ToDoContainer />
         </div>
-
         <div className="p-2 " style={{ flex: '1' }}>
-          {/* <Chat /> */}
+          <Chat />
         </div>
       </div>
     </div>

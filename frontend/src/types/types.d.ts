@@ -39,3 +39,10 @@ export type TeamsCardProps = {
   team_name: string
   team_private: boolean
 }
+
+export type MessageProps = {
+  app_user_name: string
+  app_user_email: string
+  message_content: string
+  message_date: string
+}
