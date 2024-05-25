@@ -38,7 +38,7 @@ async def disconnect_from_team(
     project = await project_services.get_project_current(team_data.project_auth_key)
     await team_services.disconnect_team(user["app_user_id"], team_data.team_id)
     await team_services.send_user_status(
-        user["app_user_id"], team_data.team_id, project["project_id"], "disconnected"
+        user, team_data.team_id, project["project_id"], "disconnected"
     )
 
 

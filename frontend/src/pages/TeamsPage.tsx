@@ -67,6 +67,7 @@ const TeamsPage: React.FC = () => {
 
   useEffect(() => {
     fetchTeamUsers();
+    rabbitSubscribeChannel('users_team_' + teamId, onMessageReceived)
 
     return () => {
       if (client && client.connected) {

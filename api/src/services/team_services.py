@@ -153,5 +153,5 @@ async def send_user_status(user, team_id, project_id, status):
                               "app_user_name": user['app_user_name'], 
                               "user_status": status}
     body = json.dumps(content_message_broker)
-    rabbit_controller.rabbit_controller.send_message(body.encode(), f"users_{team_id}")
+    rabbit_controller.rabbit_controller.send_message(body.encode(), f"users_team_{team_id}")
     return content_message_broker

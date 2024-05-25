@@ -13,37 +13,49 @@ const client = new Client({
   heartbeatOutgoing: 5000,
 });
 
-let subscription: StompSubscription | null = null;
-const user_email = userAuthStore.getState().email
+const subscriptions: { [key: string]: StompSubscription } = {};
+const user_email = userAuthStore.getState().email;
+
+client.onConnect = () => {
+  console.log('Connected to RabbitMQ broker');
+};
+
+client.onStompError = (frame) => {
+  console.error('Broker reported error:', frame.headers['message']);
+  console.error('Additional details:', frame.body);
+};
+
+client.activate();
 
 const rabbitSubscribeChannel = async (brokerChannel: string, onMessageReceived: (message: string) => void) => {
   const uniqueId = `sub-${brokerChannel}-${user_email}`;
-  client.onConnect = () => {
-    subscription = client.subscribe('/queue/' + brokerChannel, (message: IMessage) => {
+
+  if (!subscriptions[uniqueId]) {
+    const subscription = client.subscribe('/queue/' + brokerChannel, (message: IMessage) => {
       if (message.body) {
-        onMessageReceived(message.body)
+        onMessageReceived(message.body);
       } else {
         console.log('Received empty message');
       }
-    },{
+    }, {
       id: uniqueId
     });
-  };
-  client.onStompError = (frame) => {
-    console.error('Broker reported error:', frame.headers['message']);
-    console.error('Additional details:', frame.body);
-  };
-  client.activate();
+    subscriptions[uniqueId] = subscription;
+    console.log('Subscribed to channel:', brokerChannel);
+  } else {
+    console.log('Already subscribed to channel:', brokerChannel);
+  }
 };
 
 const rabbitUnsubscribeChannel = async (brokerChannel: string) => {
-  if (subscription) {
-    subscription.unsubscribe();
+  const uniqueId = `sub-${brokerChannel}-${user_email}`;
+  if (subscriptions[uniqueId]) {
+    subscriptions[uniqueId].unsubscribe();
+    delete subscriptions[uniqueId];
     console.log('Unsubscribed from channel:', brokerChannel);
   } else {
-    console.log('No active subscription to unsubscribe');
+    console.log('No active subscription to unsubscribe from channel:', brokerChannel);
   }
-  client.deactivate();
 };
 
 export { rabbitSubscribeChannel, rabbitUnsubscribeChannel, client };
