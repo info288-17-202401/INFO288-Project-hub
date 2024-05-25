@@ -2,10 +2,8 @@
 
 RABBITMQ_USER=$RABBITMQ_USER
 RABBITMQ_PASSWORD=$RABBITMQ_PASSWORD
-RABBITMQ_STOMP_PORT= $RABBITMQ_STOMP_PORT
+RABBITMQ_STOMP_PORT=$RABBITMQ_STOMP_PORT
 RABBITMQ_STOMP_WEBSOCKET_PORT=$RABBITMQ_STOMP_WEBSOCKET_PORT
-
-
 
 rabbitmq-server -detached
 # Espera a que RabbitMQ se inicie
@@ -41,7 +39,6 @@ cat <<EOF > /etc/rabbitmq/rabbitmq.config
   ]}
 ].
 EOF
-
 
 # Detiene el servidor RabbitMQ
 rabbitmqctl stop

@@ -57,7 +57,7 @@ class RabbitController:
         if not self.connection.is_connected():
             self.reconnect()
         try:
-            self.connection.send(body=message, destination='/queue/messages', id=unique_id)
+            self.connection.send(body=message, destination='/queue/messages_team_1', id=unique_id)
         except Exception as e:
             print(f"Error during sending message: {e}")
       

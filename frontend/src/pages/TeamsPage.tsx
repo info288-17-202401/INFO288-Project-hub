@@ -43,13 +43,13 @@ const TeamsPage: React.FC = () => {
 
   useEffect(() => {
     // fetchTeamUsers();
-    // rabbitSubscribeChannel('users/'+teamId)
+    rabbitSubscribeChannel('messages_team_' + teamId)
 
-    // return () => {
-    //   if (client && client.connected) {
-    //     rabbitUnsubscribeChannel('users/' + teamId)
-    //   }
-    // }
+    return () => {
+      if (client && client.connected) {
+        rabbitUnsubscribeChannel('messages_team_' + teamId)
+      }
+    }
   }, []);
 
 
