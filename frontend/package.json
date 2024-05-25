@@ -10,17 +10,27 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@babel/runtime": "^7.24.6",
+    "@babel/runtime-corejs3": "^7.24.6",
+    "@stomp/rx-stomp": "^2.0.0",
+    "@stomp/stompjs": "^7.0.0",
     "@types/chart.js": "^2.9.41",
     "@types/react-router-dom": "^5.3.3",
+    "amqplib": "^0.10.4",
     "bootstrap": "^5.3.3",
     "chart.js": "^4.4.2",
+    "core-js-pure": "^3.37.1",
+    "express": "^4.19.2",
     "react": "^18.2.0",
+    "react-avatar": "^5.0.3",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.23.0",
+    "sockjs-client": "^1.6.1",
     "sonner": "^1.4.41",
     "zustand": "^4.5.2"
   },
   "devDependencies": {
+    "@types/amqplib": "^0.10.5",
     "@types/react": "^18.2.66",
     "@types/react-dom": "^18.2.22",
     "@typescript-eslint/eslint-plugin": "^7.2.0",

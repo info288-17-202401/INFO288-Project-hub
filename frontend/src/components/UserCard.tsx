@@ -1,4 +1,5 @@
 import React from 'react';
+import Avatar from 'react-avatar';
 
 type UserCardProps = {
   photo: string;
@@ -11,12 +12,7 @@ const UserCard: React.FC<UserCardProps> = ({ photo, name }) => {
       <div className="card user-card">
         <div className="card-body d-flex align-items-center">
           <div className="user-card__circle me-3">
-            <img
-              src={photo}
-              alt={name}
-              className="user-card__photo rounded-circle"
-              style={{ width: '40px', height: '40px' }}
-            />
+            <Avatar name={name} size='50'> </Avatar>
           </div>
           <div>
             <h5 className="card-title mb-0">{name}</h5>

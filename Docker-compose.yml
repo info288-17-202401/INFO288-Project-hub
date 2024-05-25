@@ -67,6 +67,8 @@ services:
     ports:
       - "2550:5672"
       - "2560:15672"
+      - "61613:61613"     
+      - "15674:15674"    
     deploy:
       mode: replicated
       replicas: 1

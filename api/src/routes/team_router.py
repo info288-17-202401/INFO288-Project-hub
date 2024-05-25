@@ -20,8 +20,6 @@ async def join_to_team(
     team = await team_services.verify_team_in_project(
         team_data.team_id, project["project_id"]
     )
-    print(team)
-
     await team_services.verify_team_password(
         team["team_id"], team_data.team_password, team["team_password"]
     )
@@ -59,7 +57,6 @@ async def get_user_from_team(
     user=Depends(auth_services.get_user_current),
     team_data: team_models.TeamDataSearch = Depends(),
 ):
-
     await project_services.get_project_current(team_data.project_auth_key)
     users = await team_services.get_all_users_team(team_data.team_id)
     return users

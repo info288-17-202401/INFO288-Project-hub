@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import img1 from '../assets/images/management_image.jpg'
 import { projectAuthStore, teamAuthStore, userAuthStore } from '../authStore'
 import { toast } from 'sonner'
 import { apiSendData } from '../services/apiService'
+import Avatar from 'react-avatar';
 
 type TeamsCardProps = {
   team: {
@@ -75,27 +75,9 @@ const TeamsCard: React.FC<TeamsCardProps> = ({ team, colorRow }) => {
         onMouseOut={(e) => (e.currentTarget.style.backgroundColor = colorRow)}>
         <div onClick={() => setShowTeam(true)}>
           <div className="card-body d-flex align-items-center p-2">
-            <img
-              src={img1}
-              onMouseOver={(e) => {
-                e.currentTarget.style.border = '2px solid #007bff'
-              }}
-              onMouseOut={(e) => {
-                e.currentTarget.style.border = 'none'
-              }}
-              style={{
-                borderRadius: '50%',
-                height: '50px',
-                width: '50px',
-                objectFit: 'cover',
-                cursor: 'pointer',
-                marginRight: '10px',
-                transition: 'border 0.3s ease',
-              }}
-              className="img-fluid"
-              alt="Project"
-            />
-            <div>
+          <Avatar name ={team.team_name} size="50" round={true}></Avatar>
+
+            <div className='mx-2'>
               <p className="fw-bold m-0 p-0">{team.team_name}</p>
               <p className="m-0 p-0 d-none d-md-table-cell">
                 {team.team_description.length < 41

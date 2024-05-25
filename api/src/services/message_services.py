@@ -1,7 +1,7 @@
 import json
 from datetime import datetime
 import src.controllers.db_controller as db
-import src.controllers.rabbit_controller as rabbit_controller
+from src.controllers.rabbit_controller import rabbit_controller 
 
 async def send_message_to_queue(message, user, project):
     content_message_broker = {
@@ -10,9 +10,7 @@ async def send_message_to_queue(message, user, project):
         "user_email": user['app_user_email'],
     }
     body = json.dumps(content_message_broker)
-    rabbit_controller.channel.basic_publish(exchange='',
-                        routing_key=f"messages/{project['project_id']}/{message.team_id}",
-                        body=body.encode())
+    rabbit_controller.send_message(body.encode(), f"messages/{project['project_id']}/{message.team_id}")
     return content_message_broker
 
 async def save_in_db_team_message(message, user):

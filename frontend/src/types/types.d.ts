@@ -6,6 +6,7 @@ export type ProjectCardProps = {
   project_password: string
 }
 
+
 export type IconProps = {
   size: string
   color: string

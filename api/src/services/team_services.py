@@ -142,7 +142,5 @@ async def disconnect_team(user_id, team_id):
 async def send_user_status(user_id, team_id, project_id, status):
     content_message_broker = {"user_id": user_id, "status": status}
     body = json.dumps(content_message_broker)
-    rabbit_controller.channel.basic_publish(
-        exchange="", routing_key=f"messages/{project_id}/{team_id}", body=body.encode()
-    )
+    rabbit_controller.rabbit_controller.send_message(body.encode(), f"users/{team_id}")
     return content_message_broker
