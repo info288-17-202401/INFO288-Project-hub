@@ -4,10 +4,25 @@ import messagesData from './messages.json' // Importar el archivo JSON
 import { toast, Toaster } from 'sonner'
 import { apiGetData } from '../../services/apiService'
 import { projectAuthStore, teamAuthStore, userAuthStore } from '../../authStore'
+import Send from '../../assets/Send'
 
 const Chat: React.FC = () => {
   const [messages, setMessages] = useState<any[]>([])
+  const [hover, setHover] = useState(false)
+  const [message, setMessage] = useState('')
 
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    if (!message) {
+      toast.warning('Por favor, Escribe un mensaje.')
+      return
+    }
+
+    console.log(message)
+  }
+  const handleMessage = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setMessage(e.target.value)
+  }
   useEffect(() => {
     setMessages(messagesData)
     const intervalId = setInterval(fetchMessages, 50000)
@@ -18,9 +33,6 @@ const Chat: React.FC = () => {
     const teamId = teamAuthStore.getState().team_id
     const token_project = projectAuthStore.getState().token
     const token_user = userAuthStore.getState().token
-
-    console.log(teamId)
-    console.log(token_project)
 
     try {
       const route = `/team/${teamId}/messages/?project_auth_key=${token_project}`
@@ -43,9 +55,9 @@ const Chat: React.FC = () => {
     }
   }
 
-  const clickButton = () => {
-    alert('Mensaje enviado')
-  }
+  useEffect(() => {
+    fetchMessages()
+  }, [])
 
   return (
     <div className="">
@@ -53,7 +65,7 @@ const Chat: React.FC = () => {
         className=" "
         style={{
           height: '36vh',
-          overflowY: 'auto', // Agregamos desbordamiento vertical para asegurar que todos los mensajes sean visibles
+          overflowY: 'auto',
           overflowX: 'hidden',
         }}>
         <div className="d-flex m-4">
@@ -70,21 +82,29 @@ const Chat: React.FC = () => {
           </div>
         </div>
       </div>
-      <div className="d-flex ps-3 pe-2 pt-4">
+      <form onSubmit={handleSubmit} className="d-flex ps-3 pe-2 pt-4">
         <input
           className="form-control me-2"
+          style={{ backgroundColor: '#f8f8f8', borderColor: 'white' }}
           type="text"
+          onChange={handleMessage}
           placeholder="Ingresa tu mensaje!"
         />
-
         <button
+          className="bg-transparent border-0"
           type="submit"
-          className="btn text-white "
-          style={{ backgroundColor: '#5864f2' }}
-          onClick={clickButton}>
-          enviar
+          onMouseOver={(e) => (
+            (e.currentTarget.style.transform = 'scale(1.1)'),
+            setHover(true),
+            (e.currentTarget.style.transform = 'scale(-1.1)')
+          )}
+          onMouseOut={(e) => (
+            (e.currentTarget.style.transform = 'scale(1)'), setHover(false)
+          )}>
+          <Send size="40" color={hover ? '#74bff6' : '#333'} />
         </button>
-      </div>
+      </form>
+
       <Toaster richColors />
     </div>
   )

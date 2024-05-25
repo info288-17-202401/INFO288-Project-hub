@@ -5,13 +5,9 @@ import ChartsContainer from '../components/charts/ChartsContainer'
 import Back from '../assets/Back'
 import { useNavigate } from 'react-router-dom'
 import { projectAuthStore, userAuthStore } from '../authStore'
-
-type TeamsCardProps = {
-  team_description: string
-  team_id: number
-  team_name: string
-  team_private: boolean
-}
+import { toast } from 'sonner'
+import { apiGetData, apiSendData } from '../services/apiService'
+import { TeamsCardProps } from '../types/types'
 
 const ProjectPage: React.FC = () => {
   const [dataTeams, setDataTeams] = useState<TeamsCardProps[]>([])
@@ -27,29 +23,26 @@ const ProjectPage: React.FC = () => {
   const navigate = useNavigate()
 
   const fetchTeams = async () => {
-    console.log(token_project)
-    console.log(token_user)
     try {
-      const response = await fetch(
-        `http://localhost:8000/project/${token_project}/teams`,
-        {
-          method: 'GET',
-          headers: {
-            Authorization: `Bearer ${token_user}`,
-            'Content-Type': 'application/json',
-          },
-        }
-      )
-
-      if (!response.ok) {
-        throw new Error('Error fetching teams')
+      const route = `/project/${token_project}/teams`
+      const header = {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token_user}`,
       }
+      const response = await apiGetData(route, header)
 
-      const data = await response.json()
-      setDataTeams(data)
-    } catch (error) {
-      console.error('Error:', error)
-      console.log('An error occurred while fetching teams.')
+      if (response.ok) {
+        console.log(token_project)
+        setTimeout(async () => {
+          toast.success('Equipos obtenidos exitosamente.')
+        }, 700)
+        const data = await response.json()
+        setDataTeams(data)
+      } else {
+        toast.error('Error al obtener los equipos.')
+      }
+    } catch (e) {
+      console.error('Error:', e)
     }
   }
 
@@ -58,27 +51,22 @@ const ProjectPage: React.FC = () => {
   }, [token_project, token_user])
 
   const createNewTeam = async () => {
-    console.log(newTeamData)
-    const url = `http://localhost:8000/team/create?project_auth_key=${token_project}&team_name=${newTeamData.team_name}&team_description=${newTeamData.team_description}&team_password=${newTeamData.team_password}`
-
     try {
-      const response = await fetch(url, {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${token_user}`,
-          'Content-Type': 'application/json',
-        },
-      })
-
-      if (!response.ok) {
-        throw new Error('Error creating team')
+      const route = `/team/create?project_auth_key=${token_project}&team_name=${newTeamData.team_name}&team_description=${newTeamData.team_description}&team_password=${newTeamData.team_password}`
+      const header = {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token_user}`,
       }
-
-      fetchTeams()
-      setShowCreateTeamPopup(false)
+      const response = await apiSendData(route, header)
+      if (response.ok) {
+        toast.success('Equipo creado exitosamente.')
+        fetchTeams()
+        setShowCreateTeamPopup(false)
+      } else {
+        toast.error('Error al crear el equipo.')
+      }
     } catch (error) {
       console.error('Error:', error)
-      console.log('An error occurred while creating team.')
     }
   }
 
@@ -90,41 +78,44 @@ const ProjectPage: React.FC = () => {
         marginTop: '58px',
       }}>
       <div
-        style={{ flex: '0.7', backgroundColor: '#21252b', overflowY: 'auto' }}>
+        className="mt-2 m-2"
+        style={{
+          flex: '0.7',
+          overflowY: 'hidden',
+          borderRight: '1px solid #e0e0e0',
+        }}>
         <div className="d-flex align-items-center">
           <div className="m-2">
             <button
               className="btn p-0"
               onClick={() => navigate('/project-options')}>
-              <Back size="36" color="#ffffff" />
+              <Back size="36" color="#000" />
             </button>
           </div>
           <div className="w-100 mt-2 mb-2 me-2 text-center">
-            <span className="text-white p-0">
-              Volver a la página de opciones
-            </span>
+            <span className=" p-0">Volver a la página de opciones</span>
           </div>
         </div>
-        <hr className="border-top b-0 p-0 m-0 ms-2 me-2" />
+        <div className="d-flex my-2">
+          <button
+            type="submit"
+            className="btn text-white w-100 mx-2"
+            style={{ backgroundColor: '#202020' }}
+            onClick={() => setShowCreateTeamPopup(true)}>
+            Crear equipo
+          </button>
+        </div>
         <ul
-          className="p-2 m-2 mt-2"
+          className="m-2 mt-2"
           style={{
             listStyle: 'none',
             padding: 0,
             overflowY: 'auto',
-            maxHeight: 'calc(100vh - 140px)',
+            maxHeight: 'calc(100vh - 190px)',
           }}>
-          <li className="mb-3 align-item-center align-content-center">
-            <button
-              className="btn text-white w-100 mb-3"
-              style={{ backgroundColor: '#5864f2' }}
-              onClick={() => setShowCreateTeamPopup(true)}>
-              Crear equipo
-            </button>
-          </li>
           {dataTeams.map((team: TeamsCardProps, index: number) => (
-            <li className="mb-3" key={index}>
-              <TeamCard team={team} />
+            <li className="" key={index}>
+              <TeamCard team={team} colorRow={index % 2 ? '#fff' : '#f4f9ff'} />
             </li>
           ))}
         </ul>
@@ -184,15 +175,15 @@ const ProjectPage: React.FC = () => {
       <div
         style={{
           flex: '3',
-          backgroundColor: '#282c34',
+
           overflowY: 'auto',
           display: 'flex',
           flexDirection: 'column',
         }}>
-        <div className="p-2 text-white " style={{ flex: '1' }}>
+        <div className="p-2  " style={{ flex: '1' }}>
           <ChartsContainer />
         </div>
-        <div className="p-2 text-white " style={{ flex: '1' }}>
+        <div className="p-2  " style={{ flex: '1' }}>
           <Chat />
         </div>
       </div>

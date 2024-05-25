@@ -31,3 +31,10 @@ export type CardServiceProps = {
   description: string
   image: string
 }
+
+export type TeamsCardProps = {
+  team_description: string
+  team_id: number
+  team_name: string
+  team_private: boolean
+}

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { userAuthStore } from '../authStore' // Importa el store global
 import { toast, Toaster } from 'sonner'
@@ -6,7 +6,7 @@ import { apiSendData } from '../services/apiService'
 import { LoginProps } from '../types/types'
 
 const LoginPage: React.FC = () => {
-  const [LoginPageData, setLoginPageData] = useState<LoginProps>({
+  const [loginPageData, setLoginPageData] = useState<LoginProps>({
     email: '',
     password: '',
   })
@@ -20,43 +20,52 @@ const LoginPage: React.FC = () => {
 
   const handleLoginPageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setLoginPageData({
-      ...LoginPageData,
+      ...loginPageData,
       [e.target.name]: e.target.value,
     })
   }
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    if (!LoginPageData.email || !LoginPageData.password) {
+    if (!loginPageData.email || !loginPageData.password) {
       toast.warning('Por favor, completa todos los campos.')
       return
     }
 
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-    if (!emailPattern.test(LoginPageData.email)) {
+    if (!emailPattern.test(loginPageData.email)) {
       toast.warning('Por favor, introduce un correo electrónico válido.')
       return
     }
 
     try {
       const formData = new URLSearchParams()
-      formData.append('username', LoginPageData.email)
-      formData.append('password', LoginPageData.password)
+      formData.append('username', loginPageData.email)
+      formData.append('password', loginPageData.password)
 
-      const route = `/auth/login?user_email=${LoginPageData.email}&user_password=${LoginPageData.password}`
+      const route = `/auth/login?user_email=${loginPageData.email}&user_password=${loginPageData.password}`
       const header = {
         'Content-Type': 'application/x-www-form-urlencoded',
       }
       const body = formData.toString()
       const response = await apiSendData(route, header, body)
       if (response.ok) {
-        const responseData = await response.json() // Parsea la respuesta a JSON
-        setToken(responseData.access_token) // Almacena el token en el store
-        setTokenType(responseData.token_type) // Almacena el tipo de token en el store
-        setUsername(responseData.user_name) // Almacena el nombre de usuario en el store
-        setEmail(LoginPageData.email)
+        const responseData = await response.json()
+
+        setToken(responseData.access_token)
+        setTokenType(responseData.token_type)
+        setUsername(responseData.user_name)
+        setEmail(loginPageData.email)
         userAuthStore.setState({ state: true })
         toast.success('Credenciales validas. ¡Bienvenido!')
+
+        window.localStorage.setItem(
+          'userDataLogin',
+          JSON.stringify({
+            user_email: loginPageData.email,
+            token_user: responseData.access_token,
+          })
+        )
 
         setTimeout(() => {
           navigate('/home')

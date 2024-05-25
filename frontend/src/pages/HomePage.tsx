@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import team_video from '../assets/images/team_video.mp4'
 import CardService from '../components/CardService'
 import { Link } from 'react-router-dom'
@@ -6,6 +6,14 @@ import services from '../assets/ServicesData'
 import { userAuthStore } from '../authStore'
 
 const HomePage: React.FC = () => {
+  useEffect(() => {
+    const userDataLogin = window.localStorage.getItem('userDataLogin')
+    if (userDataLogin) {
+      const userData = JSON.parse(userDataLogin)
+      userAuthStore.setState({ state: true })
+      userAuthStore.setState({ token: userData.token_user })
+    }
+  }, [])
   const login = userAuthStore((state) => state.state)
   return (
     <div

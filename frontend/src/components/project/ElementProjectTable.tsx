@@ -94,7 +94,6 @@ const ElementProjectTable: React.FC<ElementProjectTableProps> = ({
 
   const formatDate = (dateString: string): string => {
     const date = parseDate(dateString)
-    console.log(date)
     const dayName = days[date.getDay()]
     const day = date.getDate()
     const monthName = months[date.getMonth()]

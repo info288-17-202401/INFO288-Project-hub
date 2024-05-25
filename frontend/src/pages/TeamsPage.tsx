@@ -21,22 +21,20 @@ const TeamsPage: React.FC = () => {
       <div
         style={{
           flex: '0.7',
-          backgroundColor: '#21252b',
+
           overflowY: 'auto',
         }}>
         <div className="d-flex align-items-center">
           <div className="m-2">
             <button className="btn p-0" onClick={clickButton}>
-              <Back size="36" color="#ffffff" />
+              <Back size="36" color="#000" />
             </button>
           </div>
           <div className="w-100 mt-2 mb-2 me-2 text-center">
-            <span className="text-white p-0">
-              Volver a la pagina de proyectos
-            </span>
+            <span className=" p-0">Volver a la pagina de proyectos</span>
           </div>
         </div>
-        <hr className=" border-top b-0 p-0 m-0 ms-2 me-2 bg-white" />
+        <hr className="m-0 mx-2" style={{ borderTop: '1.5px solid #000' }} />
         <ul className="p-2 m-1" style={{ listStyle: 'none', padding: 0 }}>
           {usercards.map((user, index) => (
             <li className="mb-3" key={index}>
