@@ -26,7 +26,7 @@ async def join_to_team(
 
     await team_services.join_team(user["app_user_id"], team_data.team_id)
     return await team_services.send_user_status(
-        user["app_user_id"], team_data.team_id, project["project_id"], "connected"
+        user, team_data.team_id, project["project_id"], "connected"
     )
 
 

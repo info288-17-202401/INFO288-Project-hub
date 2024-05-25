@@ -19,11 +19,6 @@ const user_email = userAuthStore.getState().email
 const rabbitSubscribeChannel = async (brokerChannel: string, onMessageReceived: (message: string) => void) => {
   const uniqueId = `sub-${brokerChannel}-${user_email}`;
   client.onConnect = () => {
-    if (subscription) {
-      subscription.unsubscribe();
-      console.log('Unsubscribed from previous subscription');
-    }
-
     subscription = client.subscribe('/queue/' + brokerChannel, (message: IMessage) => {
       if (message.body) {
         onMessageReceived(message.body)

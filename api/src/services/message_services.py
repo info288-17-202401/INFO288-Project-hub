@@ -50,7 +50,9 @@ async def get_team_messages(team_id):
         FROM chat_message cm
         JOIN app_user_team aut ON cm.app_user_team_id = aut.app_user_team_id
         JOIN app_user au ON au.app_user_id = aut.app_user_id  
-        WHERE aut.team_id = 1;
+        WHERE aut.team_id = {team_id}
+        ORDER BY cm.message_id desc 
+        LIMIT 10;
     """
     
     cursor.execute(get_team_messages_query, (team_id, ))

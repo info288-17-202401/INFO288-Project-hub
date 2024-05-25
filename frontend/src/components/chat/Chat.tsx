@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import Message from './Message'
 import { toast, Toaster } from 'sonner'
 import { apiGetData, apiSendData } from '../../services/apiService'
 import { projectAuthStore, teamAuthStore, userAuthStore } from '../../authStore'
@@ -17,7 +16,6 @@ const Chat: React.FC = () => {
   const teamId = teamAuthStore.getState().team_id
   const token_project = projectAuthStore.getState().token
   const token_user = userAuthStore.getState().token
-  const user_email = userAuthStore.getState().email
 
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -53,7 +51,6 @@ const Chat: React.FC = () => {
           toast.success('Equipos obtenidos exitosamente.')
         }, 700)
         const data = await response.json()
-        console.log(data)
         setMessages(data)
       } else {
         toast.error('Error al obtener los equipos.')
@@ -74,7 +71,6 @@ const Chat: React.FC = () => {
         'message_date': messageObject.message_date
       }
       setMessages(prevMessages => [...prevMessages, newMessage]);
-
   }
 
   const createNewMessage = async () => {

@@ -44,7 +44,7 @@ async def create_team(team_data, project_id):
 async def get_all_users_team(team_id):
     cursor = db.conn.cursor()
     get_user_query = f"""
-        SELECT au.app_user_id, au.app_user_name, au.app_user_email, au.app_user_last_session
+        SELECT au.app_user_id, au.app_user_name, au.app_user_email, au.app_user_last_session, aut.user_status
         FROM app_user_team aut
         JOIN app_user au ON aut.app_user_id = au.app_user_id
         WHERE aut.team_id = %s AND aut.user_status = %s;
@@ -95,21 +95,29 @@ async def join_team(user_id, team_id):
 
     cursor = db.conn.cursor()
     check_user_query = """
-        SELECT COUNT(*) FROM app_user_team WHERE app_user_id = %s;
+        SELECT COUNT(*) FROM app_user_team WHERE app_user_id = %s AND team_id = %s;
     """
-    cursor.execute(check_user_query, (user_id,))
+    cursor.execute(check_user_query, (user_id,team_id))
     user_exists = cursor.fetchone()[0] > 0
 
     if user_exists:
-        update_user_query = """
+        update_user_query = f"""
             UPDATE app_user_team
-            SET user_status = %s
-            WHERE app_user_id = %s AND team_id = %s;
+            SET user_status = 'inactive'
+            WHERE app_user_id = {user_id};
+            
+            UPDATE app_user_team
+            SET user_status = 'active'
+            WHERE app_user_id = {user_id} AND team_id = {team_id};
         """
-        update_user_query_parameters = ("active", user_id, team_id)
-        cursor.execute(update_user_query, update_user_query_parameters)
+        update_user_query_parameters = ( team_id, user_id, team_id )
+        cursor.execute(update_user_query)
     else:
-        insert_user_query = """
+        insert_user_query = f"""
+            UPDATE app_user_team
+            SET user_status = 'inactive'
+            WHERE app_user_id = {user_id};
+            
             INSERT INTO app_user_team (team_id, app_user_id, user_status)
             VALUES (%s, %s, %s);
         """
@@ -139,8 +147,11 @@ async def disconnect_team(user_id, team_id):
     db.conn.commit()
 
 
-async def send_user_status(user_id, team_id, project_id, status):
-    content_message_broker = {"user_id": user_id, "status": status}
+async def send_user_status(user, team_id, project_id, status):
+    content_message_broker = {"app_user_id": user['app_user_id'],
+                              "app_user_email": user['app_user_email'],
+                              "app_user_name": user['app_user_name'], 
+                              "user_status": status}
     body = json.dumps(content_message_broker)
     rabbit_controller.rabbit_controller.send_message(body.encode(), f"users_{team_id}")
     return content_message_broker

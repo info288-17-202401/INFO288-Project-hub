@@ -46,3 +46,10 @@ export type MessageProps = {
   message_content: string
   message_date: string
 }
+
+export type UserProps = {
+  app_user_email: string,
+  app_user_id: string,
+  app_user_name: string,
+  user_status: string
+}
