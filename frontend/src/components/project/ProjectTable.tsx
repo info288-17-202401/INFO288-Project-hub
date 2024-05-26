@@ -4,7 +4,6 @@ import { toast, Toaster } from 'sonner'
 import { apiGetData } from '../../services/apiService'
 import { ProjectCardProps } from '../../types/types'
 import ElementProjectTable from './ElementProjectTable'
-import 'bootstrap/dist/css/bootstrap.min.css'
 
 const ProjectTable: React.FC = () => {
   const [dataProjects, setDataProjects] = useState<ProjectCardProps[]>([])
@@ -60,7 +59,7 @@ const ProjectTable: React.FC = () => {
         <div
           className="h-100"
           style={{ overflowY: 'auto', position: 'relative' }}>
-          <table className="table table-striped table-hover">
+          <table className="table table-striped table-hover p-0 m-0">
             <thead>
               <tr>
                 <th className="text-secondary" style={{ width: '40%' }}>
@@ -69,7 +68,6 @@ const ProjectTable: React.FC = () => {
                 <th className="text-secondary" style={{ width: '20%' }}>
                   ID
                 </th>
-
                 <th
                   className="text-secondary d-none d-md-table-cell"
                   style={{ width: '20%' }}>
@@ -84,22 +82,22 @@ const ProjectTable: React.FC = () => {
                   name={project.project_name}
                   description={project.project_description}
                   project_id={project.project_id}
-                  project_password={project.project_password}
+                  project_password="12345"
                   project_creation_date={project.project_creation_date}
                 />
               ))}
               <Toaster richColors />
             </tbody>
           </table>
-          <div
-            className="pagination-wrapper"
-            style={{ bottom: 0, backgroundColor: 'white', zIndex: 1 }}>
-            <PaginationControl
-              currentPage={currentPage}
-              totalPages={totalPages}
-              onPageChange={setCurrentPage}
-            />
-          </div>
+        </div>
+        <div
+          className="d-flex"
+          style={{ bottom: 0, backgroundColor: 'white', zIndex: 1 }}>
+          <PaginationControl
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={setCurrentPage}
+          />
         </div>
       </div>
     </div>
@@ -112,38 +110,38 @@ const PaginationControl: React.FC<{
   onPageChange: (page: number) => void
 }> = ({ currentPage, totalPages, onPageChange }) => {
   return (
-    <nav aria-label="Pagination">
-      <ul className="pagination justify-content-center">
-        <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
-          <button
-            className="page-link"
-            onClick={() => onPageChange(currentPage - 1)}
-            disabled={currentPage === 1}>
-            Anterior
-          </button>
-        </li>
-        {Array.from({ length: totalPages }, (_, i) => (
-          <li
-            key={i}
-            className={`page-item ${currentPage === i + 1 ? 'active' : ''}`}>
-            <button className="page-link bg-black border-1 border-black" onClick={() => onPageChange(i + 1)}>
-              {i + 1}
-            </button>
-          </li>
-        ))}
+    <ul className="d-flex h-100 justify-content-end align-content-end align-items-end">
+      {Array.from({ length: totalPages }, (_, i) => (
         <li
-          className={`page-item ${
-            currentPage === totalPages ? 'disabled' : ''
-          }`}>
+          key={i}
+          className={`page-item px-2 ${
+            currentPage === i + 1 ? 'active fw-bold' : ''
+          }`}
+          onMouseOver={(e) => {
+            e.currentTarget.style.transform = 'scale(1.1)'
+          }}
+          onMouseOut={(e) => {
+            e.currentTarget.style.transform = 'scale(1)'
+          }}
+          style={{
+            listStyle: 'none',
+            color: currentPage === i + 1 ? '#111' : '#333',
+            transition: 'all 0.3s',
+          }}>
           <button
-            className="page-link"
-            onClick={() => onPageChange(currentPage + 1)}
-            disabled={currentPage === totalPages}>
-            Siguiente
+            className="page-link px-2"
+            onClick={() => onPageChange(i + 1)}>
+            <p
+              className={`${
+                currentPage === i + 1 ? ' fw-bold  border-bottom' : ''
+              }`}
+              style={{ fontSize: '1.2rem' }}>
+              {i + 1}
+            </p>
           </button>
         </li>
-      </ul>
-    </nav>
+      ))}
+    </ul>
   )
 }
 

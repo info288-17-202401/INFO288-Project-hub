@@ -1,29 +1,46 @@
-import React from 'react';
-import Avatar from 'react-avatar';
-
+import React, { useState } from 'react'
+import Avatar from 'react-avatar'
 type UserCardProps = {
-  user_name: string;
-  user_email: string;
-  user_status: string;
-};
+  user_name: string
+  user_email: string
+  user_status: string
+  colorRow: string
+}
 
-const UserCard: React.FC<UserCardProps> = ({ user_name, user_email, user_status }) => {
+const UserCard: React.FC<UserCardProps> = ({
+  user_name,
+  user_email,
+  user_status,
+  colorRow,
+}) => {
+  const [hover, setHover] = useState(false)
+
   return (
-    <div className="position-relative">
-      <div className="card user-card">
-        <div className="card-body d-flex align-items-center">
-          <div className="user-card__circle me-3">
-            <Avatar name={user_name} size='50'> </Avatar>
+    <div
+      className="position-relative"
+      style={{ backgroundColor: colorRow, cursor: 'pointer' }}
+      onMouseOver={(e) => (
+        (e.currentTarget.style.backgroundColor = '#dde8ff'), setHover(true)
+      )}
+      onMouseOut={(e) => (
+        (e.currentTarget.style.backgroundColor = colorRow), setHover(false)
+      )}>
+      <div>
+        <div className="card-body d-flex align-items-center p-2 ">
+          <div
+            className=" me-2"
+            style={{ transform: hover ? 'scale(1.1)' : 'scale(1)' }}>
+            <Avatar name={user_name} size="46" round={true} />
           </div>
-          <div>
-            <h3 className="card-title mb-0">{user_name}</h3>
-            <h6 className="card-title mb-0">{user_email}</h6>
-            <h6 className="card-title mb-0">{user_status}</h6>
+          <div className="mx-2 w-100">
+            <p className="fw-bold m-0 p-0">{user_name}</p>
+            <p className="text-secondary m-0 p-0">{user_email}</p>
+            <p className="text-center fw-bold m-0 p-0 ">{user_status}</p>
           </div>
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default UserCard;
+export default UserCard

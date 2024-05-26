@@ -50,7 +50,13 @@ const ProjectPage: React.FC = () => {
     fetchTeams()
   }, [])
 
-  const createNewTeam = async () => {
+  const createNewTeam = async (e: { preventDefault: () => void }) => {
+    e.preventDefault()
+    if (!newTeamData.team_name || !newTeamData.team_description) {
+      toast.warning('Por favor, completa todos los campos.')
+      return
+    }
+
     try {
       const route = `/team/create?project_auth_key=${token_project}&team_name=${newTeamData.team_name}&team_description=${newTeamData.team_description}&team_password=${newTeamData.team_password}`
       const header = {
@@ -98,101 +104,134 @@ const ProjectPage: React.FC = () => {
         </div>
         <div className="d-flex my-2">
           <button
-            type="submit"
-            className="btn text-white w-100 mx-2"
+            type="button"
+            className="btn text-white w-100 me-2"
             style={{ backgroundColor: '#202020' }}
             onClick={() => setShowCreateTeamPopup(true)}>
             Crear equipo
           </button>
         </div>
         <ul
-          className="m-2 mt-2"
+          className="m-2 mt-2 p-0 overflow-y-auto"
           style={{
-            listStyle: 'none',
-            padding: 0,
-            overflowY: 'auto',
             maxHeight: 'calc(100vh - 190px)',
           }}>
           {dataTeams.map((team: TeamsCardProps, index: number) => (
-            <li className="" key={index}>
-              <TeamCard team={team} colorRow={index % 2 ? '#fff' : '#f4f9ff'} />
-            </li>
+            <TeamCard team={team} colorRow={index % 2 ? '#fff' : '#f4f9ff'} />
           ))}
         </ul>
       </div>
       {showCreateTeamPopup && (
-        <div
-          className="popup"
-          style={{
-            flex: '3',
-            backgroundColor: '#282c34',
-            overflowY: 'auto',
-            display: 'flex',
-            flexDirection: 'column',
-            position: 'fixed',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
-            zIndex: 9999,
-          }}>
+        <div className="position-fixed top-0 start-0 h-100 w-100 d-flex justify-content-center align-items-center">
           <div
-            className="p-2 text-white d-flex flex-column p-5 rounded"
-            style={{ backgroundColor: '#F9F9F9' }}>
-            <input
-              className='mt-3 rounded p-2 '
-              type="text"
-              value={newTeamData.team_name}
-              onChange={(e) =>
-                setNewTeamData({ ...newTeamData, team_name: e.target.value })
-              }
-              placeholder="Nombre del equipo"
-            />
-            <input
-              type="text"
-              className='mt-3 rounded p-2'
-              value={newTeamData.team_description}
-              onChange={(e) =>
-                setNewTeamData({
-                  ...newTeamData,
-                  team_description: e.target.value,
-                })
-              }
-              placeholder="Descripción del equipo"
-            />
-            <input
-              className='mt-3 rounded p-2'
-              type="password"
-              value={newTeamData.team_password}
-              onChange={(e) =>
-                setNewTeamData({
-                  ...newTeamData,
-                  team_password: e.target.value,
-                })
-              }
-              placeholder="Contraseña del equipo"
-            />
-            <div className='d-flex justify-content-end mt-4'>
-              <button className='bg-black text-white rounded' 
-                      onClick={createNewTeam}>
-                        Crear 
-              </button>
+            className="bg-white rounded-2 p-1"
+            style={{
+              width: '25vw',
+              height: '40vh',
+              display: 'flex',
+              flexDirection: 'column',
+            }}>
+            <div
+              className="rounded-2 p-4"
+              style={{
+                flex: '1 1 auto',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'space-between',
+              }}>
+              <div className="text-center">
+                <h2 className="font-inter" style={{ fontSize: '2rem' }}>
+                  ¡Crear equipo!
+                </h2>
+                <p
+                  className="fw-bold text-uppercase text-center pt-1"
+                  style={{ fontSize: '1.1rem' }}></p>
+              </div>
+              <form onSubmit={createNewTeam}>
+                <div className="mb-3 d-flex">
+                  <input
+                    type="text"
+                    name="team_name"
+                    className="form-control"
+                    placeholder="Nombre del equipo"
+                    style={{
+                      backgroundColor: '#f8f8f8',
+                      borderColor: 'white',
+                    }}
+                    value={newTeamData.team_name}
+                    onChange={(e) =>
+                      setNewTeamData({
+                        ...newTeamData,
+                        team_name: e.target.value,
+                      })
+                    }
+                  />
+                </div>
+                <div className="mb-3">
+                  <input
+                    type="password"
+                    name="password"
+                    className="form-control"
+                    placeholder="Contraseña"
+                    value={newTeamData.team_password}
+                    onChange={(e) =>
+                      setNewTeamData({
+                        ...newTeamData,
+                        team_password: e.target.value,
+                      })
+                    }
+                    style={{
+                      backgroundColor: '#f8f8f8',
+                      borderColor: 'white',
+                    }}
+                  />
+                </div>
+                <div className="mb-3">
+                  <textarea
+                    placeholder="Descripcion"
+                    style={{ backgroundColor: '#f8f8f8', borderColor: 'white' }}
+                    value={newTeamData.team_description}
+                    onChange={(e) =>
+                      setNewTeamData({
+                        ...newTeamData,
+                        team_description: e.target.value,
+                      })
+                    }
+                    className="form-control"
+                    name="project_description"
+                  />
+                </div>
+                <div className="d-flex">
+                  <button
+                    type="submit"
+                    className="btn text-white w-100 me-2"
+                    style={{ backgroundColor: '#202020' }}>
+                    Crear
+                  </button>
+                  <button
+                    className="btn text-white w-100"
+                    style={{ backgroundColor: '#202020' }}
+                    onClick={() => {
+                      setShowCreateTeamPopup(false)
+                    }}>
+                    Cancelar
+                  </button>
+                </div>
+              </form>
             </div>
           </div>
         </div>
       )}
       <div
+        className="d-flex flex-column w-100 h-100 overflow-y-auto"
         style={{
           flex: '3',
-
-          overflowY: 'auto',
-          display: 'flex',
-          flexDirection: 'column',
         }}>
-        <div className="p-2  " style={{ flex: '1' }}>
-          {/* <ChartsContainer /> */}
+        <div className="px-2 " style={{ flex: '1' }}>
+          <ChartsContainer />
         </div>
         <div className="p-2  " style={{ flex: '1' }}>
-          {/* <Chat /> */}
+          <Chat />
         </div>
       </div>
     </div>

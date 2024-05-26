@@ -3,11 +3,13 @@ import { toast, Toaster } from 'sonner'
 import { apiGetData, apiSendData } from '../../services/apiService'
 import { projectAuthStore, teamAuthStore, userAuthStore } from '../../authStore'
 import Send from '../../assets/Send'
-import {rabbitSubscribeChannel, rabbitUnsubscribeChannel, client} from '../../services/rabbitMQService'
+import {
+  rabbitSubscribeChannel,
+  rabbitUnsubscribeChannel,
+  client,
+} from '../../services/rabbitMQService'
 import { MessageProps } from '../../types/types'
 import MessageList from './MessageList'
-
-
 
 const Chat: React.FC = () => {
   const [messages, setMessages] = useState<MessageProps[]>([])
@@ -17,19 +19,19 @@ const Chat: React.FC = () => {
   const token_project = projectAuthStore.getState().token
   const token_user = userAuthStore.getState().token
 
-
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     if (!message) {
       toast.warning('Por favor, Escribe un mensaje.')
       return
     }
+    e.currentTarget.reset()
     console.log(message)
+    createNewMessage()
   }
   const handleMessage = (e: React.ChangeEvent<HTMLInputElement>) => {
     setMessage(e.target.value)
   }
-
 
   const fetchMessages = async () => {
     const teamId = teamAuthStore.getState().team_id
@@ -62,15 +64,15 @@ const Chat: React.FC = () => {
     }
   }
 
-  const onMessageReceived = async(body: any) => {
-      const messageObject = JSON.parse(body);
-      const newMessage : MessageProps = {
-        'app_user_name': messageObject.user_name,
-        'app_user_email': messageObject.user_email,
-        'message_content': messageObject.message_text,
-        'message_date': messageObject.message_date
-      }
-      setMessages(prevMessages => [...prevMessages, newMessage]);
+  const onMessageReceived = async (body: any) => {
+    const messageObject = JSON.parse(body)
+    const newMessage: MessageProps = {
+      app_user_name: messageObject.user_name,
+      app_user_email: messageObject.user_email,
+      message_content: messageObject.message_text,
+      message_date: messageObject.message_date,
+    }
+    setMessages((prevMessages) => [...prevMessages, newMessage])
   }
 
   const createNewMessage = async () => {
@@ -92,9 +94,8 @@ const Chat: React.FC = () => {
     }
   }
 
-
   useEffect(() => {
-    fetchMessages();
+    fetchMessages()
     rabbitSubscribeChannel('messages_team_' + teamId, onMessageReceived)
 
     return () => {
@@ -102,26 +103,26 @@ const Chat: React.FC = () => {
         rabbitUnsubscribeChannel('messages_team_' + teamId)
       }
     }
-  }, []);
+  }, [])
 
   return (
-    <div className="">
+    <div>
       <div
-        className=" "
         style={{
           height: '36vh',
           overflowY: 'auto',
           overflowX: 'hidden',
         }}>
         <div className="d-flex m-4">
-          <MessageList messages={messages}></MessageList>
+          <div className="align-content-center w-100">
+            <MessageList messages={messages} />
+          </div>
         </div>
       </div>
       <form onSubmit={handleSubmit} className="d-flex ps-3 pe-2 pt-4">
         <input
           className="form-control me-2"
           style={{ backgroundColor: '#f8f8f8', borderColor: 'white' }}
-          value={message}
           type="text"
           onChange={handleMessage}
           placeholder="Ingresa tu mensaje!"
@@ -137,13 +138,9 @@ const Chat: React.FC = () => {
           onMouseOut={(e) => (
             (e.currentTarget.style.transform = 'scale(1)'), setHover(false)
           )}>
-          <button onClick={createNewMessage}>
-            <Send size="40" color={hover ? '#74bff6' : '#333'} />
-
-          </button>
+          <Send size="40" color={hover ? '#74bff6' : '#333'} />
         </button>
       </form>
-
       <Toaster richColors />
     </div>
   )

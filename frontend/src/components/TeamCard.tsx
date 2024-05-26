@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { projectAuthStore, teamAuthStore, userAuthStore } from '../authStore'
 import { toast } from 'sonner'
 import { apiSendData } from '../services/apiService'
-import Avatar from 'react-avatar';
+import Avatar from 'react-avatar'
 
 type TeamsCardProps = {
   team: {
@@ -29,6 +29,7 @@ const TeamsCard: React.FC<TeamsCardProps> = ({ team, colorRow }) => {
       [e.target.name]: e.target.value,
     })
   }
+  const [hover, setHover] = useState(false)
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     if (team.team_private) {
@@ -70,14 +71,21 @@ const TeamsCard: React.FC<TeamsCardProps> = ({ team, colorRow }) => {
     <>
       <div
         className="position-relative"
-        style={{ backgroundColor: colorRow, borderBottom: '1px solid #e0e0e0' }}
-        onMouseOver={(e) => (e.currentTarget.style.backgroundColor = '#dde8ff')}
-        onMouseOut={(e) => (e.currentTarget.style.backgroundColor = colorRow)}>
-        <div onClick={() => setShowTeam(true)}>
+        style={{ backgroundColor: colorRow }}
+        onMouseOver={(e) => (
+          (e.currentTarget.style.backgroundColor = '#dde8ff'), setHover(true)
+        )}
+        onMouseOut={(e) => (
+          (e.currentTarget.style.backgroundColor = colorRow), setHover(false)
+        )}>
+        <div onClick={() => setShowTeam(true)} style={{ cursor: 'pointer' }}>
           <div className="card-body d-flex align-items-center p-2">
-          <Avatar name ={team.team_name} size="50" round={true}></Avatar>
-
-            <div className='mx-2'>
+            <div
+              className=" me-2"
+              style={{ transform: hover ? 'scale(1.1)' : 'scale(1)' }}>
+              <Avatar name={team.team_name} size="46" round={true} />
+            </div>
+            <div className="mx-2">
               <p className="fw-bold m-0 p-0">{team.team_name}</p>
               <p className="m-0 p-0 d-none d-md-table-cell">
                 {team.team_description.length < 41
@@ -126,6 +134,10 @@ const TeamsCard: React.FC<TeamsCardProps> = ({ team, colorRow }) => {
                       name="team_id"
                       className="form-control"
                       value={team.team_id}
+                      style={{
+                        backgroundColor: '#f8f8f8',
+                        borderColor: 'white',
+                      }}
                       disabled
                     />
                   </div>
@@ -147,9 +159,23 @@ const TeamsCard: React.FC<TeamsCardProps> = ({ team, colorRow }) => {
                     </>
                   ) : (
                     <>
-                      <div>
-                        Descripcion del team al que me unire ! no pide
-                        contraseña
+                      <div className="mb-3">
+                        <label className="form-label w-50 align-content-center  align-items-center ">
+                          Descripcion:
+                        </label>
+                        <input
+                          type="text"
+                          name="description"
+                          className="form-control"
+                          placeholder="Contraseña"
+                          value={team.team_description}
+                          onChange={handleLoginTeamChange}
+                          style={{
+                            backgroundColor: '#f8f8f8',
+                            borderColor: 'white',
+                          }}
+                          disabled
+                        />
                       </div>
                     </>
                   )}

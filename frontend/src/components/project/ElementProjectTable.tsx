@@ -5,7 +5,7 @@ import { apiSendData } from '../../services/apiService'
 import { useNavigate } from 'react-router-dom'
 import img1 from '../../assets/images/maganment_login.gif'
 import Copy from '../../assets/Copy'
-import Avatar from 'react-avatar';
+import Avatar from 'react-avatar'
 
 type ElementProjectTableProps = {
   name: string
@@ -60,7 +60,6 @@ const ElementProjectTable: React.FC<ElementProjectTableProps> = ({
     navigator.clipboard.writeText(e.currentTarget.textContent || '')
   }
 
-  // src/utils/dateUtils.ts
   const days = [
     'domingo',
     'lunes',
@@ -86,10 +85,8 @@ const ElementProjectTable: React.FC<ElementProjectTableProps> = ({
   ]
 
   const parseDate = (dateString: string): Date => {
-    // Crear una fecha desde la cadena original
     const date = new Date(dateString)
 
-    // Crear una nueva fecha ajustando la diferencia horaria local
     const userTimezoneOffset = date.getTimezoneOffset() * 60000
     return new Date(date.getTime() + userTimezoneOffset)
   }
@@ -104,16 +101,41 @@ const ElementProjectTable: React.FC<ElementProjectTableProps> = ({
     return `${dayName} ${day} de ${monthName} ${year}`
   }
 
-  type TdCopyOptionProps = {
-    type: string
-    content: string
-  }
+  const [hover, SetHover] = React.useState(false)
 
-  const TdCopyOption: React.FC<TdCopyOptionProps> = ({ type, content }) => {
-    const [hover, SetHover] = React.useState(false)
-
-    return (
-      <td className="align-content-center" onClick={copyClick} data-type={type}>
+  return (
+    <tr className="">
+      <td className="d-flex align-items-center ">
+        <div
+          className="d-flex justify-content-center align-items-center text-uppercase fw-bold text-white mx-2 me-4"
+          onMouseOver={(e) => {
+            e.currentTarget.style.border = '2px solid #007bff'
+          }}
+          onMouseOut={(e) => {
+            e.currentTarget.style.border = 'none'
+          }}
+          onClick={clickCard}
+          style={{
+            borderRadius: '50%',
+            height: '50px',
+            width: '50px',
+            objectFit: 'cover',
+            cursor: 'pointer',
+            marginRight: '10px',
+            transition: 'border 0.3s ease',
+          }}>
+          <Avatar name={name} size="46" round={true} />
+        </div>
+        <div>
+          <p className="fw-bold m-0 p-0">{name}</p>
+          <p className="m-0 p-0 d-none d-md-table-cell">
+            {description.length < 41
+              ? description
+              : description.slice(0, 47) + '...'}
+          </p>
+        </div>
+      </td>
+      <td className="align-content-center" onClick={copyClick} data-type="id">
         <div
           className="d-flex align-items-center justify-content-between border-1 rounded-5 p-1 px-2"
           style={{
@@ -129,27 +151,10 @@ const ElementProjectTable: React.FC<ElementProjectTableProps> = ({
             e.currentTarget.style.color = '#333'
             SetHover(false)
           }}>
-          <p className="m-0 text-center ">{content}</p>
+          <p className="m-0 text-center ">{project_id}</p>
           <Copy color={hover ? '#a1a5a7' : '#333'} size="20" />
         </div>
       </td>
-    )
-  }
-
-  return (
-    <tr className="">
-      <td className="d-flex align-items-center ">
-        <Avatar name ={name} size="50" round={true}></Avatar>
-        <div className='mx-2'>
-          <p className="fw-bold m-0 p-0">{name}</p>
-          <p className="m-0 p-0 d-none d-md-table-cell">
-            {description.length < 41
-              ? description
-              : description.slice(0, 47) + '...'}
-          </p>
-        </div>
-      </td>
-      <TdCopyOption type="id" content={project_id} />
       <td className="align-content-center d-none d-md-table-cell">
         {formatDate(project_creation_date)}
       </td>

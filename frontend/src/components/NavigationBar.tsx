@@ -4,7 +4,6 @@ import { userAuthStore } from '../authStore.tsx'
 import Menu from '../assets/Menu.tsx'
 import Sun from '../assets/Sun.tsx'
 import Moon from '../assets/Moon.tsx'
-import '../index.css' // Importa el archivo CSS donde se definen los estilos
 
 const NavigationBar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false)
@@ -91,7 +90,13 @@ const NavigationBar: React.FC = () => {
     if (login) {
       return (
         <>
-          <NavButton route="/profile" text="Perfil" clickEvent={toggleMenu} />
+          <NavButton
+            route="/profile"
+            text="Perfil"
+            clickEvent={() => {
+              setIsOpen(false)
+            }}
+          />
           <NavButton route="/home" text="Cerrar sesión" clickEvent={logout} />
         </>
       )
@@ -156,9 +161,9 @@ const NavigationBar: React.FC = () => {
 
         <div
           className={`collapse navbar-collapse p-2 align-items-center ${
-            isOpen ? 'show' : ''
+            isOpen ? 'show   ' : ''
           }`}>
-          <ul className="navbar-nav w-100 ps-2">
+          <ul className="navbar-nav w-100 ps-2 ">
             <NavItem link="/home" text="Inicio" />
             {login && (
               <>

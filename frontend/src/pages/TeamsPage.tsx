@@ -7,11 +7,12 @@ import { useNavigate } from 'react-router-dom'
 import { projectAuthStore, teamAuthStore, userAuthStore } from '../authStore'
 import { apiGetData } from '../services/apiService'
 import { toast } from 'sonner'
-import {rabbitUnsubscribeChannel, client, rabbitSubscribeChannel} from '../services/rabbitMQService'
-import TeamUserList from '../components/team/TeamUserList'
+import {
+  rabbitUnsubscribeChannel,
+  client,
+  rabbitSubscribeChannel,
+} from '../services/rabbitMQService'
 import { UserProps } from '../types/types'
-
-
 
 const TeamsPage: React.FC = () => {
   const navigate = useNavigate()
@@ -19,11 +20,6 @@ const TeamsPage: React.FC = () => {
   const token_user = userAuthStore.getState().token
   const token_project = projectAuthStore.getState().token
   const [sessionUsers, setSessionUsers] = useState<UserProps[]>([])
-
-
-  const clickButton = () => {
-    navigate('/projects')
-  }
 
   const fetchTeamUsers = async () => {
     try {
@@ -49,24 +45,25 @@ const TeamsPage: React.FC = () => {
     }
   }
 
-  
-  const onMessageReceived = async(body: any) => {
-    const messageObject = JSON.parse(body);
-    const newUser : UserProps = {
-      'app_user_name': messageObject.app_user_name,
-      'app_user_email': messageObject.app_user_email,
-      'app_user_id': messageObject.app_user_id,
-      'user_status': messageObject.user_status
+  const onMessageReceived = async (body: any) => {
+    const messageObject = JSON.parse(body)
+    const newUser: UserProps = {
+      app_user_name: messageObject.app_user_name,
+      app_user_email: messageObject.app_user_email,
+      app_user_id: messageObject.app_user_id,
+      user_status: messageObject.user_status,
     }
-    if(newUser.user_status == 'connected'){
-      setSessionUsers(prevUsers => [...prevUsers, newUser]);
-    }else if (newUser.user_status == 'disconnected') {
-      setSessionUsers(prevUsers => prevUsers.filter(user => user.app_user_id !== newUser.app_user_id));
+    if (newUser.user_status == 'connected') {
+      setSessionUsers((prevUsers) => [...prevUsers, newUser])
+    } else if (newUser.user_status == 'disconnected') {
+      setSessionUsers((prevUsers) =>
+        prevUsers.filter((user) => user.app_user_id !== newUser.app_user_id)
+      )
     }
-}
+  }
 
   useEffect(() => {
-    fetchTeamUsers();
+    fetchTeamUsers()
     rabbitSubscribeChannel('users_team_' + teamId, onMessageReceived)
 
     return () => {
@@ -74,8 +71,7 @@ const TeamsPage: React.FC = () => {
         rabbitUnsubscribeChannel('users_team_' + teamId)
       }
     }
-  }, []);
-
+  }, [])
 
   return (
     <div
@@ -85,32 +81,41 @@ const TeamsPage: React.FC = () => {
         marginTop: '58px',
       }}>
       <div
+        className="mt-2 m-2"
         style={{
           flex: '0.7',
-
-          overflowY: 'auto',
+          overflowY: 'hidden',
+          borderRight: '1px solid #e0e0e0',
         }}>
         <div className="d-flex align-items-center">
           <div className="m-2">
-            <button className="btn p-0" onClick={clickButton}>
+            <button className="btn p-0" onClick={() => navigate('/projects')}>
               <Back size="36" color="#000" />
             </button>
           </div>
           <div className="w-100 mt-2 mb-2 me-2 text-center">
-            <span className=" p-0">Volver a la pagina de proyectos</span>
+            <span className=" p-0">Volver a la página de proyectos</span>
           </div>
         </div>
-        <hr className="m-0 mx-2" style={{ borderTop: '1.5px solid #000' }} />
-          <TeamUserList sessionUsers={sessionUsers}></TeamUserList>
+        <ul className="p-2 m-1" style={{ listStyle: 'none', padding: 0 }}>
+          {sessionUsers.map((user, index) => (
+            <li className="mb-3" key={index}>
+              <UserCard
+                user_name={user.app_user_name}
+                user_email={user.app_user_email}
+                user_status={user.user_status}
+                colorRow={index % 2 ? '#fff' : '#f4f9ff'}
+              />
+            </li>
+          ))}
+        </ul>
       </div>
       <div
+        className="d-flex flex-column overflow-y-auto"
         style={{
           flex: '3',
-          overflowY: 'auto',
-          display: 'flex',
-          flexDirection: 'column',
         }}>
-        <div className="p-2 text-white " style={{ flex: '1' }}>
+        <div className="px-2" style={{ flex: '1' }}>
           <ToDoContainer />
         </div>
         <div className="p-2 " style={{ flex: '1' }}>
