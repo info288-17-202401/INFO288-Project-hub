@@ -70,7 +70,7 @@ async def verify_team_in_project(team_id, project_id):
     """
     cursor.execute(check_team_query, (team_id, project_id))
     team = cursor.fetchone()
-
+    
     if team is None:
         raise HTTPException(
             status_code=401,
@@ -78,11 +78,10 @@ async def verify_team_in_project(team_id, project_id):
             headers={"WWW-Authenticate": "Bearer"},
         )
 
-    return team
+    return dict(team)
 
 
 async def verify_team_password(team_id, team_password, team_password_hash):
-    return team_password == None or team_password == ""
     if not await auth_services.verify_password(team_password, team_password_hash):
         raise HTTPException(
             status_code=401,
