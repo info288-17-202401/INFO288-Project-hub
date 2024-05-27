@@ -19,10 +19,12 @@ const MessageList: React.FC<MessageListProps> = ({ messages }) => {
       messagesEndRef.current.scrollIntoView({ behavior: 'smooth' })
     }
   }
+  // ordenar por id messages messages_id
+  const sortMessages = messages.sort((a, b) => a.message_id - b.message_id)
 
   return (
     <div>
-      {messages.map((message, index) => (
+      {sortMessages.map((message, index) => (
         <Message
           key={index}
           user_name={message.app_user_name}
