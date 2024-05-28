@@ -40,6 +40,20 @@ cat <<EOF > /etc/rabbitmq/rabbitmq.config
 ].
 EOF
 
+if ping -c 1 $FIRST_NODE_HOST &> /dev/null
+then
+    echo "El host $FIRST_NODE_HOST está accesible. Intentando unirse al clúster..."
+    rabbitmqctl stop_app
+    echo $ERLANG_COOKIE > /var/lib/rabbitmq/.erlang.cookie
+    chown rabbitmq:rabbitmq /var/lib/rabbitmq/.erlang.cookie
+    chmod 400 /var/lib/rabbitmq/.erlang.cookie
+
+    rabbitmqctl join_cluster rabbit@$FIRST_NODE_HOST
+    rabbitmqctl start_app
+else
+    echo "El host $FIRST_NODE_HOST no está accesible. Iniciando RabbitMQ sin unirse al clúster."
+fi
+
 # Detiene el servidor RabbitMQ
 rabbitmqctl stop
 
