@@ -1,30 +1,39 @@
-# React + TypeScript + Vite
+# Explicación de las Variables
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**CHOKIDAR_USEPOLLING**: Establece el modo de polling para Chokidar, una librería de observación de archivos. Esto es útil en sistemas de archivos donde la detección de cambios es poco confiable.
 
-Currently, two official plugins are available:
+**IP**: La dirección IP de la máquina local. Esto es crucial para la configuración de las URLs de la API y del broker.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+**VITE_API_URL**: La URL de la API, utilizando la IP de la máquina local y el puerto 8010.
 
-## Expanding the ESLint configuration
+**VITE_BROKER_URL**: La URL del broker, utilizando la IP de la máquina local y el puerto 8020.
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+**VITE_DEVELOPMENT**: Indica si la aplicación está en modo de desarrollo (true/false).
 
-- Configure the top-level `parserOptions` property like this:
+**VITE_RABBITMQ_LOGIN**: El nombre de usuario para RabbitMQ.
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
+**VITE_RABBITMQ_PASSCODE**: La contraseña para RabbitMQ.
+
+## Obtener la IP de la Máquina Local
+
+Para obtener la IP de tu máquina local, sigue estos pasos:
+
+- Abre una terminal.
+
+- Ejecuta el siguiente comando:
+
+```bash
+ifconfig
 ```
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+Busca la interfaz en0 y encuentra la línea que comienza con inet. La dirección IP que aparece en esta línea es la IP de tu máquina local. Por ejemplo, en la salida siguiente:
+
+```bash
+en0: flags=8863<UP,BROADCAST,RUNNING,SIMPLEX,MULTICAST> mtu 1500
+inet 172.20.10.14 netmask 0xffffff00 broadcast 172.20.10.255
+inet6 fe80::aede:48ff:fe00:1122%en0 prefixlen 64 secured scopeid 0x4
+```
+
+La IP es 172.20.10.14.
+
+Sustituye la dirección IP de la variable IP con la obtenida en el archivo .env.
