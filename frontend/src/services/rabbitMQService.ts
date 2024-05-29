@@ -1,7 +1,7 @@
 import { Client, IMessage, StompSubscription } from '@stomp/stompjs';
 import { userAuthStore } from '../authStore';
 
-const wsUrl = 'ws://localhost:15674/ws';
+const wsUrl = 'ws://172.22.64.1:8020/ws';
 
 const client = new Client({
   brokerURL: wsUrl,

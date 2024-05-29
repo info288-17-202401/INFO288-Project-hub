@@ -71,6 +71,7 @@ const Chat: React.FC = () => {
       app_user_email: messageObject.user_email,
       message_content: messageObject.message_text,
       message_date: messageObject.message_date,
+      message_id: messageObject.message_id
     }
     setMessages((prevMessages) => [...prevMessages, newMessage])
   }

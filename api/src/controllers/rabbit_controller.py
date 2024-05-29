@@ -1,6 +1,10 @@
 import pika, os, time
 from dotenv import load_dotenv
 import stomp
+import logging
+
+
+logging.basicConfig(level=logging.INFO)
 
 load_dotenv('.env.api')
 
@@ -42,10 +46,20 @@ class RabbitController:
         self.connect()
         self.subscription_counter = 0
         
-    def connect(self):
-        self.connection = stomp.Connection([('project_hub_broker', 61613)])
-        self.connection.set_listener('', MyListener(self))  # Pass self to MyListener
-        self.connection.connect('admin', 'admin123', wait=True)
+    def connect(self, retries=10, delay=10):
+        attempt = 0
+        while attempt < retries:
+            try:
+                self.connection = stomp.Connection([('project_hub_broker', 61613)])
+                self.connection.set_listener('', MyListener(self))
+                self.connection.connect('admin', 'admin123', wait=True)
+                logging.info(f'Connected on attempt {attempt + 1}')
+                return
+            except Exception as e:
+                logging.error(f'Connection attempt {attempt + 1} failed: {e}')
+                attempt += 1
+                time.sleep(delay)
+        raise Exception('Failed to connect after several attempts')
 
     def reconnect(self):
         if self.connection and not self.connection.is_closed:

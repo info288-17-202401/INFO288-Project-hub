@@ -3,7 +3,6 @@ import { projectAuthStore, userAuthStore } from '../../authStore'
 import { toast } from 'sonner'
 import { apiSendData } from '../../services/apiService'
 import { useNavigate } from 'react-router-dom'
-import img1 from '../../assets/images/maganment_login.gif'
 import Copy from '../../assets/Copy'
 import Avatar from 'react-avatar'
 

@@ -21,6 +21,7 @@ services:
     deploy:
       mode: replicated
       replicas: 1
+    restart: always
       
   database:
     hostname: project_hub_db
@@ -75,5 +76,5 @@ services:
 
 networks:
   project_hub_overlay:
-    driver: overlay
-    attachable: true
+    external: true
+    

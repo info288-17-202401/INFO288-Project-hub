@@ -6,8 +6,9 @@ import Back from '../assets/Back'
 import { useNavigate } from 'react-router-dom'
 import { projectAuthStore, userAuthStore } from '../authStore'
 import { toast } from 'sonner'
-import { apiGetData, apiSendData } from '../services/apiService'
+import { apiSendData } from '../services/apiService'
 import { TeamsCardProps } from '../types/types'
+import { fetchTeams } from '../services/teamServices'
 
 const ProjectPage: React.FC = () => {
   const [dataTeams, setDataTeams] = useState<TeamsCardProps[]>([])
@@ -21,33 +22,13 @@ const ProjectPage: React.FC = () => {
   const [showCreateTeamPopup, setShowCreateTeamPopup] = useState(false)
 
   const navigate = useNavigate()
-
-  const fetchTeams = async () => {
-    try {
-      const route = `/project/${token_project}/teams`
-      const header = {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token_user}`,
-      }
-      const response = await apiGetData(route, header)
-
-      if (response.ok) {
-        console.log(token_project)
-        setTimeout(async () => {
-          toast.success('Equipos obtenidos exitosamente.')
-        }, 700)
-        const data = await response.json()
-        setDataTeams(data)
-      } else {
-        toast.error('Error al obtener los equipos.')
-      }
-    } catch (e) {
-      console.error('Error:', e)
-    }
-  }
+  
 
   useEffect(() => {
-    fetchTeams()
+    const setTeamsList = async () => {
+      setDataTeams(await fetchTeams())
+    }
+    setTeamsList()
   }, [])
 
   const createNewTeam = async (e: { preventDefault: () => void }) => {
@@ -66,7 +47,7 @@ const ProjectPage: React.FC = () => {
       const response = await apiSendData(route, header)
       if (response.ok) {
         toast.success('Equipo creado exitosamente.')
-        fetchTeams()
+        setDataTeams(await fetchTeams())
         setShowCreateTeamPopup(false)
       } else {
         toast.error('Error al crear el equipo.')

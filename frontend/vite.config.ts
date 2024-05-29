@@ -1,15 +1,22 @@
-import { defineConfig } from 'vite'
+import { defineConfig, loadEnv } from 'vite'
 import react from '@vitejs/plugin-react-swc'
 
-// https://vitejs.dev/config/
-export default defineConfig({
-  plugins: [react()],
-  server: {
-    watch: {
-      usePolling: true,
-    },
-    host: true, 
-    strictPort: true,
-    port: 5173,
-  }
-})
+
+
+export default ({ mode }:{mode:string}) => {
+  process.env = {...process.env, ...loadEnv(mode, process.cwd())};
+
+  return defineConfig({
+    plugins: [react()],
+    server: {
+      open: true,
+      watch: {
+        usePolling: Boolean(process.env.VITE_DEVELOPMENT),
+      },
+      host: true, 
+      strictPort: true,
+      port: 5173,
+    }
+  })
+  
+}

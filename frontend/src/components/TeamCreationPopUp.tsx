@@ -1,9 +1,13 @@
 import { useState } from "react"
-import { TeamCreationPopUpProps } from '../types/types'
 import { apiSendData } from '../services/apiService'
 import { toast } from 'sonner'
 
-const TeamCreationPopUp: React.FC<TeamCreationPopUpProps> = (token_project, token_user) => {
+type TeamCreationPopUpProps = {
+  token_project: string
+  token_user: string
+}
+
+const TeamCreationPopUp: React.FC<TeamCreationPopUpProps> = ({token_project, token_user }) => {
 
     const [newTeamData, setNewTeamData] = useState({
         team_name: '',
@@ -21,8 +25,6 @@ const TeamCreationPopUp: React.FC<TeamCreationPopUpProps> = (token_project, toke
           const response = await apiSendData(route, header)
           if (response.ok) {
             toast.success('Equipo creado exitosamente.')
-            fetchTeams()
-            setShowCreateTeamPopup(false)
           } else {
             toast.error('Error al crear el equipo.')
           }
