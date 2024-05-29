@@ -22,8 +22,16 @@ Para obtener la IP de tu máquina local, sigue estos pasos:
 
 - Ejecuta el siguiente comando:
 
+En distribuciones Unix
+
 ```bash
 ifconfig
+```
+
+En windows
+
+```bash
+ipconfig
 ```
 
 Busca la interfaz en0 y encuentra la línea que comienza con inet. La dirección IP que aparece en esta línea es la IP de tu máquina local. Por ejemplo, en la salida siguiente:
