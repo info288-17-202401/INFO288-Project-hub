@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import UserCard from '../components/UserCard'
+import UserCard from '../components/cards/UserCard'
 import ToDoContainer from '../components/toDo/TodoContainer'
 import Chat from '../components/chat/Chat'
 import Back from '../assets/Back'
@@ -45,7 +45,7 @@ const TeamsPage: React.FC = () => {
     }
   }
 
-  const onMessageReceived = async (body: any) => {
+  const onMessageReceived = async (body: string) => {
     const messageObject = JSON.parse(body)
     const newUser: UserProps = {
       app_user_name: messageObject.app_user_name,

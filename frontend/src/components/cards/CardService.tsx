@@ -1,13 +1,5 @@
-import { CardServiceProps } from '../types/types'
+import { CardServiceProps } from '../../types/types'
 const CardService: React.FC<CardServiceProps> = ({ description, image }) => {
-  const handleMouseOver = (e: React.MouseEvent<HTMLImageElement>) => {
-    ;(e.target as HTMLImageElement).style.transform = 'scale(1.05)'
-  }
-
-  const handleMouseOut = (e: React.MouseEvent<HTMLImageElement>) => {
-    ;(e.target as HTMLImageElement).style.transform = 'scale(1)'
-  }
-
   return (
     <div
       className="overflow-hidden"
@@ -20,8 +12,12 @@ const CardService: React.FC<CardServiceProps> = ({ description, image }) => {
       <img
         src={image}
         className="card-img-top h-auto"
-        onMouseOver={handleMouseOver}
-        onMouseOut={handleMouseOut}
+        onMouseOver={(e) => {
+          e.currentTarget.style.transform = 'scale(1.05'
+        }}
+        onMouseOut={(e) => {
+          e.currentTarget.style.transform = 'scale(1)'
+        }}
         style={{ transition: 'transform 0.2s' }}
         alt="Card image"
       />

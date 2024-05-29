@@ -1,5 +1,4 @@
-//const BASE_URL = `${import.meta.env.VITE_API_URL}`;
-const BASE_URL = `http://172.22.64.1:8010`
+const BASE_URL = `${import.meta.env.VITE_API_URL}`
 
 export const apiSendData = async (
   route: string,

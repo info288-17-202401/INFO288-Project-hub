@@ -1,5 +1,3 @@
-// servicesData.ts
-
 import image_2a from '../assets/images/services/2a.jpg'
 import image_3a from '../assets/images/services/3a.jpg'
 import image_4a from '../assets/images/services/4a.png'

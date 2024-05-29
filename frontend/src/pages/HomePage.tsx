@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import team_video from '../assets/images/team_video.mp4'
-import CardService from '../components/CardService'
+import CardService from '../components/cards/CardService'
 import { Link } from 'react-router-dom'
 import services from '../assets/ServicesData'
 import { userAuthStore } from '../authStore'

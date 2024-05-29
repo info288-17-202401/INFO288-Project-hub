@@ -64,14 +64,14 @@ const Chat: React.FC = () => {
     }
   }
 
-  const onMessageReceived = async (body: any) => {
+  const onMessageReceived = async (body: string) => {
     const messageObject = JSON.parse(body)
     const newMessage: MessageProps = {
       app_user_name: messageObject.user_name,
       app_user_email: messageObject.user_email,
       message_content: messageObject.message_text,
       message_date: messageObject.message_date,
-      message_id: messageObject.message_id
+      message_id: messageObject.message_id,
     }
     setMessages((prevMessages) => [...prevMessages, newMessage])
   }

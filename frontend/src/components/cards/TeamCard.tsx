@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { projectAuthStore, teamAuthStore, userAuthStore } from '../authStore'
+import { projectAuthStore, teamAuthStore, userAuthStore } from '../../authStore'
 import { toast } from 'sonner'
-import { apiSendData } from '../services/apiService'
+import { apiSendData } from '../../services/apiService'
 import Avatar from 'react-avatar'
 
 type TeamsCardProps = {

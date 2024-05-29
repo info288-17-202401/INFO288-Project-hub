@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import Chat from '../components/chat/Chat'
-import TeamCard from '../components/TeamCard'
+import TeamCard from '../components/cards/TeamCard'
 import ChartsContainer from '../components/charts/ChartsContainer'
 import Back from '../assets/Back'
 import { useNavigate } from 'react-router-dom'
@@ -22,7 +22,6 @@ const ProjectPage: React.FC = () => {
   const [showCreateTeamPopup, setShowCreateTeamPopup] = useState(false)
 
   const navigate = useNavigate()
-  
 
   useEffect(() => {
     const setTeamsList = async () => {
