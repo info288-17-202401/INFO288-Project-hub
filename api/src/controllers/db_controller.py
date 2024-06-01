@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 
 load_dotenv('.env.api')
 
-conn = psycopg2.connect(
+conn = psycopg2.connect(  # Crea la conexión con la base de datos
                 host = os.getenv("POSTGRES_HOST"),
                 dbname = os.getenv("POSTGRES_DB"),
                 user = os.getenv("POSTGRES_USER"),
@@ -12,7 +12,7 @@ conn = psycopg2.connect(
             )
 
 
-def query_database(query, parameters = None):
+def query_database(query, parameters = None): #Función que ejecuta una consulta en la base de datos
     cursor = conn.cursor()
     if parameters != None:
         cursor.execute(query, parameters)

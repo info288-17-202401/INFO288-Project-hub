@@ -8,11 +8,11 @@ import psycopg2
 from psycopg2.extras import RealDictCursor
 
 
-async def create_team(team_data, project_id):
+async def create_team(team_data, project_id): # Registra un equipo en la base de datos
     cursor = db.conn.cursor()
     team_add_query = None
     team_add_query_parameters = None
-    if team_data.team_password == "" or team_data.team_password == None:
+    if team_data.team_password == "" or team_data.team_password == None: # Si no se especifica contraseña se crea un equipo publico
         team_add_query = f"""
             INSERT INTO team (team_creation_date, team_description, team_name, project_id, team_private)
             VALUES (%s, %s, %s, %s, %s);
@@ -24,8 +24,8 @@ async def create_team(team_data, project_id):
             project_id,
             False,
         )
-    else:
-        team_add_query = f"""
+    else: # Si se especifica contraseña se crea un equipo privado
+        team_add_query = f""" 
             INSERT INTO team (team_creation_date, team_description, team_name, project_id, team_password, team_private)
             VALUES (%s, %s, %s, %s, %s, %s);
         """
@@ -41,7 +41,7 @@ async def create_team(team_data, project_id):
     db.conn.commit()
 
 
-async def get_all_users_team(team_id):
+async def get_all_users_team(team_id): # Obtiene todos los usuarios de un equipo segun su id
     cursor = db.conn.cursor()
     get_user_query = f"""
         SELECT au.app_user_id, au.app_user_name, au.app_user_email, au.app_user_last_session, aut.user_status
@@ -63,7 +63,7 @@ async def get_all_users_team(team_id):
     return users_as_dict
 
 
-async def verify_team_in_project(team_id, project_id):
+async def verify_team_in_project(team_id, project_id): # Valida que un equipo pertenezca a un proyecto, comparando el id del equipo y el id del proyecto
     cursor = db.conn.cursor(cursor_factory=RealDictCursor)
     check_team_query = """
         SELECT * FROM team WHERE team_id = %s AND project_id = %s;
@@ -81,7 +81,7 @@ async def verify_team_in_project(team_id, project_id):
     return dict(team)
 
 
-async def verify_team_password(team_id, team_password, team_password_hash):
+async def verify_team_password(team_id, team_password, team_password_hash): # Valida la contraseña de un equipo
     if not await auth_services.verify_password(team_password, team_password_hash):
         raise HTTPException(
             status_code=401,
@@ -90,7 +90,7 @@ async def verify_team_password(team_id, team_password, team_password_hash):
         )
 
 
-async def join_team(user_id, team_id):
+async def join_team(user_id, team_id): # Une un usuario a un equipo 
 
     cursor = db.conn.cursor()
     check_user_query = """
@@ -126,7 +126,7 @@ async def join_team(user_id, team_id):
     db.conn.commit()
 
 
-async def disconnect_team(user_id, team_id):
+async def disconnect_team(user_id, team_id): # Desconecta un usuario de un equipo 
     cursor = db.conn.cursor()
     check_user_query = """
         SELECT COUNT(*) FROM app_user_team WHERE app_user_id = %s;
@@ -134,7 +134,7 @@ async def disconnect_team(user_id, team_id):
     cursor.execute(check_user_query, (user_id,))
     user_exists = cursor.fetchone()[0] > 0
 
-    if user_exists:
+    if user_exists: # Si el usuario existe en la base de datos se actualiza su estado a inactivo
         update_user_query = """
             UPDATE app_user_team
             SET user_status = %s
@@ -146,7 +146,7 @@ async def disconnect_team(user_id, team_id):
     db.conn.commit()
 
 
-async def send_user_status(user, team_id, project_id, status):
+async def send_user_status(user, team_id, project_id, status): # Envía el estado de un usuario a un equipo
     content_message_broker = {"app_user_id": user['app_user_id'],
                               "app_user_email": user['app_user_email'],
                               "app_user_name": user['app_user_name'], 

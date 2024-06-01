@@ -11,7 +11,7 @@ import src.services.message_services as message_services
 team_router = APIRouter()
 
 
-@team_router.post("/join", tags=["team"])
+@team_router.post("/join", tags=["team"]) # Ruta para unirse a un equipo
 async def join_to_team(
     user=Depends(auth_services.get_user_current),
     team_data: team_models.TeamJoinModel = Depends(),
@@ -31,7 +31,7 @@ async def join_to_team(
     )
 
 
-@team_router.post("/disconnect", tags=["team"])
+@team_router.post("/disconnect", tags=["team"]) # Ruta para desconectarse de un equipo
 async def disconnect_from_team(
     user=Depends(auth_services.get_user_current),
     team_data: team_models.TeamJoinModel = Depends(),
@@ -43,8 +43,8 @@ async def disconnect_from_team(
     )
 
 
-@team_router.post("/create", tags=["team"])
-async def create_team(
+@team_router.post("/create", tags=["team"]) # Ruta para el registro de equipos
+async def create_team( 
     user=Depends(auth_services.get_user_current),
     team_data: team_models.TeamRegisterModel = Depends(),
 ):
@@ -53,7 +53,7 @@ async def create_team(
     return {201, f"Team created in project {project['project_id']}"}
 
 
-@team_router.get("/{team_id}/users", tags=["team"])
+@team_router.get("/{team_id}/users", tags=["team"]) # Ruta para la obtención de usuarios de un equipo
 async def get_user_from_team(
     user=Depends(auth_services.get_user_current),
     team_data: team_models.TeamDataSearch = Depends(),
@@ -63,7 +63,7 @@ async def get_user_from_team(
     return users
 
 
-@team_router.get("/{team_id}/messages", tags=["team"])
+@team_router.get("/{team_id}/messages", tags=["team"]) # Ruta para la obtención de mensajes de un equipo
 async def get_team_messages(
     user=Depends(auth_services.get_user_current),
     team_data: team_models.TeamDataSearch = Depends(),
@@ -74,7 +74,7 @@ async def get_team_messages(
     return messages
 
 
-@team_router.get("/{team_id}/tasks", tags=["team"])
+@team_router.get("/{team_id}/tasks", tags=["team"]) # Ruta para la obtención de tareas de un equipo
 async def get_tasks_messages(
     user=Depends(auth_services.get_user_current),
     team_data: team_models.TeamDataSearch = Depends(),

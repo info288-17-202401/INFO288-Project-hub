@@ -3,7 +3,7 @@ from datetime import datetime
 import src.controllers.db_controller as db
 import src.controllers.rabbit_controller as rabbit_controller
 
-async def get_tasks_from_team(team_id):
+async def get_tasks_from_team(team_id): # Obtiene las tareas de un equipo segundo su id
     cursor = db.conn.cursor()
     get_tasks_messages_query = f"""
         SELECT *
@@ -22,7 +22,7 @@ async def get_tasks_from_team(team_id):
     
     return team_messages_dict
 
-async def add_task(task_data):
+async def add_task(task_data): # Añade una tarea a la base de datos segun los datos recibidos
     cursor = db.conn.cursor()
     add_task_query = f"""
             INSERT INTO task (task_description, task_creation_date, task_end_date, task_deadline_date, task_difficult, task_state, team_id)
@@ -40,7 +40,7 @@ async def add_task(task_data):
     cursor.execute(add_task_query,add_task_query_parameters)
     db.conn.commit()
     
-async def update_task(task_data):
+async def update_task(task_data): # Actualiza una tarea en la base de datos segun los datos recibidos
     cursor = db.conn.cursor()
     update_task_query = f"""
         UPDATE task
@@ -63,7 +63,7 @@ async def update_task(task_data):
     db.conn.commit()
 
     
-async def destroy_task(task_id):
+async def destroy_task(task_id): # Elimina una tarea de la base de datos segun su id
     cursor = db.conn.cursor()
     task_destroy_query = f"""
         DELETE FROM task WHERE task_id = %s
@@ -72,7 +72,7 @@ async def destroy_task(task_id):
     db.conn.commit()
 
     
-async def send_task_to_queue(task_data, project_id, tag):
+async def send_task_to_queue(task_data, project_id, tag): # Añade una tarea a la cola, usando rabbitmq
     content_message_broker = {
                               "task_description":task_data.task_description,
                                 "task_end_date":task_data.task_end_date.isoformat(),

@@ -28,13 +28,13 @@ cat <<EOF > /etc/rabbitmq/rabbitmq.config
   {rabbitmq_stomp, [
     {tcp_listeners, [{"0.0.0.0", $RABBITMQ_STOMP_PORT}]},
     {ssl_listeners, []},
-    {default_user, [{"$RABBITMQ_USER", "$RABBITMQ_PASSWORD"}]},
+    {default_user, [{$RABBITMQ_USER, $RABBITMQ_PASSWORD}]},
     {default_vhost, "/"}
   ]},
   {rabbitmq_web_stomp, [
     {tcp_listeners, [{"0.0.0.0", $RABBITMQ_STOMP_WEBSOCKET_PORT}]},
     {ssl_listeners, []},
-    {default_user, [{"$RABBITMQ_USER", "$RABBITMQ_PASSWORD"}]},
+    {default_user, [{$RABBITMQ_USER, $RABBITMQ_PASSWORD}]},
     {default_vhost, "/"}
   ]}
 ].

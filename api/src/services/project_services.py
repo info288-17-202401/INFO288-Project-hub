@@ -13,7 +13,7 @@ SECRET_KEY = os.environ.get("SECRET_KEY")
 ALGORITHM = "HS256"
 
 
-async def create_project(project_data, user_data):
+async def create_project(project_data, user_data): # Registra un proyecto en la base de datos
     cursor = db.conn.cursor()
     random_id = await random_key(10)
     time_now = datetime.now()
@@ -41,7 +41,7 @@ async def create_project(project_data, user_data):
 
 
     
-async def project_auth(project_id, project_password):
+async def project_auth(project_id, project_password): # Valida las credenciales de un proyecto en la base de datos
     find_project = await get_project_by_id(project_id)
     if not find_project:
         raise HTTPException(
@@ -58,12 +58,12 @@ async def project_auth(project_id, project_password):
     return find_project
 
 
-async def random_key(tamaño):
+async def random_key(tamaño): # Genera una clave aleatoria usando letras y números
     caracteres = string.ascii_letters + string.digits
     return "".join(random.choice(caracteres) for _ in range(tamaño))
 
 
-async def get_project_by_id(project_id):
+async def get_project_by_id(project_id): # Obtiene un proyecto por su id en la base de datos
     cursor = db.conn.cursor()
     project_search_query = f"SELECT * FROM project WHERE project_id = '{ project_id }';"
     cursor.execute(project_search_query)
@@ -75,8 +75,8 @@ async def get_project_by_id(project_id):
     cursor.close()
     return find_project
 
-
-async def get_teams_from_project(project_id):
+ 
+async def get_teams_from_project(project_id): # Obtiene los equipos de un proyecto
     cursor = db.conn.cursor()
     teams_search_query = f"""
                     SELECT team_id, team_description, team_name, team_private
@@ -94,7 +94,7 @@ async def get_teams_from_project(project_id):
     return teams_as_dict
 
 
-async def get_project_current(project_token: str):
+async def get_project_current(project_token: str): # Obtiene el proyecto actual a partir de un token
     try:
         token_decode = jwt.decode(project_token, SECRET_KEY, ALGORITHM)
         project_id = token_decode.get("sub")
@@ -121,7 +121,7 @@ async def get_project_current(project_token: str):
     return project
 
 
-async def set_profile_in_project(project_id, user_id, profile_type):
+async def set_profile_in_project(project_id, user_id, profile_type): # Establece el perfil de un usuario en un proyecto
     cursor = db.conn.cursor()
     profile_add_query = f"""
         INSERT INTO app_user_profile_project (app_user_profile_type, app_user_id, project_id)
@@ -134,7 +134,7 @@ async def set_profile_in_project(project_id, user_id, profile_type):
     return {"project_id": project_id}
 
 
-async def get_all_projects_from_user(user_id):
+async def get_all_projects_from_user(user_id): # Obtiene todos los proyectos de un usuario dueño
     cursor = db.conn.cursor()
     projects_search_query = f"""
                     SELECT project_id, project_creation_date, project_description, project_name, project_password

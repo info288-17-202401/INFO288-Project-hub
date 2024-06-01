@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 from datetime import date
 
-class TasksModel(BaseModel):
+class TasksModel(BaseModel): # Modelo de una tarea
     project_auth_key: str
     team_id: int
     task_description: str
@@ -10,7 +10,7 @@ class TasksModel(BaseModel):
     task_difficult: int
     task_state: str
     
-class TaskUpdateModel(BaseModel):
+class TaskUpdateModel(BaseModel): # Modelo para la actualización de tareas (PUT /task)
     project_auth_key: str
     team_id: int
     task_id: int
@@ -20,6 +20,6 @@ class TaskUpdateModel(BaseModel):
     task_difficult: int
     task_state: str
     
-class TaskDestroyModel(BaseModel):
+class TaskDestroyModel(BaseModel): # Modelo para la eliminación de tareas (DELETE /task)    
     project_auth_key: str
     task_id: int

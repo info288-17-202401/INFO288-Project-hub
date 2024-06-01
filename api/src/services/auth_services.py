@@ -7,17 +7,18 @@ from fastapi.security import HTTPBearer, OAuth2PasswordBearer
 from jose import jwt as jose_jwt, JWTError
 import src.controllers.db_controller as db
 
-load_dotenv('.env.api')
+load_dotenv('.env.api') # Cargar variables de entorno
 
+# Configuración de seguridad
 security = HTTPBearer()
 SECRET_KEY = os.environ.get("SECRET_KEY")
 ALGORITHM = 'HS256'
 ACCESS_TOKEN_EXPIRE_MINUTES = 60
-
+# Configuración de encriptación
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 oauth2_scheme_user = OAuth2PasswordBearer(tokenUrl="/auth/login")
 
-async def register_user(user_data):
+async def register_user(user_data): # Registra un usuario en la base de datos
     find_user = await get_user_by_email(user_data.user_email)
     cursor = db.conn.cursor()
     if not find_user:
@@ -37,7 +38,7 @@ async def register_user(user_data):
             detail="User email exists"
         )
 
-async def login_user(user_data):
+async def login_user(user_data): # Valida las credenciales de un usuario en la base de datos
     find_user = await get_user_by_email(user_data.username)
     if not find_user:
         raise HTTPException(status_code = 401, detail="Could not validate credentials", 
@@ -47,7 +48,7 @@ async def login_user(user_data):
                     headers={"WWW-Authenticate":"Bearer"})  
     return find_user
         
-async def get_user_by_email(user_email):
+async def get_user_by_email(user_email): # Obtiene un usuario por su email
     cursor = db.conn.cursor()
     email_query = f"SELECT * FROM app_user WHERE app_user_email = '{ user_email }';"
     cursor.execute(email_query)
@@ -59,19 +60,19 @@ async def get_user_by_email(user_email):
     cursor.close()
     return find_user
 
-async def verify_password(plain_password, hashed_password):
+async def verify_password(plain_password, hashed_password): # Verifica la contraseña de un usuario 
     return pwd_context.verify(plain_password.encode('utf-8'), hashed_password)
 
-async def get_password_hash(password):
+async def get_password_hash(password): # Obtiene el hash de una contraseña
     return pwd_context.hash(password.encode('utf-8'))
 
-async def create_access_token(user_id):
+async def create_access_token(user_id): # Crea un token de acceso JWT para un usuario
     payload = {
         'sub': user_id
     }
     return jose_jwt.encode(payload, SECRET_KEY, ALGORITHM)
     
-async def get_user_current(user_token: str = Depends(oauth2_scheme_user)):
+async def get_user_current(user_token: str = Depends(oauth2_scheme_user)): # Obtiene el usuario actual a partir de un token
     try:
         token_decode = jose_jwt.decode(user_token, SECRET_KEY, ALGORITHM)
         user_email = token_decode.get("sub")

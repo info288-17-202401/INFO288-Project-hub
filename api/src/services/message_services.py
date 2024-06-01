@@ -3,7 +3,7 @@ from datetime import datetime
 import src.controllers.db_controller as db
 from src.controllers.rabbit_controller import rabbit_controller 
 
-async def send_message_to_queue(message, user, project):
+async def send_message_to_queue(message, user, project): # Añade un mensaje a la cola 
     content_message_broker = {
         "message_text": message.message_content,
         "user_name": user['app_user_name'],
@@ -14,7 +14,7 @@ async def send_message_to_queue(message, user, project):
     rabbit_controller.send_message(body.encode(), f"messages_team_{message.team_id}")
     return content_message_broker
 
-async def save_in_db_team_message(message, user):
+async def save_in_db_team_message(message, user): # Guarda un mensaje en la base de datos
     cursor = db.conn.cursor()
     check_user_query = f"""
         SELECT * FROM app_user_team WHERE app_user_id = %s AND team_id = %s;
@@ -43,7 +43,7 @@ async def save_in_db_team_message(message, user):
         db.conn.commit()
         
     
-async def get_team_messages(team_id):
+async def get_team_messages(team_id): # Obtiene los mensajes de un equipo
     cursor = db.conn.cursor()
     get_team_messages_query = f"""
         SELECT aut.app_user_team_id, aut.app_user_id, cm.message_id, cm.message_date, message_content, au.app_user_id, au.app_user_name, au.app_user_email 

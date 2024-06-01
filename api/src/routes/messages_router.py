@@ -6,7 +6,7 @@ import src.services.message_services as message_services
 
 messages_router = APIRouter()
 
-@messages_router.post("/send/team", tags = ["message"])
+@messages_router.post("/send/team", tags = ["message"]) # Ruta para el envío de mensajes a un equipo
 async def send_message( message: message_models.MessageContent = Depends(), user = Depends(auth_services.get_user_current)):
     project = await project_services.get_project_current(message.project_auth_key)
     await message_services.save_in_db_team_message(message, user)

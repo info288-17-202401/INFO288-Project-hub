@@ -8,6 +8,6 @@ import src.services.project_services as project_services
 
 user_router = APIRouter()
 
-@user_router.get("/projects", tags=["user"])
+@user_router.get("/projects", tags=["user"]) # Ruta para la obtención de proyectos de un usuario
 async def get_projects_from_user(user_data=Depends(auth_services.get_user_current)):
     return await project_services.get_all_projects_from_user(user_data["app_user_id"])

@@ -9,7 +9,7 @@ import src.services.project_services as project_services
 project_router = APIRouter()
 
 
-@project_router.post(
+@project_router.post( # Ruta para la autenticación de proyectos
     "/auth", tags=["project"], dependencies=[Depends(auth_services.get_user_current)]
 )
 async def auth_project(project_data: project_models.ProjectSearchModel = Depends()):
@@ -18,7 +18,7 @@ async def auth_project(project_data: project_models.ProjectSearchModel = Depends
     data = {"status_code": 201, "access_token": token, "token_type": "bearer"}
     return data
 
-@project_router.post("/create", tags=["project"])
+@project_router.post("/create", tags=["project"]) # Ruta para el registro de proyectos
 async def create_project(
     project_data: project_models.ProjectRegisterModel = Depends(),
     user_data=Depends(auth_services.get_user_current),
@@ -28,7 +28,7 @@ async def create_project(
         project_id["project_id"], user_data["app_user_id"], "admin"
     )
 
-@project_router.get(
+@project_router.get( # Ruta para la obtención de equipos de un proyecto
     "/{project_auth_key}/teams",
     tags=["project"],
     dependencies=[Depends(auth_services.get_user_current)],
