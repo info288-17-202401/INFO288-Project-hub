@@ -4,8 +4,8 @@ import { useEffect, useState } from 'react'
 import { toast, Toaster } from 'sonner'
 import { useNavigate } from 'react-router-dom'
 import { apiSendData } from '../../services/apiService'
-
-const CreateProject: React.FC<{ onReturn: () => void }> = ({ onReturn }) => {
+// Componente para crear un proyecto
+const CreateProject: React.FC<{ onReturn: () => void }> = ({ onReturn }) => { 
   const navigate = useNavigate()
   const [idProject, setIdProject] = useState('')
 
@@ -18,7 +18,7 @@ const CreateProject: React.FC<{ onReturn: () => void }> = ({ onReturn }) => {
     project_description: '',
   })
 
-  const handleCreateDataChange = (
+  const handleCreateDataChange = ( // Función para manejar los cambios en los inputs
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target
@@ -28,7 +28,7 @@ const CreateProject: React.FC<{ onReturn: () => void }> = ({ onReturn }) => {
     }))
   }
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => { // Función para manejar el envío del formulario
     e.preventDefault()
 
     if (
@@ -40,7 +40,7 @@ const CreateProject: React.FC<{ onReturn: () => void }> = ({ onReturn }) => {
       return
     }
 
-    try {
+    try { // Intenta crear el proyecto
       const route = `/project/create?project_name=${createProjectData.project_name}&project_password=${createProjectData.project_password}&project_description=${createProjectData.project_description}`
       const header = {
         'Content-Type': 'application/json',
@@ -48,20 +48,20 @@ const CreateProject: React.FC<{ onReturn: () => void }> = ({ onReturn }) => {
       }
       const response = await apiSendData(route, header)
       const data = await response.json()
-      if (response.ok) {
+      if (response.ok) { // Si la respuesta es exitosa, almacena el id del proyecto
         setIdProject(data.project_id)
       } else {
         toast.error('Error al crear el proyecto. Por favor, intenta de nuevo.')
       }
-    } catch (e) {
+    } catch (e) { 
       toast.warning(
         'Error de red. Por favor, revisa tu conexión e intenta de nuevo.'
       )
     }
   }
 
-  useEffect(() => {
-    const fetchJoinProject = async () => {
+  useEffect(() => { 
+    const fetchJoinProject = async () => { // Hace fetch para unirse al proyecto
       try {
         const route = `/project/auth?project_id=${idProject}&project_password=${createProjectData.project_password}`
         const header = {
@@ -86,7 +86,7 @@ const CreateProject: React.FC<{ onReturn: () => void }> = ({ onReturn }) => {
       }
     }
     if (idProject) {
-      fetchJoinProject()
+      fetchJoinProject() // Llama a la función para unirse al proyecto
     }
   }, [idProject])
 

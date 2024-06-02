@@ -6,7 +6,7 @@ interface ToDoCardProps {
   onDelete: (id: number) => void
 }
 
-const ToDoCard: React.FC<ToDoCardProps> = ({ id, onDelete }) => {
+const ToDoCard: React.FC<ToDoCardProps> = ({ id, onDelete }) => { // Componente que representa una tarea (visualmente una carta)
   const [isDragging, setIsDragging] = useState(false)
   const dragItem = useRef<HTMLDivElement>(null)
   const [checked, setChecked] = useState(false)

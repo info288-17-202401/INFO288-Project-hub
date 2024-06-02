@@ -5,7 +5,7 @@ import Menu from '../assets/Menu.tsx'
 import Sun from '../assets/Sun.tsx'
 import Moon from '../assets/Moon.tsx'
 
-const NavigationBar: React.FC = () => {
+const NavigationBar: React.FC = () => { // Componente de la barra de navegación
   const [isOpen, setIsOpen] = useState(false)
   const [mode, setMode] = useState('light') // Estado para el modo claro/oscuro
 
@@ -14,7 +14,7 @@ const NavigationBar: React.FC = () => {
 
   const toggleMenu = () => setIsOpen(!isOpen)
 
-  const logout = () => {
+  const logout = () => { // Función para cerrar sesión
     setIsOpen(false)
     const authState = userAuthStore.getState()
     authState.setToken('')
@@ -25,12 +25,12 @@ const NavigationBar: React.FC = () => {
     localStorage.removeItem('userDataLogin')
   }
 
-  const handleNavItemClick = (link: string) => {
+  const handleNavItemClick = (link: string) => { // Maneja el evento de hacer clic en un enlace de navegación
     setActiveItem(link)
     setIsOpen(false)
   }
 
-  const NavItem: React.FC<{ link: string; text: string }> = ({
+  const NavItem: React.FC<{ link: string; text: string }> = ({ // Componente para un elemento de navegación
     link,
     text,
   }) => (
@@ -58,7 +58,7 @@ const NavigationBar: React.FC = () => {
     </li>
   )
 
-  const NavButton: React.FC<{
+  const NavButton: React.FC<{ // Componente para un botón de navegación
     route: string
     text: string
     clickEvent?: () => void
@@ -86,7 +86,7 @@ const NavigationBar: React.FC = () => {
     </Link>
   )
 
-  const renderAuthButtons = () => {
+  const renderAuthButtons = () => { // Renderiza los botones de autenticación
     if (login) {
       return (
         <>
@@ -111,7 +111,7 @@ const NavigationBar: React.FC = () => {
     }
   }
 
-  const toggleMode = () => {
+  const toggleMode = () => { // Función para alternar el modo claro/oscuro
     const newMode = mode === 'light' ? 'dark' : 'light'
     setMode(newMode)
     if (newMode === 'dark') {

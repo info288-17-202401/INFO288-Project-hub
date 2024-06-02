@@ -1,9 +1,9 @@
 import { Client, IMessage, StompSubscription } from '@stomp/stompjs'
 import { userAuthStore } from '../authStore'
 
-const wsUrl = `ws://${import.meta.env.VITE_BROKER_URL}/ws`
+const wsUrl = `ws://${import.meta.env.VITE_BROKER_URL}/ws` // URL del servidor de RabbitMQ
 
-const client = new Client({
+const client = new Client({ // Define el cliente de RabbitMQ
   brokerURL: wsUrl,
   connectHeaders: {
     login: import.meta.env.VITE_RABBITMQ_LOGIN,
@@ -13,8 +13,8 @@ const client = new Client({
   heartbeatOutgoing: 5000,
 })
 
-const subscriptions: { [key: string]: StompSubscription } = {}
-const user_email = userAuthStore.getState().email
+const subscriptions: { [key: string]: StompSubscription } = {} // Almacena las suscripciones
+const user_email = userAuthStore.getState().email // Obtiene el correo electrónico del usuario
 
 client.onConnect = () => {
   console.log('Connected to RabbitMQ broker')
@@ -27,13 +27,13 @@ client.onStompError = (frame) => {
 
 client.activate()
 
-const rabbitSubscribeChannel = async (
+const rabbitSubscribeChannel = async ( // Función para suscribirse a un canal de RabbitMQ
   brokerChannel: string,
   onMessageReceived: (message: string) => void
 ) => {
-  const uniqueId = `sub-${brokerChannel}-${user_email}`
+  const uniqueId = `sub-${brokerChannel}-${user_email}` // Identificador único de la suscripción
 
-  if (!subscriptions[uniqueId]) {
+  if (!subscriptions[uniqueId]) { // Si la id no se encuentra en las suscripciones, lo suscribe al canal
     const subscription = client.subscribe(
       '/queue/' + brokerChannel,
       (message: IMessage) => {
@@ -49,12 +49,12 @@ const rabbitSubscribeChannel = async (
     )
     subscriptions[uniqueId] = subscription
     console.log('Subscribed to channel:', brokerChannel)
-  } else {
+  } else { // Si ya está suscrito, muestra un mensaje en consola
     console.log('Already subscribed to channel:', brokerChannel)
   }
 }
 
-const rabbitUnsubscribeChannel = async (brokerChannel: string) => {
+const rabbitUnsubscribeChannel = async (brokerChannel: string) => { // Función para cancelar la suscripción a un canal de RabbitMQ
   const uniqueId = `sub-${brokerChannel}-${user_email}`
   if (subscriptions[uniqueId]) {
     subscriptions[uniqueId].unsubscribe()

@@ -11,7 +11,7 @@ import {
 import { MessageProps } from '../../types/types'
 import MessageList from './MessageList'
 
-const Chat: React.FC = () => {
+const Chat: React.FC = () => { // Componente para el chat
   const [messages, setMessages] = useState<MessageProps[]>([])
   const [hover, setHover] = useState(false)
   const [message, setMessage] = useState('')
@@ -19,7 +19,7 @@ const Chat: React.FC = () => {
   const token_project = projectAuthStore.getState().token
   const token_user = userAuthStore.getState().token
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {  // Envía el mensaje al backend
     e.preventDefault()
     if (!message) {
       toast.warning('Por favor, Escribe un mensaje.')
@@ -29,11 +29,11 @@ const Chat: React.FC = () => {
     console.log(message)
     createNewMessage()
   }
-  const handleMessage = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleMessage = (e: React.ChangeEvent<HTMLInputElement>) => { // Actualiza el estado del mensaje
     setMessage(e.target.value)
   }
 
-  const fetchMessages = async () => {
+  const fetchMessages = async () => { // Función para obtener los mensajes del equipo desde la base de datos
     const teamId = teamAuthStore.getState().team_id
     const token_project = projectAuthStore.getState().token
     const token_user = userAuthStore.getState().token
@@ -64,7 +64,7 @@ const Chat: React.FC = () => {
     }
   }
 
-  const onMessageReceived = async (body: string) => {
+  const onMessageReceived = async (body: string) => { // Función que maneja cuando se recibe un mensaje
     const messageObject = JSON.parse(body)
     const newMessage: MessageProps = {
       app_user_name: messageObject.user_name,
@@ -76,7 +76,7 @@ const Chat: React.FC = () => {
     setMessages((prevMessages) => [...prevMessages, newMessage])
   }
 
-  const createNewMessage = async () => {
+  const createNewMessage = async () => { // Función para crear un nuevo mensaje y enviarlo al backend
     try {
       const route = `/message/send/team?project_auth_key=${token_project}&team_id=${teamId}&message_content=${message}`
       const header = {
@@ -95,7 +95,7 @@ const Chat: React.FC = () => {
     }
   }
 
-  useEffect(() => {
+  useEffect(() => { //  Obtiene los mensajes del equipo y suscribe al canal de mensajes del equipo
     fetchMessages()
     rabbitSubscribeChannel('messages_team_' + teamId, onMessageReceived)
 

@@ -14,14 +14,14 @@ import {
 } from '../services/rabbitMQService'
 import { UserProps } from '../types/types'
 
-const TeamsPage: React.FC = () => {
+const TeamsPage: React.FC = () => { // Página de equipos
   const navigate = useNavigate()
   const teamId = teamAuthStore.getState().team_id
   const token_user = userAuthStore.getState().token
   const token_project = projectAuthStore.getState().token
   const [sessionUsers, setSessionUsers] = useState<UserProps[]>([])
 
-  const fetchTeamUsers = async () => {
+  const fetchTeamUsers = async () => { // Obtiene los usuarios del equipo
     try {
       const route = `/team/${teamId}/users?project_auth_key=${token_project}`
       const header = {
@@ -30,7 +30,7 @@ const TeamsPage: React.FC = () => {
       }
       const response = await apiGetData(route, header)
 
-      if (response.ok) {
+      if (response.ok) { // Si la respuesta es exitosa, muestra un mensaje de éxito y devuelve los datos
         setTimeout(async () => {
           toast.success('Usuarios obtenidos exitosamente.')
         }, 700)
@@ -45,7 +45,7 @@ const TeamsPage: React.FC = () => {
     }
   }
 
-  const onMessageReceived = async (body: string) => {
+  const onMessageReceived = async (body: string) => { // Cuando se recibe un mensaje, actualiza el estado de los usuarios
     const messageObject = JSON.parse(body)
     const newUser: UserProps = {
       app_user_name: messageObject.app_user_name,
@@ -53,17 +53,17 @@ const TeamsPage: React.FC = () => {
       app_user_id: messageObject.app_user_id,
       user_status: messageObject.user_status,
     }
-    if (newUser.user_status == 'connected') {
+    if (newUser.user_status == 'connected') { // Si el usuario está conectado, añádelo a la lista de usuarios
       setSessionUsers((prevUsers) => [...prevUsers, newUser])
-    } else if (newUser.user_status == 'disconnected') {
+    } else if (newUser.user_status == 'disconnected') { // Si el usuario está desconectado, elimínalo de la lista de usuarios
       setSessionUsers((prevUsers) =>
         prevUsers.filter((user) => user.app_user_id !== newUser.app_user_id)
       )
     }
   }
 
-  useEffect(() => {
-    fetchTeamUsers()
+  useEffect(() => { // Obtiene los usuarios del equipo y se suscribe al canal de mensajes
+    fetchTeamUsers() 
     rabbitSubscribeChannel('users_team_' + teamId, onMessageReceived)
 
     return () => {

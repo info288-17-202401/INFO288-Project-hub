@@ -1,5 +1,5 @@
 import { CardServiceProps } from '../../types/types'
-const CardService: React.FC<CardServiceProps> = ({ description, image }) => {
+const CardService: React.FC<CardServiceProps> = ({ description, image }) => { // Componente que define la forma de las tarjetas
   return (
     <div
       className="overflow-hidden"

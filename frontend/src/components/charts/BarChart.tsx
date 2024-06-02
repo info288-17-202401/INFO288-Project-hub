@@ -13,24 +13,24 @@ interface BarChartProps {
   data: Team[];
 }
 
-const BarChart: React.FC<BarChartProps> = ({ data }) => {
+const BarChart: React.FC<BarChartProps> = ({ data }) => { // Componente que representa los gráficos de barras
   const chartRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
-    if (chartRef.current && data) {
+    if (chartRef.current && data) { // Si hay datos y el elemento canvas está disponible, se crea el gráfico
       const context = chartRef.current.getContext('2d');
 
-      if (context) {
+      if (context) { 
         const barChart = new Chart(context, {
           type: 'bar',
           data: {
-            labels: data.map((team) => team.nombre_team),
+            labels: data.map((team) => team.nombre_team), // Etiquetas para el eje X
             datasets: [
               {
-                label: 'Tareas Finalizadas',
-                data: data.map((team) => team.tareas_finalizadas_team),
+                label: 'Tareas Finalizadas', 
+                data: data.map((team) => team.tareas_finalizadas_team), // Datos para el eje Y
                 backgroundColor: '#6c757d', // Cambia el color aquí
-                borderWidth: 1,
+                borderWidth: 1, // Ancho del borde
               },
             ],
           },
@@ -39,13 +39,13 @@ const BarChart: React.FC<BarChartProps> = ({ data }) => {
               x: {
                 title: {
                   display: true,
-                  text: 'Equipos',
+                  text: 'Equipos', // Título del eje X
                 },
               },
               y: {
                 title: {
                   display: true,
-                  text: 'Tareas Finalizadas',
+                  text: 'Tareas Finalizadas', // Título del eje Y
                 },
                 beginAtZero: true,
               },
@@ -54,7 +54,7 @@ const BarChart: React.FC<BarChartProps> = ({ data }) => {
         });
 
         return () => {
-          barChart.destroy();
+          barChart.destroy(); // Se destruye el gráfico al desmontar el componente
         };
       }
     }

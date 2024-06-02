@@ -33,6 +33,16 @@ docker exec -it project_hub_broker_1 rabbitmqctl join_cluster rabbit@project_hub
 docker exec -it project_hub_broker_1 rabbitmqctl start_app
 ```
 
+En caso de que se encuentre con errores por el usuario por defecto de RabbitMQ, intente:  
+1.Reiniciar ambos contenedores del broker a la misma vez  
+2.Agregar manualmente el usuario, para esto, entre en el contenedor project_hub_broker, exec, e introduzca los siguientes comandos:  
+```sh
+rabbitmqctl add_user admin admin123
+rabbitmqctl set_user_tags admin administrator
+rabbitmqctl set_permissions -p / admin ".*" ".*" ".*"
+```
+
+
 ## Api Setup
 
 ```sh

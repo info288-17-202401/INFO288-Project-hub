@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom'
 import Copy from '../../assets/Copy'
 import Avatar from 'react-avatar'
 
-type ElementProjectTableProps = {
+type ElementProjectTableProps = { // Define las propiedades de la tabla de proyectos
   name: string
   description: string
   project_id: string
@@ -14,18 +14,18 @@ type ElementProjectTableProps = {
   project_password: string
 }
 
-const ElementProjectTable: React.FC<ElementProjectTableProps> = ({
+const ElementProjectTable: React.FC<ElementProjectTableProps> = ({  // Componente para mostrar un proyecto en la tabla
   name,
   description,
   project_id,
   project_creation_date,
   project_password,
 }) => {
-  const setToken = projectAuthStore((state) => state.setToken)
-  const setTokenType = projectAuthStore((state) => state.setTokenType)
-  const navigate = useNavigate()
+  const setToken = projectAuthStore((state) => state.setToken) // Token del proyecto
+  const setTokenType = projectAuthStore((state) => state.setTokenType) // Tipo de token del proyecto
+  const navigate = useNavigate() 
 
-  const clickCard = async () => {
+  const clickCard = async () => { // Función para manejar el click en el proyecto
     console.log(project_password)
     try {
       const route = `/project/auth?project_id=${project_id}&project_password=${project_password}`
@@ -35,11 +35,11 @@ const ElementProjectTable: React.FC<ElementProjectTableProps> = ({
       }
       const response = await apiSendData(route, header)
       const data = await response.json()
-      if (response.ok) {
+      if (response.ok) { // Si la respuesta es exitosa, almacena el token del proyecto y navega a la página de proyectos
         setToken(data.access_token)
         setTokenType(data.token_type)
         toast.success('Credenciales exitosas!.')
-        navigate('/projects')
+        navigate('/projects') // Navega a la página de proyectos
       } else {
         toast.error('Credenciales inválidas. Por favor, intenta de nuevo.')
       }
@@ -50,7 +50,7 @@ const ElementProjectTable: React.FC<ElementProjectTableProps> = ({
     }
   }
 
-  const copyClick = (e: React.MouseEvent<HTMLTableDataCellElement>) => {
+  const copyClick = (e: React.MouseEvent<HTMLTableDataCellElement>) => { // Maneja el click para copiar el id o la contraseña
     if (e.currentTarget.getAttribute('data-type') === 'password') {
       toast.info('Contraseña copiada!')
     } else {
@@ -59,7 +59,7 @@ const ElementProjectTable: React.FC<ElementProjectTableProps> = ({
     navigator.clipboard.writeText(e.currentTarget.textContent || '')
   }
 
-  const days = [
+  const days = [ // Define los días de la semana y los meses
     'domingo',
     'lunes',
     'martes',
@@ -83,14 +83,14 @@ const ElementProjectTable: React.FC<ElementProjectTableProps> = ({
     'diciembre',
   ]
 
-  const parseDate = (dateString: string): Date => {
+  const parseDate = (dateString: string): Date => { // Parsea la fecha en el formato correcto
     const date = new Date(dateString)
 
     const userTimezoneOffset = date.getTimezoneOffset() * 60000
     return new Date(date.getTime() + userTimezoneOffset)
   }
 
-  const formatDate = (dateString: string): string => {
+  const formatDate = (dateString: string): string => { // Formatea la fecha mostrando el día, mes y año
     const date = parseDate(dateString)
     const dayName = days[date.getDay()]
     const day = date.getDate()
