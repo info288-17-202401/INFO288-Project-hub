@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 
-type AuthState = {
+type AuthState = { // Define el estado de autenticación
   username: string;
   email: string;
   token: string | null;
@@ -13,7 +13,7 @@ type AuthState = {
   setState: (state: boolean) => void;
 };
 
-export const userAuthStore = create<AuthState>((set) => ({
+export const userAuthStore = create<AuthState>((set) => ({ // Crea el store de autenticación del usuario
   username: '',
   email: '',
   token: null,
@@ -26,7 +26,7 @@ export const userAuthStore = create<AuthState>((set) => ({
   setState: (state) => set({ state }),
 }));
 
-export const projectAuthStore = create<AuthState>((set) => ({
+export const projectAuthStore = create<AuthState>((set) => ({ // Crea el store de autenticación del proyecto
   username: '',
   email: '',
   token: null,
@@ -39,7 +39,7 @@ export const projectAuthStore = create<AuthState>((set) => ({
   setState: (state) => set({ state }),
 }));
 
-type teamState = {
+type teamState = { // Define el estado de autenticación del equipo
   team_id: number | null;
   token: string | null;
   tokenType: string | null;
@@ -50,7 +50,7 @@ type teamState = {
   setState: (state: boolean) => void;
 };
 
-export const teamAuthStore = create<teamState>((set) => ({
+export const teamAuthStore = create<teamState>((set) => ({ // Crea el store de autenticación del equipo
   team_id: null,
   token: null,
   tokenType: null,

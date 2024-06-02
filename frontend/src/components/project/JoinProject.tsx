@@ -5,7 +5,8 @@ import { useNavigate } from 'react-router-dom'
 import { toast, Toaster } from 'sonner'
 import { apiSendData } from '../../services/apiService'
 
-const JoinProject: React.FC<{ onReturn: () => void }> = ({ onReturn }) => {
+// Componente para unirse a un proyecto 
+const JoinProject: React.FC<{ onReturn: () => void }> = ({ onReturn }) => { 
   const setToken = projectAuthStore((state) => state.setToken) // Obtén el método setToken del store
   const setTokenType = projectAuthStore((state) => state.setTokenType) // Obtén el método setUserType del store
 
@@ -16,14 +17,14 @@ const JoinProject: React.FC<{ onReturn: () => void }> = ({ onReturn }) => {
     project_password: '',
   })
 
-  const handleJoinProjectChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleJoinProjectChange = (e: React.ChangeEvent<HTMLInputElement>) => { // Actualiza el estado de los datos del proyecto
     setJoinProjectData({
       ...joinProjectData,
       [e.target.name]: e.target.value,
     })
   }
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => { // Envía los datos del proyecto al backend
     e.preventDefault()
     if (!joinProjectData.project_id || !joinProjectData.project_password) {
       toast.warning('Por favor, completa todos los campos.')
@@ -37,7 +38,7 @@ const JoinProject: React.FC<{ onReturn: () => void }> = ({ onReturn }) => {
       }
       const response = await apiSendData(route, header)
       const data = await response.json() // Parsear la respuesta JSON
-      if (response.ok) {
+      if (response.ok) { // Si la respuesta es exitosa, almacena el token en el store y redirige al usuario a la página de proyectos
         setToken(data.access_token) // Almacena el token en el store
         setTokenType(data.token_type) // Almacena el tipo de token en el store
         toast.success('Credenciales exitosas!.')

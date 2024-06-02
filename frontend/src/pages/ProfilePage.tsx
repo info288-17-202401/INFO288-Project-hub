@@ -2,8 +2,8 @@ import React from 'react'
 import profileimg from '../assets/images/background_home.jpg'
 import { userAuthStore } from '../authStore'
 
-const ProfilePage: React.FC = () => {
-  return (
+const ProfilePage: React.FC = () => { // Página de perfil de usuario
+  return ( 
     <div style={{ height: 'calc(100vh - 58px)', marginTop: '58px' }}>
       <div className="container-fluid p-3">
         <div className="row justify-content-center">

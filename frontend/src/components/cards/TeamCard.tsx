@@ -15,7 +15,7 @@ type TeamsCardProps = {
   colorRow: string
 }
 
-const TeamsCard: React.FC<TeamsCardProps> = ({ team, colorRow }) => {
+const TeamsCard: React.FC<TeamsCardProps> = ({ team, colorRow }) => { // Componente para mostrar la información de un equipo
   const [showTeam, setShowTeam] = useState(false)
   const [dataTeam, setDataTeam] = useState({
     team_id: team.team_id.toString(),
@@ -23,14 +23,14 @@ const TeamsCard: React.FC<TeamsCardProps> = ({ team, colorRow }) => {
   })
   const setId = teamAuthStore((state) => state.setTeamId) // Obtén el método setToken del store
   const navigate = useNavigate()
-  const handleLoginTeamChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleLoginTeamChange = (e: React.ChangeEvent<HTMLInputElement>) => { // Actualiza el estado de los datos del equipo
     setDataTeam({
       ...dataTeam,
       [e.target.name]: e.target.value,
     })
   }
   const [hover, setHover] = useState(false)
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => { // Envía los datos del equipo al backend
     e.preventDefault()
     if (team.team_private) {
       if (!dataTeam.password) {
@@ -50,7 +50,7 @@ const TeamsCard: React.FC<TeamsCardProps> = ({ team, colorRow }) => {
       const response = await apiSendData(route, header)
       const data = await response.json()
       console.log(data)
-      if (response.ok) {
+      if (response.ok) { // Si la respuesta es exitosa, almacena el token en el store y redirige al usuario a la página de teams
         console.log('Credenciales exitosas!.')
         setId(team.team_id)
         setShowTeam(false)

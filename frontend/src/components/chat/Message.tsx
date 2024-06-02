@@ -8,7 +8,7 @@ type MessageProps = {
   colorRow: string
 }
 
-const Message: React.FC<MessageProps> = ({
+const Message: React.FC<MessageProps> = ({ // Componente que representa un mensaje
   message_text,
   user_name,
   user_email,

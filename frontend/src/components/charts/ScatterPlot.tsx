@@ -13,11 +13,11 @@ interface ScatterPlotProps {
   data: Team[];
 }
 
-const ScatterPlot: React.FC<ScatterPlotProps> = ({ data }) => {
+const ScatterPlot: React.FC<ScatterPlotProps> = ({ data }) => { // Componente que representa el gráfico de dispersión
   const chartRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
-    if (chartRef.current && data) {
+    if (chartRef.current && data) { // Si hay datos y el elemento canvas está disponible, se crea el gráfico
       const context = chartRef.current.getContext('2d');
 
       if (context) {
@@ -28,10 +28,10 @@ const ScatterPlot: React.FC<ScatterPlotProps> = ({ data }) => {
               {
                 label: 'Equipos',
                 data: data.map((team) => ({
-                  x: team.tamaño_team,
-                  y: team.tareas_finalizadas_team,
-                  radius: team.tareas_pendientes,
-                  borderWidth: 1,
+                  x: team.tamaño_team, // Tamaño del equipo
+                  y: team.tareas_finalizadas_team, // Tareas finalizadas
+                  radius: team.tareas_pendientes, // Tareas pendientes
+                  borderWidth: 1, // Ancho del borde
                   borderColor: '#6c757d', // Cambia el color aquí
                 })),
               },
@@ -44,13 +44,13 @@ const ScatterPlot: React.FC<ScatterPlotProps> = ({ data }) => {
                 position: 'bottom',
                 title: {
                   display: true,
-                  text: 'Tamaño del Equipo',
+                  text: 'Tamaño del Equipo', // Título del eje X
                 },
               },
               y: {
                 title: {
                   display: true,
-                  text: 'Tareas Finalizadas',
+                  text: 'Tareas Finalizadas', // Título del eje Y
                 },
               },
             },

@@ -7,7 +7,7 @@ type UserCardProps = {
   colorRow: string
 }
 
-const UserCard: React.FC<UserCardProps> = ({
+const UserCard: React.FC<UserCardProps> = ({ // Componente que representa la información de un usuario
   user_name,
   user_email,
   user_status,

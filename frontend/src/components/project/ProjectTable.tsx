@@ -11,7 +11,7 @@ const ProjectTable: React.FC = () => {
   const itemsPerPage = 5
 
   useEffect(() => {
-    const fetchProjects = async () => {
+    const fetchProjects = async () => { // Fect de los proyectos del usuario
       try {
         const route = `/user/projects`
         const header = {
@@ -19,7 +19,7 @@ const ProjectTable: React.FC = () => {
           Authorization: `Bearer ${userAuthStore.getState().token}`,
         }
         const response = await apiGetData(route, header)
-        if (response.ok) {
+        if (response.ok) { // Si la respuesta es exitosa, almacena los proyectos en el estado
           toast.success('Proyectos obtenidos exitosamente.')
           const data = await response.json()
           setDataProjects(data)
@@ -33,9 +33,9 @@ const ProjectTable: React.FC = () => {
 
     fetchProjects()
   }, [])
-
-  const indexOfLastProject = currentPage * itemsPerPage
-  const indexOfFirstProject = indexOfLastProject - itemsPerPage
+  // Paginación de los proyectos
+  const indexOfLastProject = currentPage * itemsPerPage 
+  const indexOfFirstProject = indexOfLastProject - itemsPerPage 
   const currentProjects = dataProjects.slice(
     indexOfFirstProject,
     indexOfLastProject

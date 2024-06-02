@@ -3,7 +3,7 @@ import ScatterPlot from './ScatterPlot'
 import testjson from './testjson.json'
 import BarChart from './BarChart'
 
-const ChartsContainer: React.FC = () => {
+const ChartsContainer: React.FC = () => { // Componente que contiene los gráficos
   return (
     <div className="container-fluid">
       <div className="row">

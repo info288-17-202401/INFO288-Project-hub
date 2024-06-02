@@ -3,7 +3,7 @@ import error_page from '../assets/images/error_page.gif'
 import { Link } from 'react-router-dom'
 import { userAuthStore } from '../authStore'
 
-const NotFoundPage: React.FC = () => {
+const NotFoundPage: React.FC = () => { // Página de error 404
   useEffect(() => {
     const userDataLogin = window.localStorage.getItem('userDataLogin')
     if (userDataLogin) {

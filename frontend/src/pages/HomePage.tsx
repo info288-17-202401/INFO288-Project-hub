@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 import services from '../assets/ServicesData'
 import { userAuthStore } from '../authStore'
 
-const HomePage: React.FC = () => {
+const HomePage: React.FC = () => { // Página de inicio
   useEffect(() => {
     const userDataLogin = window.localStorage.getItem('userDataLogin')
     if (userDataLogin) {

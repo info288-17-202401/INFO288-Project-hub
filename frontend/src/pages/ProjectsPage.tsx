@@ -10,7 +10,7 @@ import { apiSendData } from '../services/apiService'
 import { TeamsCardProps } from '../types/types'
 import { fetchTeams } from '../services/teamServices'
 
-const ProjectPage: React.FC = () => {
+const ProjectPage: React.FC = () => { // Página de proyecto
   const [dataTeams, setDataTeams] = useState<TeamsCardProps[]>([])
   const token_project = projectAuthStore.getState().token
   const token_user = userAuthStore.getState().token
@@ -23,14 +23,14 @@ const ProjectPage: React.FC = () => {
 
   const navigate = useNavigate()
 
-  useEffect(() => {
+  useEffect(() => { // Obtiene los equipos del proyecto
     const setTeamsList = async () => {
       setDataTeams(await fetchTeams())
     }
     setTeamsList()
   }, [])
 
-  const createNewTeam = async (e: { preventDefault: () => void }) => {
+  const createNewTeam = async (e: { preventDefault: () => void }) => { // Crea un nuevo equipo
     e.preventDefault()
     if (!newTeamData.team_name || !newTeamData.team_description) {
       toast.warning('Por favor, completa todos los campos.')
@@ -44,7 +44,7 @@ const ProjectPage: React.FC = () => {
         Authorization: `Bearer ${token_user}`,
       }
       const response = await apiSendData(route, header)
-      if (response.ok) {
+      if (response.ok) { // Si la respuesta es exitosa, muestra un mensaje de éxito y actualiza los datos
         toast.success('Equipo creado exitosamente.')
         setDataTeams(await fetchTeams())
         setShowCreateTeamPopup(false)

@@ -4,7 +4,7 @@ import { toast, Toaster } from 'sonner'
 import { apiSendData } from '../services/apiService'
 import { RegisterProps } from '../types/types'
 
-const RegisterPage: React.FC = () => {
+const RegisterPage: React.FC = () => { // Componente para la página de registro
   const [RegisterPageData, setRegisterPageData] = useState<RegisterProps>({
     username: '',
     email: '',
@@ -13,7 +13,7 @@ const RegisterPage: React.FC = () => {
 
   const navigate = useNavigate()
 
-  const handleRegisterPageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleRegisterPageChange = (e: React.ChangeEvent<HTMLInputElement>) => { // Actualiza el estado de los datos de registro
     setRegisterPageData({
       ...RegisterPageData,
       [e.target.name]: e.target.value,
@@ -23,7 +23,7 @@ const RegisterPage: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
-    if (
+    if ( // Verifica si los campos están vacíos
       !RegisterPageData.username ||
       !RegisterPageData.email ||
       !RegisterPageData.password
@@ -32,7 +32,7 @@ const RegisterPage: React.FC = () => {
       return
     }
 
-    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/ // Expresión regular para validar el correo electrónico
     if (!emailPattern.test(RegisterPageData.email)) {
       toast.warning('Por favor, introduce un correo electrónico válido.')
       return
@@ -41,7 +41,7 @@ const RegisterPage: React.FC = () => {
       const route = `/auth/register?user_name=${RegisterPageData.username}&user_email=${RegisterPageData.email}&user_password=${RegisterPageData.password}`
       const header = { 'Content-Type': 'application/json' }
       const response = await apiSendData(route, header)
-      if (response.ok) {
+      if (response.ok) { // Si la respuesta es exitosa, muestra un mensaje de éxito y redirige al usuario a la página de inicio de sesión
         toast.success('Usuario registrado exitosamente.')
         setTimeout(() => {
           navigate('/login')

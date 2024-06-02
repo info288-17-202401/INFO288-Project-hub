@@ -2,7 +2,7 @@ import { toast } from "sonner"
 import { projectAuthStore, userAuthStore } from "../authStore"
 import { apiGetData } from "./apiService"
 
-export const fetchTeams = async () => {
+export const fetchTeams = async () => { // Función para obtener los equipos de un proyecto desde el backend
     const token_project = projectAuthStore.getState().token
     const token_user = userAuthStore.getState().token
     try {
@@ -13,7 +13,7 @@ export const fetchTeams = async () => {
       }
       const response = await apiGetData(route, header)
 
-      if (response.ok) {
+      if (response.ok) { // Si la respuesta es exitosa, muestra un mensaje de éxito y devuelve los datos
         console.log(token_project)
         setTimeout(async () => {
           toast.success('Equipos obtenidos exitosamente.')

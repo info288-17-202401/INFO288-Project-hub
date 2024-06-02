@@ -7,7 +7,7 @@ type ProjectOptionsPageButtonProps = {
   onClick: () => void
 }
 
-const ProjectOptionsPageButton: React.FC<ProjectOptionsPageButtonProps> = ({
+const ProjectOptionsPageButton: React.FC<ProjectOptionsPageButtonProps> = ({ // Botón para crear o unirse a un proyecto
   type,
   onClick,
 }) => {
@@ -24,21 +24,21 @@ const ProjectOptionsPageButton: React.FC<ProjectOptionsPageButtonProps> = ({
   )
 }
 
-const ProjectOptionsPage: React.FC = () => {
+const ProjectOptionsPage: React.FC = () => { // Página de opciones de proyecto
   const [showCreateProject, setShowCreateProject] = useState(false)
   const [showJoinProject, setShowJoinProject] = useState(false)
 
-  const handleCreateProjectClick = () => {
+  const handleCreateProjectClick = () => { // Maneja el evento de crear un proyecto
     setShowCreateProject(true)
     setShowJoinProject(false)
   }
 
-  const handleJoinProjectClick = () => {
+  const handleJoinProjectClick = () => { // Maneja el evento de unirse a un proyecto
     setShowJoinProject(true)
     setShowCreateProject(false)
   }
 
-  const handleReturn = () => {
+  const handleReturn = () => { // Maneja el evento de regresar
     setShowCreateProject(false)
     setShowJoinProject(false)
   }

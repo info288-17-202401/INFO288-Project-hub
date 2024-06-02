@@ -1,10 +1,10 @@
 const BASE_URL = `${import.meta.env.VITE_API_URL}`
 
-export const apiSendData = async (
+export const apiSendData = async ( // Función para enviar datos al backend
   route: string,
   header: any,
   body?: string
-): Promise<Response> => {
+): Promise<Response> => { // Devuelve una promesa con la respuesta
   try {
     const response = await fetch(BASE_URL + route, {
       method: 'POST',
@@ -18,10 +18,10 @@ export const apiSendData = async (
   }
 }
 
-export const apiGetData = async (
+export const apiGetData = async ( // Función para obtener datos del backend
   route: string,
   header: any
-): Promise<Response> => {
+): Promise<Response> => { // Devuelve una promesa con la respuesta
   try {
     const response = await fetch(BASE_URL + route, {
       method: 'GET',

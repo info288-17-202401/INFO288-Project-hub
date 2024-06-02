@@ -7,7 +7,7 @@ interface Todo {
   completed: boolean
 }
 
-const ToDo: React.FC = () => {
+const ToDo: React.FC = () => { // Componente para la lista de tareas (To-Do)
   const [todos, setTodos] = useState<Todo[]>([])
   const [text, setText] = useState('Agrega tareas!')
   const [isEditing, setIsEditing] = useState(false)
@@ -18,11 +18,11 @@ const ToDo: React.FC = () => {
     setIsOver(true)
   }
 
-  const handleDragLeave = () => {
+  const handleDragLeave = () => { // Maneja el evento de arrastrar y soltar
     setIsOver(false)
   }
 
-  const handleDrop = (event: DragEvent<HTMLDivElement>) => {
+  const handleDrop = (event: DragEvent<HTMLDivElement>) => { // Maneja el evento de soltar
     event.preventDefault()
     setIsOver(false)
     const data = event.dataTransfer?.getData('text/plain')
@@ -31,7 +31,7 @@ const ToDo: React.FC = () => {
       console.log('Elemento soltado en el área.')
     }
   }
-  const handleAddTodo = () => {
+  const handleAddTodo = () => { // Agrega una nueva tarea a la lista
     const newTodoItem: Todo = {
       id: Date.now(),
       completed: false,
@@ -40,19 +40,19 @@ const ToDo: React.FC = () => {
     setTodos([...todos, newTodoItem])
   }
 
-  const handleDeleteTodo = (id: number) => {
+  const handleDeleteTodo = (id: number) => { // Elimina una tarea de la lista
     setTodos((prevTodos) => prevTodos.filter((todo) => todo.id !== id))
   }
 
-  const handleTextClick = () => {
+  const handleTextClick = () => { // Maneja el evento de hacer clic en el texto
     setIsEditing(true)
   }
 
-  const handleTextChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleTextChange = (event: React.ChangeEvent<HTMLInputElement>) => { // Actualiza el estado del texto
     setText(event.target.value)
   }
 
-  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => { // Maneja el evento de presionar una tecla
     if (event.key === 'Enter') {
       setIsEditing(false)
     }

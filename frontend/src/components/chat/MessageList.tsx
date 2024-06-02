@@ -6,15 +6,15 @@ type MessageListProps = {
   messages: MessageProps[]
 }
 
-const MessageList: React.FC<MessageListProps> = ({ messages }) => {
+const MessageList: React.FC<MessageListProps> = ({ messages }) => { // Componente que representa la lista de mensajes
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
-  useEffect(() => {
+  useEffect(() => { // Actualiza la lista de mensajes si hay cambios en el arreglo de mensajes
     console.log('Messages have been updated:', messages)
     scrollToBottom()
   }, [messages])
 
-  const scrollToBottom = () => {
+  const scrollToBottom = () => { // Desplaza la lista de mensajes al final
     if (messagesEndRef.current) {
       messagesEndRef.current.scrollIntoView({ behavior: 'smooth' })
     }

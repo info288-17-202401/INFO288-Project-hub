@@ -3,12 +3,14 @@ import services from '../assets/ServicesData'
 import { ElementPageProps } from '../types/types'
 import { userAuthStore } from '../authStore'
 
-const ElementPage: React.FC<ElementPageProps> = ({
+// Página de acerca de
+
+const ElementPage: React.FC<ElementPageProps> = ({ 
   image,
   title,
   description,
 }) => {
-  useEffect(() => {
+  useEffect(() => { // Verifica los datos de autenticación del usuario
     const userDataLogin = window.localStorage.getItem('userDataLogin')
     if (userDataLogin) {
       const userData = JSON.parse(userDataLogin)

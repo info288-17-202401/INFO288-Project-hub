@@ -5,7 +5,7 @@ import { toast, Toaster } from 'sonner'
 import { apiSendData } from '../services/apiService'
 import { LoginProps } from '../types/types'
 
-const LoginPage: React.FC = () => {
+const LoginPage: React.FC = () => { // Componente para la página de inicio de sesión
   const [loginPageData, setLoginPageData] = useState<LoginProps>({
     email: '',
     password: '',
