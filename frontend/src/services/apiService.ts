@@ -1,35 +1,56 @@
 const BASE_URL = `${import.meta.env.VITE_API_URL}`
 
-export const apiSendData = async ( // Función para enviar datos al backend
-  route: string,
-  header: any,
-  body?: string
-): Promise<Response> => { // Devuelve una promesa con la respuesta
-  try {
-    const response = await fetch(BASE_URL + route, {
-      method: 'POST',
-      headers: header,
-      body: body ? body : JSON.stringify({}),
-    })
-    return response
-  } catch (error) {
-    console.error('Error', error)
-    throw error
-  }
+interface Headers {
+	[key: string]: string
 }
 
-export const apiGetData = async ( // Función para obtener datos del backend
-  route: string,
-  header: any
-): Promise<Response> => { // Devuelve una promesa con la respuesta
-  try {
-    const response = await fetch(BASE_URL + route, {
-      method: 'GET',
-      headers: header,
-    })
-    return response
-  } catch (error) {
-    console.error('Error', error)
-    throw error
-  }
+const apiRequest = async (
+	route: string,
+	method: string,
+	header: Headers,
+	body?: string
+): Promise<Response> => {
+	try {
+		const options: RequestInit = {
+			method,
+			headers: header,
+		}
+		if (body) {
+			options.body = body
+		}
+		const response = await fetch(BASE_URL + route, options)
+		return response
+	} catch (error) {
+		console.error('Error', error)
+		throw error
+	}
+}
+
+export const apiSendData = (
+	route: string,
+	header: Headers,
+	body?: string
+): Promise<Response> => {
+	return apiRequest(route, 'POST', header, body ? body : JSON.stringify({}))
+}
+
+export const apiGetData = (
+	route: string,
+	header: Headers
+): Promise<Response> => {
+	return apiRequest(route, 'GET', header)
+}
+
+export const apiDeleteData = (
+	route: string,
+	header: Headers
+): Promise<Response> => {
+	return apiRequest(route, 'DELETE', header)
+}
+
+export const apiPatchData = (
+	route: string,
+	header: Headers
+): Promise<Response> => {
+	return apiRequest(route, 'PATCH', header)
 }
